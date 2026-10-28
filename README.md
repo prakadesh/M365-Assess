@@ -33,6 +33,8 @@ M365 Assess runs a single read-only command against a Microsoft 365 tenant and p
 
 It is built for security administrators, compliance officers, IT consultants / vCISOs, auditors, and CI pipelines - anyone who needs a fast, evidence-backed posture snapshot mapped to CIS, NIST, SOC 2, HIPAA, ISO 27001, and more.
 
+**CIS Microsoft 365 Foundations Benchmark v7.0.0** is available alongside the existing v6.0.1 framework. The v7 integration currently maps 154 assessment check IDs to 138 unique benchmark recommendations; unmapped recommendations remain gaps rather than being treated as passing. See the [v7 crosswalk and coverage notes](docs/research/cis-m365-v7-crosswalk.md) before using the output for audit work.
+
 ## Install
 
 ```powershell
