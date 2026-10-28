@@ -28,7 +28,7 @@
 M365 Assess runs a single read-only command against a Microsoft 365 tenant and produces CSV data, a self-contained branded HTML report, and an XLSX compliance matrix covering identity, email, security, devices, collaboration, and compliance baselines.
 
 <!-- registry-stats:summary:begin -->
-**292 automated security checks** mapped across **15 compliance frameworks** — counts generated from [`controls/registry.json`](src/M365-Assess/controls/registry.json); per-framework coverage in [docs/reference/COVERAGE.md](docs/reference/COVERAGE.md).
+**292 automated security checks** mapped across **16 compliance frameworks** — counts generated from [`controls/registry.json`](src/M365-Assess/controls/registry.json); per-framework coverage in [docs/reference/COVERAGE.md](docs/reference/COVERAGE.md).
 <!-- registry-stats:summary:end -->
 
 It is built for security administrators, compliance officers, IT consultants / vCISOs, auditors, and CI pipelines - anyone who needs a fast, evidence-backed posture snapshot mapped to CIS, NIST, SOC 2, HIPAA, ISO 27001, and more.
@@ -66,7 +66,7 @@ Invoke-M365Assessment -Section Identity,Email -TenantId 'contoso.onmicrosoft.com
 
 ## Report preview
 
-The self-contained HTML report opens in any browser with no dependencies. Click through from the executive overview to individual security domains, drill into findings, and review compliance posture across 15 frameworks - all in a single offline file.
+The self-contained HTML report opens in any browser with no dependencies. Click through from the executive overview to individual security domains, drill into findings, and review compliance posture across 16 frameworks - all in a single offline file.
 
 <div align="center">
 
@@ -96,7 +96,7 @@ See the [Changelog](CHANGELOG.md) for the full release history and version notes
 | [GCC High setup](docs/user/GCC-HIGH-SETUP.md) | Sovereign-cloud setup: app reg, consent, Power BI, known gaps |
 | [Permissions](docs/reference/PERMISSIONS.md) | Generated per-section matrix: delegated Graph scopes, app permissions, EXO RBAC groups, Purview directory roles |
 | [HTML Report](docs/user/REPORT-USER-GUIDE.md) | Report features, interactive walkthrough, standalone generation, white-label |
-| [Compliance](docs/user/COMPLIANCE.md) | 15 frameworks, XLSX export, CheckId system, control registry |
+| [Compliance](docs/user/COMPLIANCE.md) | 16 frameworks, XLSX export, CheckId system, control registry |
 | [Compatibility](docs/reference/COMPATIBILITY.md) | Module versions, dependency matrix, known incompatibilities |
 | [Troubleshooting](docs/user/TROUBLESHOOTING.md) | Common errors, module conflicts, permission issues |
 | [Changelog](CHANGELOG.md) | Release history and version notes |
