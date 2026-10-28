@@ -181,7 +181,7 @@ $collectorStats = foreach ($collector in $collectors) {
 # ------------------------------------------------------------------
 # Render generated content
 # ------------------------------------------------------------------
-$summaryBlock = "**$checkCount automated security checks** mapped across **$frameworkFileCount compliance frameworks** — counts generated from [``controls/registry.json``](src/M365-Assess/controls/registry.json) and [``controls/local-extensions.json``](src/M365-Assess/controls/local-extensions.json); per-framework coverage in [docs/reference/COVERAGE.md](docs/reference/COVERAGE.md)."
+$summaryBlock = "**$automatedCount automated security checks** mapped across **$frameworkFileCount compliance frameworks** — counts generated from [``controls/registry.json``](src/M365-Assess/controls/registry.json) and [``controls/local-extensions.json``](src/M365-Assess/controls/local-extensions.json); per-framework coverage in [docs/reference/COVERAGE.md](docs/reference/COVERAGE.md)."
 
 $filesBlock = "The runtime control set contains **$checkCount checks** across **$collectorCount collector families**, including **$localExtCount local extension checks**. Mappings span **$($frameworkStats.Keys.Count) framework keys**, $frameworkFileCount of which have report-view definitions in ``frameworks/``."
 
