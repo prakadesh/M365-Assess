@@ -69,6 +69,30 @@ function Import-ControlRegistry {
         }
     }
 
+    # Merge local extension definitions that have not yet been materialized into
+    # registry.json by the CheckID sync workflow. This keeps newly added local
+    # checks visible to progress tracking and report enrichment immediately, while
+    # preserving registry.json as the generated upstream + merged local artifact.
+    $localExtensionsPath = Join-Path -Path $ControlsPath -ChildPath 'local-extensions.json'
+    if (Test-Path -Path $localExtensionsPath) {
+        $localExtensions = Get-Content -Path $localExtensionsPath -Raw | ConvertFrom-Json
+        $registeredCheckIds = @{}
+        foreach ($check in $checks) { $registeredCheckIds[$check.checkId] = $true }
+
+        $extensionCollectors = @()
+        if (Test-Path -Path $scopePath) {
+            $extensionScopeData = Get-Content -Path $scopePath -Raw | ConvertFrom-Json
+            $extensionCollectors = @($extensionScopeData.collectors)
+        }
+
+        foreach ($extension in $localExtensions) {
+            if (-not $extension.checkId -or $registeredCheckIds.ContainsKey($extension.checkId)) { continue }
+            if ($extensionCollectors.Count -gt 0 -and $extension.collector -and $extension.collector -notin $extensionCollectors) { continue }
+            $checks += $extension
+            $registeredCheckIds[$extension.checkId] = $true
+        }
+    }
+
     # Load licensing overlay (M365-Assess-specific service plan gating)
     $licensingOverlay = @{}
     $overlayPath = Join-Path -Path $ControlsPath -ChildPath 'licensing-overlay.json'
