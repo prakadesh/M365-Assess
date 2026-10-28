@@ -1,6 +1,6 @@
 # Multi-Framework Compliance
 
-The HTML report includes a **Compliance Overview** section that maps all assessed security controls across 15 compliance frameworks simultaneously. No parameters needed; all framework data is always included.
+The HTML report includes a **Compliance Overview** section that maps assessed security controls across 16 compliance frameworks simultaneously. No parameters needed; all framework data is always included.
 
 **Assessment scope:** M365-Assess provides best-effort checks and framework mappings to support security insights, audit preparation, and alignment. Some requirements allow multiple implementations or require organizational and procedural evidence beyond the settings assessed here. A passing check does not establish that a framework requirement is fully satisfied, and a deviation from this baseline does not by itself establish noncompliance. Determine applicability within your system's scope and validate supporting evidence with the responsible assessor. Recorded attestations document reviewer judgments; they do not constitute certification.
 
@@ -12,6 +12,10 @@ The HTML report includes a **Compliance Overview** section that maps all assesse
 | CIS M365 E3 Level 2 | 34 | CIS Benchmark v6.0.1 compliance score |
 | CIS M365 E5 Level 1 | 97 | CIS Benchmark v6.0.1 compliance score |
 | CIS M365 E5 Level 2 | 43 | CIS Benchmark v6.0.1 compliance score |
+| CIS M365 v7 E3 Level 1 | 100 | Benchmark v7.0.0 profile recommendations; assessment mapping is partial |
+| CIS M365 v7 E3 Level 2 | 37 | Benchmark v7.0.0 profile recommendations; assessment mapping is partial |
+| CIS M365 v7 E5 Level 1 | 114 | Benchmark v7.0.0 profile recommendations; assessment mapping is partial |
+| CIS M365 v7 E5 Level 2 | 46 | Benchmark v7.0.0 profile recommendations; assessment mapping is partial |
 | NIST 800-53 Rev 5 | 1,189 | Coverage mapping |
 | NIST CSF 2.0 | 106 | Coverage mapping |
 | ISO 27001:2022 | 93 | Coverage mapping |
@@ -28,6 +32,14 @@ The HTML report includes a **Compliance Overview** section that maps all assesse
 | Entra ID STIG V1R1 | 10 | DISA security controls for Entra ID |
 
 **CIS profiles** show a compliance score (pass rate against benchmarked controls). Other frameworks show coverage mapping, indicating which of your assessed findings align to that framework's controls.
+
+### CIS Microsoft 365 Foundations Benchmark v7.0.0
+
+CIS v7.0.0 (released May 20, 2026) is available as a separate framework from v6.0.1. The current crosswalk maps 154 assessment check IDs to 138 unique recommendation IDs out of 160. The v6 definition remains available for historical comparisons, and the legacy ordering/default behavior is intentionally preserved.
+
+The v7 integration uses a version-specific crosswalk over existing M365-Assess checks. It is **not yet a full implementation of every v7 recommendation**: controls without a defensible matching check remain unmapped and must not be treated as passing. Profile counts shown above are the benchmark's profile recommendation counts, not a claim that M365-Assess currently assesses every recommendation. Review the mapping notes in [the CIS v7 crosswalk document](../research/cis-m365-v7-crosswalk.md) and validate all findings against the official [CIS benchmark source](https://www.cisecurity.org/benchmark/microsoft_365) before audit or attestation.
+
+The CIS benchmark PDF is not redistributed by this project. Consult CIS for the authoritative recommendation wording, audit procedures, rationale, impact, and remediation guidance.
 
 ## Compliance Overview Features
 
@@ -72,13 +84,13 @@ ENTRA-ADMIN-001.2    Second setting assessed under ENTRA-ADMIN-001
 ```
 
 <!-- registry-stats:checks:begin -->
-The assessment suite includes **292 security checks** across **16 collector families** (Backup, CAEvaluator, Compliance, CriticalExposure, Defender, DNS, EntApp, Entra, ExchangeOnline, Forms, Intune, PowerBI, PurviewRetention, SharePoint, StrykerReadiness, Teams), each mapped to one or more compliance frameworks.
+The assessment suite includes **293 security checks** across **16 collector families** (Backup, CAEvaluator, Compliance, CriticalExposure, Defender, DNS, EntApp, Entra, ExchangeOnline, Forms, Intune, PowerBI, PurviewRetention, SharePoint, StrykerReadiness, Teams), each mapped to one or more compliance frameworks.
 <!-- registry-stats:checks:end -->
 
 ## Control Registry
 
 <!-- registry-stats:registry:begin -->
-Framework mappings are defined in `controls/registry.json`, which contains **292 control entries** — the M365-scoped subset of the upstream CheckID registry plus **5 local extension checks**.
+Framework mappings are defined in `controls/registry.json` and `controls/local-extensions.json`, which together provide **293 control entries** — the M365-scoped subset of the upstream CheckID registry plus **6 local extension checks**.
 <!-- registry-stats:registry:end -->
 
 CheckID upstream also carries Windows-endpoint `WIN-*` and Azure-subscription `AZ-*` checks; the sync workflow filters those out via `controls/sync-scope.json` because no collector in this module can emit them. Each entry specifies the check ID, description, and mappings to all applicable frameworks.

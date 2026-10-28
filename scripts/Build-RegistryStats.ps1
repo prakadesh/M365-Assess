@@ -4,13 +4,14 @@
     from controls/registry.json.
 .DESCRIPTION
     Reads the control data files (registry.json, sync-scope.json, risk-severity.json,
-    learn-more.json, local-extensions.json, frameworks/*.json) and regenerates:
+    learn-more.json, local-extensions.json, frameworks/*.json) plus version-specific
+    crosswalk overlays such as cis-m365-v7-overlay.json, and regenerates:
 
       - Marker-delimited stat blocks in README.md, src/M365-Assess/controls/README.md,
         and docs/user/COMPLIANCE.md (between <!-- registry-stats:NAME:begin/end -->
         comments)
       - docs/reference/COVERAGE.md in full (registry summary, per-framework mapping
-        coverage, CISA SCuBA product pillars, per-collector counts)
+        coverage including separate CIS v7 overlays, CISA SCuBA product pillars, per-collector counts)
 
     Every public check count and framework statistic comes from this script so the
     numbers can never drift from the shipped registry. CI runs this with -Check to
@@ -50,6 +51,18 @@ $learnMore = Get-Content -Path (Join-Path -Path $controlsPath -ChildPath 'learn-
 $localExt = Get-Content -Path (Join-Path -Path $controlsPath -ChildPath 'local-extensions.json') -Raw | ConvertFrom-Json
 
 $checks = @($registry.checks)
+
+# local-extensions.json is the source of truth for local-only check IDs. Most are
+# already included by the last CheckID sync, but newly added extensions must be
+# included in stats immediately and must not be double-counted when sync has run.
+$knownCheckIds = @{}
+foreach ($registeredCheck in $checks) { $knownCheckIds[$registeredCheck.checkId] = $true }
+foreach ($localCheck in $localExt) {
+    if ($localCheck.checkId -and -not $knownCheckIds.ContainsKey($localCheck.checkId)) {
+        $checks += $localCheck
+        $knownCheckIds[$localCheck.checkId] = $true
+    }
+}
 $severityIds = @($severity.checks.PSObject.Properties.Name)
 $learnMoreIds = @($learnMore.checks.PSObject.Properties.Name)
 
@@ -100,6 +113,30 @@ foreach ($regCheck in $checks) {
     }
 }
 
+# Versioned CIS crosswalk overlays live outside registry.json because that registry is
+# regenerated from upstream CheckID/SCF. Include their mapped checks in report-view
+# coverage statistics without mutating or double-counting the upstream registry.
+$cisV7OverlayPath = Join-Path -Path $controlsPath -ChildPath 'cis-m365-v7-overlay.json'
+if (Test-Path -Path $cisV7OverlayPath) {
+    $cisV7Overlay = Get-Content -Path $cisV7OverlayPath -Raw | ConvertFrom-Json
+    foreach ($prop in $cisV7Overlay.checks.PSObject.Properties) {
+        $frameworkId = 'cis-m365-v7'
+        if (-not $frameworkStats.ContainsKey($frameworkId)) {
+            $frameworkStats[$frameworkId] = @{
+                Checks   = 0
+                Controls = [System.Collections.Generic.HashSet[string]]::new()
+            }
+        }
+        $frameworkStats[$frameworkId].Checks++
+        if ($prop.Value.controlId) {
+            foreach ($cid in ([string]$prop.Value.controlId) -split '[;,]') {
+                $trimmed = $cid.Trim()
+                if ($trimmed) { [void]$frameworkStats[$frameworkId].Controls.Add($trimmed) }
+            }
+        }
+    }
+}
+
 # CISA SCuBA product pillars from controlId prefixes (MS.<PRODUCT>.x.y).
 # Labels come from scoring.products, falling back to the groups map (which the
 # Framework-Taxonomy test guarantees covers every registry-mapped MS.* key).
@@ -144,18 +181,18 @@ $collectorStats = foreach ($collector in $collectors) {
 # ------------------------------------------------------------------
 # Render generated content
 # ------------------------------------------------------------------
-$summaryBlock = "**$checkCount automated security checks** mapped across **$frameworkFileCount compliance frameworks** — counts generated from [``controls/registry.json``](src/M365-Assess/controls/registry.json); per-framework coverage in [docs/reference/COVERAGE.md](docs/reference/COVERAGE.md)."
+$summaryBlock = "**$automatedCount automated security checks** mapped across **$frameworkFileCount compliance frameworks** — counts generated from [``controls/registry.json``](src/M365-Assess/controls/registry.json) and [``controls/local-extensions.json``](src/M365-Assess/controls/local-extensions.json); per-framework coverage in [docs/reference/COVERAGE.md](docs/reference/COVERAGE.md)."
 
-$filesBlock = "``registry.json`` currently contains **$checkCount checks** across **$collectorCount collector families**, including **$localExtCount local extension checks**. Mappings span **$($frameworkStats.Keys.Count) framework keys**, $frameworkFileCount of which have report-view definitions in ``frameworks/``."
+$filesBlock = "The runtime control set contains **$checkCount checks** across **$collectorCount collector families**, including **$localExtCount local extension checks**. Mappings span **$($frameworkStats.Keys.Count) framework keys**, $frameworkFileCount of which have report-view definitions in ``frameworks/``."
 
 $checksBlock = "The assessment suite includes **$checkCount security checks** across **$collectorCount collector families** ($($collectors -join ', ')), each mapped to one or more compliance frameworks."
 
-$registryBlock = "Framework mappings are defined in ``controls/registry.json``, which contains **$checkCount control entries** — the M365-scoped subset of the upstream CheckID registry plus **$localExtCount local extension checks**."
+$registryBlock = "Framework mappings are defined in ``controls/registry.json`` and ``controls/local-extensions.json``, which together provide **$checkCount control entries** — the M365-scoped subset of the upstream CheckID registry plus **$localExtCount local extension checks**."
 
 $coverage = [System.Text.StringBuilder]::new()
 [void]$coverage.AppendLine('# Coverage Statistics')
 [void]$coverage.AppendLine()
-[void]$coverage.AppendLine('> Generated by `scripts/Build-RegistryStats.ps1` from `controls/registry.json` (data version ' + $registry.dataVersion + '). Do not edit by hand — regenerate with `./scripts/Build-RegistryStats.ps1`; CI fails PRs where this page drifts from the registry.')
+[void]$coverage.AppendLine('> Generated by `scripts/Build-RegistryStats.ps1` from `controls/registry.json` and `controls/local-extensions.json` (registry data version ' + $registry.dataVersion + '), plus version-specific framework overlays when present. Do not edit by hand — regenerate with `./scripts/Build-RegistryStats.ps1`; CI fails PRs where this page drifts from the control data and overlays.')
 [void]$coverage.AppendLine()
 [void]$coverage.AppendLine('## Registry summary')
 [void]$coverage.AppendLine()
@@ -167,7 +204,7 @@ $coverage = [System.Text.StringBuilder]::new()
 [void]$coverage.AppendLine()
 [void]$coverage.AppendLine('## Per-framework mapping coverage')
 [void]$coverage.AppendLine()
-[void]$coverage.AppendLine('"Checks mapped" counts registry checks carrying a mapping for the framework; "distinct controls" counts the unique framework control IDs those mappings reference. Coverage relative to a framework''s full control catalog needs the framework''s own denominator — the registry only knows what is mapped, so an unmapped control is invisible here (see the SCuBA pillar table below for a worked example).')
+[void]$coverage.AppendLine('"Checks mapped" counts registry checks, local-extension entries, or version-overlay entries carrying a mapping for the framework; "distinct controls" counts the unique framework control IDs those mappings reference. Coverage relative to a framework''s full control catalog needs the framework''s own denominator — unmapped controls are not inferred from absence of a mapping (see the SCuBA pillar table below for a worked example).')
 [void]$coverage.AppendLine()
 [void]$coverage.AppendLine('| Framework key | Report view | Checks mapped | Distinct controls mapped | Avg checks / control |')
 [void]$coverage.AppendLine('|---|---|---|---|---|')

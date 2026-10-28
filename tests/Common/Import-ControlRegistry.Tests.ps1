@@ -17,6 +17,18 @@ Describe 'Import-ControlRegistry' {
         $entry.frameworks.'cis-m365-v6'.controlId | Should -Not -BeNullOrEmpty
     }
 
+    It 'loads a local extension missing from registry.json with severity and framework mappings' {
+        $registry = Import-ControlRegistry -ControlsPath $testRoot
+        $entry = $registry['EXO-UNAUTHRELAY-001']
+        $entry | Should -Not -BeNullOrEmpty
+        $entry.collector | Should -Be 'ExchangeOnline'
+        $entry.hasAutomatedCheck | Should -BeTrue
+        $entry.riskSeverity | Should -Be 'Medium'
+        $entry.severityRated | Should -BeTrue
+        $entry.frameworks.'cis-controls-v8'.controlId | Should -Not -BeNullOrEmpty
+        $entry.frameworks.ContainsKey('cis-m365-v6') | Should -BeFalse
+    }
+
     It 'Builds a reverse lookup from CIS control ID to CheckId' {
         $registry = Import-ControlRegistry -ControlsPath $testRoot
         $reverseLookup = $registry['__cisReverseLookup']

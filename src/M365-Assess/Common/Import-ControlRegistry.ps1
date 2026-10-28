@@ -69,6 +69,30 @@ function Import-ControlRegistry {
         }
     }
 
+    # Merge local extension definitions that have not yet been materialized into
+    # registry.json by the CheckID sync workflow. This keeps newly added local
+    # checks visible to progress tracking and report enrichment immediately, while
+    # preserving registry.json as the generated upstream + merged local artifact.
+    $localExtensionsPath = Join-Path -Path $ControlsPath -ChildPath 'local-extensions.json'
+    if (Test-Path -Path $localExtensionsPath) {
+        $localExtensions = Get-Content -Path $localExtensionsPath -Raw | ConvertFrom-Json
+        $registeredCheckIds = @{}
+        foreach ($check in $checks) { $registeredCheckIds[$check.checkId] = $true }
+
+        $extensionCollectors = @()
+        if (Test-Path -Path $scopePath) {
+            $extensionScopeData = Get-Content -Path $scopePath -Raw | ConvertFrom-Json
+            $extensionCollectors = @($extensionScopeData.collectors)
+        }
+
+        foreach ($extension in $localExtensions) {
+            if (-not $extension.checkId -or $registeredCheckIds.ContainsKey($extension.checkId)) { continue }
+            if ($extensionCollectors.Count -gt 0 -and $extension.collector -and $extension.collector -notin $extensionCollectors) { continue }
+            $checks += $extension
+            $registeredCheckIds[$extension.checkId] = $true
+        }
+    }
+
     # Load licensing overlay (M365-Assess-specific service plan gating)
     $licensingOverlay = @{}
     $overlayPath = Join-Path -Path $ControlsPath -ChildPath 'licensing-overlay.json'
@@ -125,6 +149,36 @@ function Import-ControlRegistry {
         $cisMapping = $check.frameworks.$CisFrameworkId
         if ($cisMapping -and $cisMapping.controlId) {
             $cisReverse[$cisMapping.controlId] = $check.checkId
+        }
+    }
+
+    # Apply the separately versioned CIS Microsoft 365 v7 crosswalk. Do not edit
+    # registry.json for this: it is regenerated from upstream CheckID/SCF and must
+    # retain its v6 mappings for historical comparisons.
+    $cisV7OverlayPath = Join-Path -Path $ControlsPath -ChildPath 'cis-m365-v7-overlay.json'
+    if (Test-Path -Path $cisV7OverlayPath) {
+        try {
+            $cisV7Overlay = Get-Content -Path $cisV7OverlayPath -Raw | ConvertFrom-Json -ErrorAction Stop
+            foreach ($prop in $cisV7Overlay.checks.PSObject.Properties) {
+                if (-not $lookup.ContainsKey($prop.Name)) { continue }
+                if (-not $prop.Value.controlId) { continue }
+
+                $v7Mapping = @{ controlId = [string]$prop.Value.controlId }
+                $v7Profiles = @()
+                if ($prop.Value.profiles) {
+                    $v7Profiles = @($prop.Value.profiles | Where-Object { $_ -in @('E3-L1', 'E3-L2', 'E5-L1', 'E5-L2') })
+                }
+                if ($v7Profiles.Count -eq 0) {
+                    Write-Warning "CIS M365 v7 crosswalk entry '$($prop.Name)' has no supported profile; skipping it."
+                    continue
+                }
+                $v7Mapping['profiles'] = $v7Profiles
+                $lookup[$prop.Name].frameworks['cis-m365-v7'] = $v7Mapping
+            }
+            Write-Verbose "Applied $(@($cisV7Overlay.checks.PSObject.Properties).Count) CIS M365 v7 crosswalk definitions."
+        }
+        catch {
+            Write-Warning "Unable to load CIS M365 v7 crosswalk '$cisV7OverlayPath': $_"
         }
     }
 

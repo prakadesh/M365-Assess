@@ -581,7 +581,7 @@ catch {
 }
 
 # ------------------------------------------------------------------
-# 13. Direct Send / Unauthenticated Relay (CIS 6.5.5)
+# 13. Unauthenticated relay connector hygiene (separate from CIS v7 Direct Send)
 # ------------------------------------------------------------------
 try {
     $connectorAvailable = Get-Command -Name Get-InboundConnector -ErrorAction SilentlyContinue
@@ -601,7 +601,7 @@ try {
                 CurrentValue     = 'No unauthenticated relay connectors found'
                 RecommendedValue = 'No open relay connectors'
                 Status           = 'Pass'
-                CheckId          = 'EXO-DIRECTSEND-001'
+                CheckId          = 'EXO-UNAUTHRELAY-001'
                 Remediation      = 'No action needed.'
             }
             Add-Setting @settingParams
@@ -614,7 +614,7 @@ try {
                 CurrentValue     = "$($relayConnectors.Count) connectors without TLS/domain restriction: $connectorNames"
                 RecommendedValue = 'No open relay connectors'
                 Status           = 'Fail'
-                CheckId          = 'EXO-DIRECTSEND-001'
+                CheckId          = 'EXO-UNAUTHRELAY-001'
                 Remediation      = "Review inbound connectors: $connectorNames. Require TLS and restrict to specific sender domains/IPs. Exchange admin center > Mail flow > Connectors."
             }
             Add-Setting @settingParams
@@ -627,7 +627,7 @@ try {
             CurrentValue     = 'Get-InboundConnector not available'
             RecommendedValue = 'No open relay connectors'
             Status           = 'Review'
-            CheckId          = 'EXO-DIRECTSEND-001'
+            CheckId          = 'EXO-UNAUTHRELAY-001'
             Remediation      = 'Connect to Exchange Online PowerShell to check inbound connector configuration.'
         }
         Add-Setting @settingParams
@@ -638,7 +638,56 @@ catch {
 }
 
 # ------------------------------------------------------------------
-# 14. Hidden User Mailboxes (potential compromise indicator)
+# 14. Direct Send submissions rejected (CIS M365 Foundations Benchmark v7.0.0, 6.5.5)
+# ------------------------------------------------------------------
+try {
+    Write-Verbose "Checking the Exchange Online RejectDirectSend organization setting..."
+    $organizationConfig = Get-OrganizationConfig -ErrorAction Stop
+    $rejectDirectSend = $organizationConfig.RejectDirectSend
+
+    if ($null -eq $rejectDirectSend) {
+        $directSendStatus = 'Review'
+        $directSendCurrent = 'RejectDirectSend was not returned by Exchange Online'
+        $directSendRemediation = 'Verify RejectDirectSend with Get-OrganizationConfig. If supported and currently False, enable it with Set-OrganizationConfig -RejectDirectSend $true.'
+    }
+    elseif ($rejectDirectSend -eq $true) {
+        $directSendStatus = 'Pass'
+        $directSendCurrent = 'RejectDirectSend = True'
+        $directSendRemediation = 'No action needed.'
+    }
+    else {
+        $directSendStatus = 'Fail'
+        $directSendCurrent = 'RejectDirectSend = False'
+        $directSendRemediation = 'Run Set-OrganizationConfig -RejectDirectSend $true. Validate mail-flow impact and confirm any required partner connector scenarios before change.'
+    }
+
+    $settingParams = @{
+        Category         = 'Mail Flow'
+        Setting          = 'Direct Send submissions rejected'
+        CurrentValue     = $directSendCurrent
+        RecommendedValue = 'RejectDirectSend = True'
+        Status           = $directSendStatus
+        CheckId          = 'EXO-DIRECTSEND-001'
+        Remediation      = $directSendRemediation
+    }
+    Add-Setting @settingParams
+}
+catch {
+    Write-Warning "Could not read the Exchange Online RejectDirectSend setting: $_"
+    $settingParams = @{
+        Category         = 'Mail Flow'
+        Setting          = 'Direct Send submissions rejected'
+        CurrentValue     = "Unable to verify RejectDirectSend: $($_.Exception.Message)"
+        RecommendedValue = 'RejectDirectSend = True'
+        Status           = 'Review'
+        CheckId          = 'EXO-DIRECTSEND-001'
+        Remediation      = 'Connect to Exchange Online PowerShell with permission to read organization configuration, then run Get-OrganizationConfig | Select-Object RejectDirectSend.'
+    }
+    Add-Setting @settingParams
+}
+
+# ------------------------------------------------------------------
+# 15. Hidden User Mailboxes (potential compromise indicator)
 # ------------------------------------------------------------------
 try {
     Write-Verbose "Checking for hidden user mailboxes..."

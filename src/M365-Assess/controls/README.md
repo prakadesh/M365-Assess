@@ -31,6 +31,8 @@ M365-Assess repo
 | `sync-scope.json` | Collector allowlist applied when syncing the registry from CheckID |
 | `frameworks/cis-controls-v8.json` | CIS Controls v8 mappings |
 | `frameworks/cis-m365-v6.json` | CIS M365 v6 profile definitions (E3/E5, L1/L2) |
+| `frameworks/cis-m365-v7.json` | CIS M365 v7.0.0 profile definitions and recommendation catalog metadata |
+| `cis-m365-v7-overlay.json` | Version-specific v7 mappings kept separate from the upstream-generated registry |
 | `frameworks/cisa-scuba.json` | CISA SCuBA baseline definitions |
 | `frameworks/cmmc.json` | CMMC 2.0 practice/domain definitions |
 | `frameworks/essential-eight.json` | Australian Essential Eight maturity model |
@@ -45,7 +47,7 @@ M365-Assess repo
 | `frameworks/stig.json` | DISA STIG M365 rules |
 
 <!-- registry-stats:files:begin -->
-`registry.json` currently contains **292 checks** across **16 collector families**, including **5 local extension checks**. Mappings span **20 framework keys**, 15 of which have report-view definitions in `frameworks/`.
+The runtime control set contains **293 checks** across **16 collector families**, including **6 local extension checks**. Mappings span **21 framework keys**, 16 of which have report-view definitions in `frameworks/`.
 <!-- registry-stats:files:end -->
 
 ## Updating Registry Data

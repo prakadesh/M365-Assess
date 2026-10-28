@@ -115,5 +115,67 @@
       "rationale": "Informational: surfaces the total count of disabled member accounts alongside total directory size. High ratios may indicate accounts pending removal or an offboarding gap.",
       "scfWeighting": 3
     }
+  },
+  {
+    "checkId": "EXO-UNAUTHRELAY-001",
+    "name": "Inbound Connectors - Unauthenticated Relay",
+    "category": "RELAY",
+    "collector": "ExchangeOnline",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {
+      "cis-controls-v8": {
+        "controlId": "12.7;13.5;9.6"
+      },
+      "cmmc": {
+        "controlId": "AC.L2-3.1.12;SC.L1-B.1.X;SC.L1-B.1.X[a];SC.L1-B.1.X[b];SC.L1-B.1.X[c];SC.L1-B.1.X[d];SC.L1-B.1.X[e];SC.L1-B.1.X[f];SC.L1-B.1.X[g];SC.L1-B.1.X[h];SC.L2-3.13.1",
+        "profiles": [
+          "L1",
+          "L2"
+        ]
+      },
+      "fedramp": {
+        "controlId": "AC-17;SC-07;SC-07(09);SC-07(11)"
+      },
+      "iso-27001": {
+        "controlId": "6.7;8.2;8.21"
+      },
+      "iso-27017": {
+        "controlId": "13.1.1;13.1.2"
+      },
+      "mitre-attack": {
+        "controlId": "T1001;T1001.001;T1001.002;T1001.003;T1008;T1020.001;T1021;T1021.001;T1021.002;T1021.003;T1021.004;T1021.005;T1021.006;T1021.008;T1029;T1030;T1036.008;T1037;T1037.001;T1040;T1041;T1046;T1047;T1048;T1048.001;T1048.002;T1048.003;T1055;T1055.001;T1055.002;T1055.003;T1055.004;T1055.005;T1055.008;T1055.009;T1055.011;T1055.012;T1055.013;T1055.014;T1059;T1059.001;T1059.002;T1059.003;T1059.004;T1059.005;T1059.006;T1059.007;T1059.008;T1068;T1070;T1070.001;T1070.002;T1070.008;T1071;T1071.001;T1071.002;T1071.003;T1071.004;T1071.005;T1072;T1078;T1080;T1090;T1090.001;T1090.002;T1090.003;T1095;T1098;T1098.001;T1102;T1102.001;T1102.002;T1102.003;T1104;T1105;T1114;T1114.001;T1114.002;T1114.003;T1119;T1127.002;T1132;T1132.001;T1132.002;T1133;T1136;T1136.002;T1136.003;T1137;T1137.002;T1176;T1187;T1189;T1190;T1197;T1199;T1203;T1204;T1204.001;T1204.002;T1204.003;T1205;T1205.001;T1210;T1211;T1212;T1213;T1213.001;T1213.002;T1213.005;T1218;T1218.012;T1218.015;T1219;T1221;T1482;T1489;T1498;T1498.001;T1498.002;T1499;T1499.001;T1499.002;T1499.003;T1499.004;T1505.004;T1505.005;T1530;T1537;T1542;T1542.004;T1542.005;T1543;T1547.003;T1547.004;T1547.009;T1547.012;T1547.013;T1550.001;T1552;T1552.001;T1552.002;T1552.004;T1552.005;T1552.007;T1557;T1557.001;T1557.002;T1557.003;T1557.004;T1558;T1558.002;T1558.003;T1558.004;T1559;T1559.001;T1559.002;T1560;T1560.001;T1563;T1563.001;T1563.002;T1565;T1565.001;T1565.002;T1565.003;T1566;T1566.001;T1566.002;T1566.003;T1567;T1567.001;T1567.002;T1567.003;T1567.004;T1568;T1568.002;T1570;T1571;T1572;T1573;T1573.001;T1573.002;T1590.002;T1598;T1598.001;T1598.002;T1598.003;T1599;T1599.001;T1602;T1602.001;T1602.002;T1609;T1610;T1611;T1612;T1613;T1619;T1622;T1647;T1648;T1651;T1659"
+      },
+      "nist-800-171": {
+        "controlId": "3.1.12;3.13.1"
+      },
+      "nist-800-53": {
+        "controlId": "AC-18;SC-23;AC-17;AC-17(06);SC-07;SC-07(09);SC-07(11)",
+        "title": "Wireless Access; Session Authenticity; Remote Access",
+        "profiles": [
+          "Low",
+          "Moderate",
+          "High",
+          "Privacy"
+        ]
+      },
+      "pci-dss": {
+        "controlId": "1.3.3;1.4;1.4.1;1.4.2;11.5.1;12.8.1;3.4.2;7.2.5;8.2.3;8.2.7"
+      },
+      "soc2": {
+        "controlId": "CC6.1;CC6.1-POF5;CC6.6;CC6.6-POF1;CC6.6-POF3;CC6.6-POF4;CC6.8",
+        "title": "Logical Access Security Software, Infrastructure, and Architectures; Restriction of Access to System Boundaries; Prevention and Detection of Unauthorized Software"
+      },
+      "iso-27002": {
+        "controlId": "6.7;8.2;8.21"
+      }
+    },
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "This heuristic flags enabled inbound connectors where TLS is not required and sender-domain/IP restrictions are absent. Review the connector's intended use and sender scope. A pass means no connector matched this heuristic; it does not independently prove that tenant-wide Direct Send is blocked.",
+      "scfWeighting": 5
+    }
   }
 ]

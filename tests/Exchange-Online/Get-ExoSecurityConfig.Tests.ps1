@@ -33,6 +33,7 @@ Describe 'Get-ExoSecurityConfig' {
                 MailTipsExternalRecipientsTipsEnabled = $true
                 MailTipsGroupMetricsEnabled          = $true
                 MailTipsLargeAudienceThreshold       = 25
+                RejectDirectSend                    = $true
             }
         }
 
@@ -183,6 +184,13 @@ Describe 'Get-ExoSecurityConfig' {
             $s.CheckId | Should -Match '^EXO-' `
                 -Because "CheckId '$($s.CheckId)' should start with EXO-"
         }
+    }
+
+    It 'v7 Direct Send check reads RejectDirectSend and passes when enabled' {
+        $check = @($settings | Where-Object { $_.CheckId -eq 'EXO-DIRECTSEND-001' })
+        $check.Count | Should -Be 1
+        $check[0].Status | Should -Be 'Pass'
+        $check[0].CurrentValue | Should -Be 'RejectDirectSend = True'
     }
 
     It 'Modern authentication check passes' {
