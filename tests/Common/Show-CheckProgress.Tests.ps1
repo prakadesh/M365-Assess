@@ -91,6 +91,29 @@ Describe 'Update-CheckProgress' {
     }
 }
 
+Describe 'Registered local-extension progress integration' {
+    BeforeAll {
+        . "$PSScriptRoot/../../src/M365-Assess/Common/Import-ControlRegistry.ps1"
+        . "$PSScriptRoot/../../src/M365-Assess/Common/Show-CheckProgress.ps1"
+        Mock Write-Host { }
+        Mock Write-Progress { }
+        $controlsPath = "$PSScriptRoot/../../src/M365-Assess/controls"
+        $registry = Import-ControlRegistry -ControlsPath $controlsPath
+        Initialize-CheckProgress -ControlRegistry $registry -ActiveSections @('Email')
+    }
+
+    It 'queues EXO-UNAUTHRELAY-001 under the Exchange Online collector' {
+        $global:CheckProgressState.CheckIds.ContainsKey('EXO-UNAUTHRELAY-001') | Should -BeTrue
+        $global:CheckProgressState.CheckIds['EXO-UNAUTHRELAY-001'] | Should -Be 'ExchangeOnline'
+    }
+
+    It 'counts EXO-UNAUTHRELAY-001 when its finding is emitted' {
+        $before = $global:CheckProgressState.Completed
+        Update-CheckProgress -CheckId 'EXO-UNAUTHRELAY-001' -Setting 'Inbound Connectors - Unauthenticated Relay' -Status 'Review'
+        $global:CheckProgressState.Completed | Should -Be ($before + 1)
+    }
+}
+
 Describe 'Complete-CheckProgress' {
     BeforeAll {
         . "$PSScriptRoot/../../src/M365-Assess/Common/Show-CheckProgress.ps1"
