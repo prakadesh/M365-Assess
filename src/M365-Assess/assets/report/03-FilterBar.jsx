@@ -576,7 +576,7 @@ function FindingsTable({ filters, search, focusFinding, onFocusClear, onMatchesC
       case 'controlId': {
         const activeFw = filters.framework.length === 1 ? filters.framework[0] : null;
         const meta = activeFw ? f.fwMeta?.[activeFw] : null;
-        const FW_PREF = ['cis-m365-v6','nist-800-53','cmmc','nist-csf','iso-27001'];
+        const FW_PREF = ['cis-m365-v7','cis-m365-v6','nist-800-53','cmmc','nist-csf','iso-27001'];
         const cid = meta?.controlId || (() => {
           if (!f.fwMeta) return null;
           for (const fw of FW_PREF) { if (f.fwMeta[fw]?.controlId) return f.fwMeta[fw].controlId; }

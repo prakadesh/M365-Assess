@@ -1,0 +1,2566 @@
+{
+  "description": "CIS Microsoft 365 Foundations Benchmark v7.0.0 control catalog and check-to-control mapping. Local overlay merged into registry entries by Import-ControlRegistry at load time, so it survives the weekly CheckID registry sync (which rewrites registry.json and cis-m365-v6.json).",
+  "frameworkId": "cis-m365-v7",
+  "benchmarkVersion": "7.0.0",
+  "benchmarkDate": "2026-05-20",
+  "catalog": {
+    "1.1.1": {
+      "title": "Ensure Administrative accounts are cloud-only",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "1.1.2": {
+      "title": "Ensure two emergency access accounts have been defined",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "1.1.3": {
+      "title": "Ensure that between two and four global admins are designated",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "1.1.4": {
+      "title": "Ensure administrative accounts use licenses with a reduced application footprint",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "1.2.1": {
+      "title": "Ensure that only organizationally managed/approved public groups exist",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "1.2.2": {
+      "title": "Ensure sign-in to shared mailboxes is blocked",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "1.3.1": {
+      "title": "Ensure the 'Password expiration policy' is set to 'Set passwords to never expire (recommended)'",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "1.3.2": {
+      "title": "Ensure 'Idle session timeout' is set to '3 hours (or less)' for unmanaged devices",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "1.3.3": {
+      "title": "Ensure 'External sharing' of calendars is not available",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "1.3.4": {
+      "title": "Ensure 'User owned apps and services' is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "1.3.5": {
+      "title": "Ensure internal phishing protection for Forms is enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "1.3.6": {
+      "title": "Ensure the customer lockbox feature is enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "1.3.7": {
+      "title": "Ensure 'third-party storage services' are restricted in 'Microsoft 365 on the web'",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "1.3.8": {
+      "title": "Ensure that Sways cannot be shared with people outside of your organization",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "1.3.9": {
+      "title": "Ensure shared bookings pages are restricted to select users",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "2.1.1": {
+      "title": "Ensure Safe Links for Office Applications is Enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "2.1.2": {
+      "title": "Ensure the Common Attachment Types Filter is enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "2.1.3": {
+      "title": "Ensure notifications for internal users sending malware is Enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "2.1.4": {
+      "title": "Ensure Safe Attachments policy is enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "2.1.5": {
+      "title": "Ensure Safe Attachments for SharePoint, OneDrive, and Microsoft Teams is Enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "2.1.6": {
+      "title": "Ensure Exchange Online Spam Policies are set to notify administrators",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "2.1.7": {
+      "title": "Ensure that an anti-phishing policy has been created",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "2.1.8": {
+      "title": "Ensure that SPF records are published for all Exchange Domains",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "2.1.9": {
+      "title": "Ensure that DKIM is enabled for all Exchange Online Domains",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "2.1.10": {
+      "title": "Ensure DMARC records for all Exchange Online domains are published",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "2.1.11": {
+      "title": "Ensure comprehensive attachment filtering is applied",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "2.1.12": {
+      "title": "Ensure the connection filter IP allow list is not used",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "2.1.13": {
+      "title": "Ensure the connection filter safe list is off",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "2.1.14": {
+      "title": "Ensure inbound anti-spam policies do not contain allowed domains",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "2.1.15": {
+      "title": "Ensure outbound anti-spam message limits are in place",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "2.2.1": {
+      "title": "Ensure emergency access account activity is monitored",
+      "assessment": "Manual",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "2.4.1": {
+      "title": "Ensure Priority account protection is enabled and configured",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "2.4.2": {
+      "title": "Ensure Priority accounts have 'Strict protection' presets applied",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "2.4.3": {
+      "title": "Ensure Microsoft Defender for Cloud Apps is enabled and configured",
+      "assessment": "Manual",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "2.4.4": {
+      "title": "Ensure Zero-hour auto purge for Microsoft Teams is on",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "2.4.5": {
+      "title": "Ensure 'AIR' remediation is enabled",
+      "assessment": "Manual",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "3.1.1": {
+      "title": "Ensure Microsoft 365 audit log search is Enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "3.2.1": {
+      "title": "Ensure DLP policies are enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "3.2.2": {
+      "title": "Ensure DLP policies are enabled for Microsoft Teams",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "3.2.3": {
+      "title": "Ensure DLP policies are published for Copilot users",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "3.3.1": {
+      "title": "Ensure Information Protection sensitivity label policies are published",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "4.1": {
+      "title": "Ensure devices without a compliance policy are marked 'not compliant'",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "4.2": {
+      "title": "Ensure device enrollment for personally owned devices is blocked by default",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.2.1": {
+      "title": "Ensure 'Per-user MFA' is disabled",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.2.2": {
+      "title": "Ensure users cannot register applications",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.2.3": {
+      "title": "Ensure 'Restrict non-admin users from creating tenants' is set to 'Yes'",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.2.4": {
+      "title": "Ensure access to the Entra admin center is restricted",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.2.5": {
+      "title": "Ensure the option to remain signed in is hidden",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.1.2.6": {
+      "title": "Ensure 'LinkedIn account connections' is disabled",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.1.3.1": {
+      "title": "Ensure users cannot create security groups",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.3.2": {
+      "title": "Ensure that 'Restrict user ability to access groups features in My Groups' is set to 'Yes'",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.1.3.3": {
+      "title": "Ensure that 'Owners can manage group membership requests in My Groups' is set to 'No'",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.3.4": {
+      "title": "Ensure that 'Users can create Microsoft 365 groups in Azure portals, API or PowerShell' is set to 'No'",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.1.4.1": {
+      "title": "Ensure the ability to join devices to Entra is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.1.4.2": {
+      "title": "Ensure the maximum number of devices per user is limited",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.4.3": {
+      "title": "Ensure the GA role is not added as a local administrator during Entra join",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.4.4": {
+      "title": "Ensure local administrator assignment is limited during Entra join",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.4.5": {
+      "title": "Ensure Local Administrator Password Solution is enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.4.6": {
+      "title": "Ensure users are restricted from recovering BitLocker keys",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.1.5.1": {
+      "title": "Ensure user consent to apps accessing company data on their behalf is not allowed",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.1.5.2": {
+      "title": "Ensure the admin consent workflow is enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.5.3": {
+      "title": "Ensure password addition is blocked for applications",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.1.5.4": {
+      "title": "Ensure password lifetime for applications does not exceed 180 days",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.5.5": {
+      "title": "Ensure new application passwords are system-generated",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.5.6": {
+      "title": "Ensure maximum certificate lifetime for applications does not exceed 180 days",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.6.1": {
+      "title": "Ensure that collaboration invitations are sent to allowed domains only",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.1.6.2": {
+      "title": "Ensure that guest user access is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.1.6.3": {
+      "title": "Ensure guest user invitations are limited",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.1.8.1": {
+      "title": "Ensure that password hash sync is enabled for hybrid deployments",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.2.1": {
+      "title": "Ensure multifactor authentication is enabled for all users in administrative roles",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.2.2": {
+      "title": "Ensure multifactor authentication is enabled for all users",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.2.3": {
+      "title": "Enable Conditional Access policies to block legacy authentication",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.2.4": {
+      "title": "Ensure Sign-in frequency is enabled and browser sessions are not persistent for Administrative users",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.2.5": {
+      "title": "Ensure 'Phishing-resistant MFA strength' is required for Administrators",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.2.2.6": {
+      "title": "Enable Identity Protection user risk policies",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "5.2.2.7": {
+      "title": "Enable Identity Protection sign-in risk policies",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "5.2.2.8": {
+      "title": "Ensure 'sign-in risk' is blocked for medium and high risk",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "5.2.2.9": {
+      "title": "Ensure a managed device is required for authentication",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.2.10": {
+      "title": "Ensure a managed device is required to register security information",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.2.11": {
+      "title": "Ensure sign-in frequency for Intune Enrollment is set to 'Every time'",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.2.12": {
+      "title": "Ensure the device code sign-in flow is blocked",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.2.13": {
+      "title": "Ensure that periodic reauthentication is required for all users",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.2.14": {
+      "title": "Ensure trusted 'named locations' are defined",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.2.2.15": {
+      "title": "Ensure exclusionary geographic access controls are utilized",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.2.2.16": {
+      "title": "Ensure Token Protection is enforced for session tokens",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.2.2.17": {
+      "title": "Ensure authentication transfer is blocked",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.3.1": {
+      "title": "Ensure Microsoft Authenticator is configured to protect against MFA fatigue",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.3.2": {
+      "title": "Ensure custom banned passwords lists are used",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.3.3": {
+      "title": "Ensure password protection is enabled for on-prem Active Directory",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.3.4": {
+      "title": "Ensure all member users are 'MFA capable'",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.3.5": {
+      "title": "Ensure weak authentication methods are disabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.3.6": {
+      "title": "Ensure system-preferred multifactor authentication is enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.3.7": {
+      "title": "Ensure the email OTP authentication method is disabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.2.3.8": {
+      "title": "Ensure that Account 'Lockout threshold' is '10' or less",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.3.9": {
+      "title": "Ensure that Account 'Lockout duration in seconds' is at least 60 seconds",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.3.10": {
+      "title": "Ensure Microsoft Authenticator on companion applications is disabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.4.1": {
+      "title": "Ensure 'Self service password reset enabled' is set to 'All'",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.4.2": {
+      "title": "Ensure that 2 methods are required for password reset",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "5.2.4.3": {
+      "title": "Ensure SSPR registration and authentication re- confirmation are required",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.4.4": {
+      "title": "Ensure that users are notified on password resets",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.2.4.5": {
+      "title": "Ensure all admins are notified when other admins reset their password",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "5.3.1": {
+      "title": "Ensure privileged role assignments are activated and not assigned",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "5.3.2": {
+      "title": "Ensure 'Access reviews' for guest users are configured",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "5.3.3": {
+      "title": "Ensure 'Access reviews' for privileged roles are configured",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "5.3.4": {
+      "title": "Ensure approval is required for Global Administrator role activation",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "5.3.5": {
+      "title": "Ensure approval is required for Privileged Role Administrator activation",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "6.1.1": {
+      "title": "Ensure 'AuditDisabled' organizationally is set to 'False'",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "6.1.2": {
+      "title": "Ensure mailbox audit actions are configured",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "6.1.3": {
+      "title": "Ensure 'AuditBypassEnabled' is not enabled on mailboxes",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "6.2.1": {
+      "title": "Ensure all forms of mail forwarding are blocked and/or disabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "6.2.2": {
+      "title": "Ensure mail transport rules do not whitelist specific domains",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "6.2.3": {
+      "title": "Ensure email from external senders is identified",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "6.3.1": {
+      "title": "Ensure users installing Outlook add-ins is not allowed",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "6.3.2": {
+      "title": "Ensure the ability to add personal email accounts and calendars is disabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "6.5.1": {
+      "title": "Ensure modern authentication for Exchange Online is enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "6.5.2": {
+      "title": "Ensure MailTips are enabled for end users",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "6.5.3": {
+      "title": "Ensure additional storage providers are restricted in Outlook on the web",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "6.5.4": {
+      "title": "Ensure SMTP AUTH is disabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "6.5.5": {
+      "title": "Ensure Direct Send submissions are rejected",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "7.2.1": {
+      "title": "Ensure modern authentication for SharePoint applications is required",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "7.2.2": {
+      "title": "Ensure SharePoint and OneDrive integration with Azure AD B2B is enabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "7.2.3": {
+      "title": "Ensure external content sharing is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "7.2.4": {
+      "title": "Ensure OneDrive content sharing is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "7.2.5": {
+      "title": "Ensure that SharePoint guest users cannot share items they don't own",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "7.2.6": {
+      "title": "Ensure SharePoint external sharing is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "7.2.7": {
+      "title": "Ensure link sharing is restricted in SharePoint and OneDrive",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "7.2.8": {
+      "title": "Ensure external sharing is restricted by security group",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "7.2.9": {
+      "title": "Ensure guest access to a site or OneDrive will expire automatically",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "7.2.10": {
+      "title": "Ensure reauthentication with verification code is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "7.2.11": {
+      "title": "Ensure the SharePoint default sharing link permission is set",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "7.3.1": {
+      "title": "Ensure Office 365 SharePoint infected files are disallowed for download",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "8.1.1": {
+      "title": "Ensure external file sharing in Teams is enabled for only approved cloud storage services",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "8.1.2": {
+      "title": "Ensure users can't send emails to a channel email address",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "8.2.1": {
+      "title": "Ensure external domains are restricted in the Teams admin center",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "8.2.2": {
+      "title": "Ensure communication with unmanaged Teams users is disabled",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "8.2.3": {
+      "title": "Ensure external Teams users cannot initiate conversations",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "8.2.4": {
+      "title": "Ensure the organization cannot communicate with accounts in trial Teams tenants",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "8.4.1": {
+      "title": "Ensure app permission policies are configured",
+      "assessment": "Manual",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "8.5.1": {
+      "title": "Ensure anonymous users can't join a meeting",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "8.5.2": {
+      "title": "Ensure anonymous users and dial-in callers can't start a meeting",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "8.5.3": {
+      "title": "Ensure only people in my org can bypass the lobby",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "8.5.4": {
+      "title": "Ensure users dialing in can't bypass the lobby",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "8.5.5": {
+      "title": "Ensure meeting chat does not allow anonymous users",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "8.5.6": {
+      "title": "Ensure only organizers and co-organizers can present",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "8.5.7": {
+      "title": "Ensure external participants can't give or request control",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "8.5.8": {
+      "title": "Ensure external meeting chat is off",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "8.5.9": {
+      "title": "Ensure meeting recording is off by default",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "8.6.1": {
+      "title": "Ensure users can report security concerns in Teams",
+      "assessment": "Automated",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "9.1.1": {
+      "title": "Ensure guest user access is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "9.1.2": {
+      "title": "Ensure external user invitations are restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "9.1.3": {
+      "title": "Ensure guest access to content is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "9.1.4": {
+      "title": "Ensure 'Publish to web' is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "9.1.5": {
+      "title": "Ensure 'Interact with and share R and Python' visuals is 'Disabled'",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "9.1.6": {
+      "title": "Ensure 'Allow users to apply sensitivity labels for content' is 'Enabled'",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "9.1.7": {
+      "title": "Ensure shareable links are restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "9.1.8": {
+      "title": "Ensure enabling of external data sharing is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "9.1.9": {
+      "title": "Ensure 'Block ResourceKey Authentication' is 'Enabled'",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "9.1.10": {
+      "title": "Ensure access to APIs by service principals is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "9.1.11": {
+      "title": "Ensure service principals cannot create and use profiles",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "9.1.12": {
+      "title": "Ensure service principals ability to create workspaces, connections and deployment pipelines is restricted",
+      "assessment": "Automated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    }
+  },
+  "checks": {
+    "CA-DEVICE-001": {
+      "controlId": "5.2.2.9",
+      "title": "Ensure a managed device is required for authentication",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-DEVICE-002": {
+      "controlId": "5.2.2.10",
+      "title": "Ensure a managed device is required to register security information",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-DEVICECODE-001": {
+      "controlId": "5.2.2.12",
+      "title": "Ensure the device code sign-in flow is blocked",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-EXCLUSION-001": {
+      "controlId": "5.1.2.1",
+      "title": "Ensure 'Per-user MFA' is disabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-INTUNE-001": {
+      "controlId": "5.2.2.11",
+      "title": "Ensure sign-in frequency for Intune Enrollment is set to 'Every time'",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-LEGACYAUTH-001": {
+      "controlId": "5.2.2.3",
+      "title": "Enable Conditional Access policies to block legacy authentication",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-MFA-ADMIN-001": {
+      "controlId": "5.2.2.1",
+      "title": "Ensure multifactor authentication is enabled for all users in administrative roles",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-MFA-ALL-001": {
+      "controlId": "5.2.2.2",
+      "title": "Ensure multifactor authentication is enabled for all users",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-PHISHRES-001": {
+      "controlId": "5.2.2.5",
+      "title": "Ensure 'Phishing-resistant MFA strength' is required for Administrators",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "CA-SIGNIN-FREQ-001": {
+      "controlId": "5.2.2.4",
+      "title": "Ensure Sign-in frequency is enabled and browser sessions are not persistent for Administrative users",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-SIGNINRISK-001": {
+      "controlId": "5.2.2.7",
+      "title": "Enable Identity Protection sign-in risk policies",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "CA-SIGNINRISK-002": {
+      "controlId": "5.2.2.8",
+      "title": "Ensure 'sign-in risk' is blocked for medium and high risk",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "CA-USERRISK-001": {
+      "controlId": "5.2.2.6",
+      "title": "Enable Identity Protection user risk policies",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "COMPLIANCE-AUDIT-001": {
+      "controlId": "3.1.1",
+      "title": "Ensure Microsoft 365 audit log search is Enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "COMPLIANCE-DLP-001": {
+      "controlId": "3.2.1",
+      "title": "Ensure DLP policies are enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "COMPLIANCE-DLP-002": {
+      "controlId": "3.2.2",
+      "title": "Ensure DLP policies are enabled for Microsoft Teams",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "COMPLIANCE-LABELS-001": {
+      "controlId": "3.3.1",
+      "title": "Ensure Information Protection sensitivity label policies are published",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-ANTIMALWARE-001": {
+      "controlId": "2.1.2",
+      "title": "Ensure the Common Attachment Types Filter is enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-ANTIMALWARE-002": {
+      "controlId": "2.1.3",
+      "title": "Ensure notifications for internal users sending malware is Enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-ANTIPHISH-001": {
+      "controlId": "2.1.7",
+      "title": "Ensure that an anti-phishing policy has been created",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "DEFENDER-ANTISPAM-001": {
+      "controlId": "2.1.6",
+      "title": "Ensure Exchange Online Spam Policies are set to notify administrators",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-ANTISPAM-002": {
+      "controlId": "2.1.14",
+      "title": "Ensure inbound anti-spam policies do not contain allowed domains",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-CLOUDAPPS-001": {
+      "controlId": "2.4.3",
+      "title": "Ensure Microsoft Defender for Cloud Apps is enabled and configured",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "DEFENDER-MALWARE-002": {
+      "controlId": "2.1.11",
+      "title": "Ensure comprehensive attachment filtering is applied",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "DEFENDER-OUTBOUND-001": {
+      "controlId": "2.1.15",
+      "title": "Ensure outbound anti-spam message limits are in place",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-PRIORITY-001": {
+      "controlId": "2.4.1",
+      "title": "Ensure Priority account protection is enabled and configured",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-PRIORITY-002": {
+      "controlId": "2.4.2",
+      "title": "Ensure Priority accounts have 'Strict protection' presets applied",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-SAFEATTACH-001": {
+      "controlId": "2.1.4",
+      "title": "Ensure Safe Attachments policy is enabled",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "DEFENDER-SAFEATTACH-002": {
+      "controlId": "2.1.5",
+      "title": "Ensure Safe Attachments for SharePoint, OneDrive, and Microsoft Teams is Enabled",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "DEFENDER-SAFELINKS-001": {
+      "controlId": "2.1.1",
+      "title": "Ensure Safe Links for Office Applications is Enabled",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "DEFENDER-ZAP-001": {
+      "controlId": "2.4.4",
+      "title": "Ensure Zero-hour auto purge for Microsoft Teams is on",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "DNS-DKIM-001": {
+      "controlId": "2.1.9",
+      "title": "Ensure that DKIM is enabled for all Exchange Online Domains",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DNS-DMARC-001": {
+      "controlId": "2.1.10",
+      "title": "Ensure DMARC records for all Exchange Online domains are published",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DNS-SPF-001": {
+      "controlId": "2.1.8",
+      "title": "Ensure that SPF records are published for all Exchange Domains",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-ADMIN-001": {
+      "controlId": "1.1.3",
+      "title": "Ensure that between two and four global admins are designated",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-ADMIN-002": {
+      "controlId": "5.1.2.4",
+      "title": "Ensure access to the Entra admin center is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-ADMIN-003": {
+      "controlId": "1.1.2",
+      "title": "Ensure two emergency access accounts have been defined",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-APPS-001": {
+      "controlId": "5.1.2.2",
+      "title": "Ensure users cannot register applications",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-AUTHMETHOD-001": {
+      "controlId": "5.2.3.5",
+      "title": "Ensure weak authentication methods are disabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-AUTHMETHOD-002": {
+      "controlId": "5.2.3.7",
+      "title": "Ensure the email OTP authentication method is disabled",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-AUTHMETHOD-003": {
+      "controlId": "5.2.3.1",
+      "title": "Ensure Microsoft Authenticator is configured to protect against MFA fatigue",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-AUTHMETHOD-004": {
+      "controlId": "5.2.3.6",
+      "title": "Ensure system-preferred multifactor authentication is enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-BREAKGLASS-001": {
+      "controlId": "1.1.4",
+      "title": "Ensure administrative accounts use licenses with a reduced application footprint",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-BREAKGLASS-002": {
+      "controlId": "2.2.1",
+      "title": "Ensure emergency access account activity is monitored",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "ENTRA-CA-001": {
+      "controlId": "5.2.2.3",
+      "title": "Enable Conditional Access policies to block legacy authentication",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-CLOUDADMIN-001": {
+      "controlId": "1.1.1",
+      "title": "Ensure Administrative accounts are cloud-only",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-CLOUDADMIN-002": {
+      "controlId": "1.1.4",
+      "title": "Ensure administrative accounts use licenses with a reduced application footprint",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-CONSENT-001": {
+      "controlId": "5.1.5.1",
+      "title": "Ensure user consent to apps accessing company data on their behalf is not allowed",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-CONSENT-002": {
+      "controlId": "5.1.5.2",
+      "title": "Ensure the admin consent workflow is enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-DEVICE-001": {
+      "controlId": "5.1.4.1",
+      "title": "Ensure the ability to join devices to Entra is restricted",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-DEVICE-002": {
+      "controlId": "5.1.4.2",
+      "title": "Ensure the maximum number of devices per user is limited",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-DEVICE-003": {
+      "controlId": "5.1.4.3",
+      "title": "Ensure the GA role is not added as a local administrator during Entra join",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-DEVICE-004": {
+      "controlId": "5.1.4.4",
+      "title": "Ensure local administrator assignment is limited during Entra join",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-DEVICE-005": {
+      "controlId": "5.1.4.5",
+      "title": "Ensure Local Administrator Password Solution is enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-DEVICE-006": {
+      "controlId": "5.1.4.6",
+      "title": "Ensure users are restricted from recovering BitLocker keys",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-GROUP-001": {
+      "controlId": "5.1.3.1",
+      "title": "Ensure users cannot create security groups",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-GROUP-003": {
+      "controlId": "1.2.1",
+      "title": "Ensure that only organizationally managed/approved public groups exist",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-GUEST-001": {
+      "controlId": "5.1.6.2",
+      "title": "Ensure that guest user access is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-GUEST-002": {
+      "controlId": "5.1.6.3",
+      "title": "Ensure guest user invitations are limited",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-GUEST-004": {
+      "controlId": "5.1.6.1",
+      "title": "Ensure that collaboration invitations are sent to allowed domains only",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-HYBRID-001": {
+      "controlId": "5.1.8.1",
+      "title": "Ensure that password hash sync is enabled for hybrid deployments",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-LINKEDIN-001": {
+      "controlId": "5.1.2.6",
+      "title": "Ensure 'LinkedIn account connections' is disabled",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-MFA-001": {
+      "controlId": "5.2.3.4",
+      "title": "Ensure all member users are 'MFA capable'",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-ORGSETTING-001": {
+      "controlId": "1.3.4",
+      "title": "Ensure 'User owned apps and services' is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-ORGSETTING-002": {
+      "controlId": "1.3.5",
+      "title": "Ensure internal phishing protection for Forms is enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-ORGSETTING-003": {
+      "controlId": "1.3.7",
+      "title": "Ensure 'third-party storage services' are restricted in 'Microsoft 365 on the web'",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-ORGSETTING-004": {
+      "controlId": "1.3.9",
+      "title": "Ensure shared bookings pages are restricted to select users",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PASSWORD-001": {
+      "controlId": "1.3.1",
+      "title": "Ensure the 'Password expiration policy' is set to 'Set passwords to never expire (recommended)'",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PASSWORD-002": {
+      "controlId": "5.2.3.2",
+      "title": "Ensure custom banned passwords lists are used",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PASSWORD-003": {
+      "controlId": "5.2.3.8",
+      "title": "Ensure that Account 'Lockout threshold' is '10' or less",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PASSWORD-005": {
+      "controlId": "5.2.3.3",
+      "title": "Ensure password protection is enabled for on-prem Active Directory",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PERUSER-001": {
+      "controlId": "5.1.2.1",
+      "title": "Ensure 'Per-user MFA' is disabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PIM-001": {
+      "controlId": "5.3.1",
+      "title": "Ensure privileged role assignments are activated and not assigned",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "ENTRA-PIM-002": {
+      "controlId": "5.3.2",
+      "title": "Ensure 'Access reviews' for guest users are configured",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PIM-003": {
+      "controlId": "5.3.3",
+      "title": "Ensure 'Access reviews' for privileged roles are configured",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PIM-004": {
+      "controlId": "5.3.4",
+      "title": "Ensure approval is required for Global Administrator role activation",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PIM-005": {
+      "controlId": "5.3.5",
+      "title": "Ensure approval is required for Privileged Role Administrator activation",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "ENTRA-SESSION-001": {
+      "controlId": "5.1.2.5",
+      "title": "Ensure the option to remain signed in is hidden",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-SYNCADMIN-001": {
+      "controlId": "1.1.1",
+      "title": "Ensure Administrative accounts are cloud-only",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-TENANT-001": {
+      "controlId": "5.1.2.3",
+      "title": "Ensure 'Restrict non-admin users from creating tenants' is set to 'Yes'",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-ADDINS-001": {
+      "controlId": "6.3.1",
+      "title": "Ensure users installing Outlook add-ins is not allowed",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "EXO-ANTIPHISH-001": {
+      "controlId": "4.2",
+      "title": "Ensure device enrollment for personally owned devices is blocked by default",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-ANTISPAM-001": {
+      "controlId": "2.1.6",
+      "title": "Ensure Exchange Online Spam Policies are set to notify administrators",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-AUDIT-001": {
+      "controlId": "6.1.1",
+      "title": "Ensure 'AuditDisabled' organizationally is set to 'False'",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-AUDIT-002": {
+      "controlId": "6.1.3",
+      "title": "Ensure 'AuditBypassEnabled' is not enabled on mailboxes",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-AUDIT-003": {
+      "controlId": "6.1.2",
+      "title": "Ensure mailbox audit actions are configured",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-AUTH-001": {
+      "controlId": "6.5.1",
+      "title": "Ensure modern authentication for Exchange Online is enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-AUTH-002": {
+      "controlId": "6.5.4",
+      "title": "Ensure SMTP AUTH is disabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-CONNFILTER-001": {
+      "controlId": "2.1.12",
+      "title": "Ensure the connection filter IP allow list is not used",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-CONNFILTER-002": {
+      "controlId": "2.1.13",
+      "title": "Ensure the connection filter safe list is off",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-DIRECTSEND-001": {
+      "controlId": "6.5.5",
+      "title": "Ensure Direct Send submissions are rejected",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "EXO-DKIM-001": {
+      "controlId": "2.1.9",
+      "title": "Ensure that DKIM is enabled for all Exchange Online Domains",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-EXTTAG-001": {
+      "controlId": "6.2.3",
+      "title": "Ensure email from external senders is identified",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-FORWARD-001": {
+      "controlId": "6.2.1",
+      "title": "Ensure all forms of mail forwarding are blocked and/or disabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-LOCKBOX-001": {
+      "controlId": "1.3.6",
+      "title": "Ensure the customer lockbox feature is enabled",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "EXO-MAILTIPS-001": {
+      "controlId": "6.5.2",
+      "title": "Ensure MailTips are enabled for end users",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-MALWARE-001": {
+      "controlId": "2.1.2",
+      "title": "Ensure the Common Attachment Types Filter is enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-OWA-001": {
+      "controlId": "6.5.3",
+      "title": "Ensure additional storage providers are restricted in Outlook on the web",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "EXO-SHAREDMBX-001": {
+      "controlId": "1.2.2",
+      "title": "Ensure sign-in to shared mailboxes is blocked",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-SHARING-001": {
+      "controlId": "1.3.3",
+      "title": "Ensure 'External sharing' of calendars is not available",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "EXO-TRANSPORT-001": {
+      "controlId": "6.2.2",
+      "title": "Ensure mail transport rules do not whitelist specific domains",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-TRANSPORT-002": {
+      "controlId": "6.2.1",
+      "title": "Ensure all forms of mail forwarding are blocked and/or disabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "FORMS-CONFIG-004": {
+      "controlId": "1.3.5",
+      "title": "Ensure internal phishing protection for Forms is enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "INTUNE-COMPLIANCE-001": {
+      "controlId": "4.1",
+      "title": "Ensure devices without a compliance policy are marked 'not compliant'",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "INTUNE-ENROLL-001": {
+      "controlId": "4.2",
+      "title": "Ensure device enrollment for personally owned devices is blocked by default",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "INTUNE-ENROLLMENT-001": {
+      "controlId": "4.2",
+      "title": "Ensure device enrollment for personally owned devices is blocked by default",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "INTUNE-SECURITY-001": {
+      "controlId": "4.1",
+      "title": "Ensure devices without a compliance policy are marked 'not compliant'",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-API-001": {
+      "controlId": "9.1.10",
+      "title": "Ensure access to APIs by service principals is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-AUTH-001": {
+      "controlId": "9.1.9",
+      "title": "Ensure 'Block ResourceKey Authentication' is 'Enabled'",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-CONTENT-001": {
+      "controlId": "9.1.3",
+      "title": "Ensure guest access to content is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-GUEST-001": {
+      "controlId": "9.1.1",
+      "title": "Ensure guest user access is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-INVITE-001": {
+      "controlId": "9.1.2",
+      "title": "Ensure external user invitations are restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-LABELS-001": {
+      "controlId": "9.1.6",
+      "title": "Ensure 'Allow users to apply sensitivity labels for content' is 'Enabled'",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-LINK-001": {
+      "controlId": "9.1.7",
+      "title": "Ensure shareable links are restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-PROFILE-001": {
+      "controlId": "9.1.11",
+      "title": "Ensure service principals cannot create and use profiles",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-PUBLISH-001": {
+      "controlId": "9.1.4",
+      "title": "Ensure 'Publish to web' is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-SCRIPT-001": {
+      "controlId": "9.1.5",
+      "title": "Ensure 'Interact with and share R and Python' visuals is 'Disabled'",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "PBI-SHARING-001": {
+      "controlId": "9.1.8",
+      "title": "Ensure enabling of external data sharing is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-TENANT-001": {
+      "controlId": "9.1.8",
+      "title": "Ensure enabling of external data sharing is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-TENANT-002": {
+      "controlId": "9.1.4",
+      "title": "Ensure 'Publish to web' is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PBI-TENANT-003": {
+      "controlId": "9.1.1",
+      "title": "Ensure guest user access is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-AUTH-001": {
+      "controlId": "9.1.9",
+      "title": "Ensure 'Block ResourceKey Authentication' is 'Enabled'",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-AUTH-002": {
+      "controlId": "9.1.10",
+      "title": "Ensure access to APIs by service principals is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-AUTH-003": {
+      "controlId": "9.1.11",
+      "title": "Ensure service principals cannot create and use profiles",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-GUEST-001": {
+      "controlId": "9.1.1",
+      "title": "Ensure guest user access is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-GUEST-002": {
+      "controlId": "9.1.2",
+      "title": "Ensure external user invitations are restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-GUEST-003": {
+      "controlId": "9.1.3",
+      "title": "Ensure guest access to content is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-INFOPROT-001": {
+      "controlId": "9.1.6",
+      "title": "Ensure 'Allow users to apply sensitivity labels for content' is 'Enabled'",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-SERVICEPRINCIPAL-001": {
+      "controlId": "9.1.12",
+      "title": "Ensure service principals ability to create workspaces, connections and deployment pipelines is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-SHARING-001": {
+      "controlId": "9.1.4",
+      "title": "Ensure 'Publish to web' is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-SHARING-002": {
+      "controlId": "9.1.5",
+      "title": "Ensure 'Interact with and share R and Python' visuals is 'Disabled'",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "POWERBI-SHARING-003": {
+      "controlId": "9.1.7",
+      "title": "Ensure shareable links are restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-SHARING-004": {
+      "controlId": "9.1.8",
+      "title": "Ensure enabling of external data sharing is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "PURVIEW-AUDIT-001": {
+      "controlId": "3.1.1",
+      "title": "Ensure Microsoft 365 audit log search is Enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "SPO-AUTH-001": {
+      "controlId": "7.2.1",
+      "title": "Ensure modern authentication for SharePoint applications is required",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "SPO-B2B-001": {
+      "controlId": "7.2.2",
+      "title": "Ensure SharePoint and OneDrive integration with Azure AD B2B is enabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "SPO-MALWARE-002": {
+      "controlId": "7.3.1",
+      "title": "Ensure Office 365 SharePoint infected files are disallowed for download",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "SPO-OD-001": {
+      "controlId": "7.2.4",
+      "title": "Ensure OneDrive content sharing is restricted",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "SPO-SESSION-001": {
+      "controlId": "1.3.2",
+      "title": "Ensure 'Idle session timeout' is set to '3 hours (or less)' for unmanaged devices",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "SPO-SHARING-001": {
+      "controlId": "7.2.3",
+      "title": "Ensure external content sharing is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "SPO-SHARING-002": {
+      "controlId": "7.2.5",
+      "title": "Ensure that SharePoint guest users cannot share items they don't own",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "SPO-SHARING-003": {
+      "controlId": "7.2.6",
+      "title": "Ensure SharePoint external sharing is restricted",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "SPO-SHARING-004": {
+      "controlId": "7.2.7",
+      "title": "Ensure link sharing is restricted in SharePoint and OneDrive",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "SPO-SHARING-005": {
+      "controlId": "7.2.9",
+      "title": "Ensure guest access to a site or OneDrive will expire automatically",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "SPO-SHARING-006": {
+      "controlId": "7.2.10",
+      "title": "Ensure reauthentication with verification code is restricted",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "SPO-SHARING-007": {
+      "controlId": "7.2.11",
+      "title": "Ensure the SharePoint default sharing link permission is set",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "SPO-SHARING-008": {
+      "controlId": "7.2.8",
+      "title": "Ensure external sharing is restricted by security group",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "SPO-SWAY-001": {
+      "controlId": "1.3.8",
+      "title": "Ensure that Sways cannot be shared with people outside of your organization",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "TEAMS-APPS-002": {
+      "controlId": "8.4.1",
+      "title": "Ensure app permission policies are configured",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "TEAMS-CLIENT-001": {
+      "controlId": "8.1.1",
+      "title": "Ensure external file sharing in Teams is enabled for only approved cloud storage services",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "TEAMS-CLIENT-002": {
+      "controlId": "8.1.2",
+      "title": "Ensure users can't send emails to a channel email address",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "TEAMS-EXTACCESS-001": {
+      "controlId": "8.2.2",
+      "title": "Ensure communication with unmanaged Teams users is disabled",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "TEAMS-EXTACCESS-002": {
+      "controlId": "8.2.3",
+      "title": "Ensure external Teams users cannot initiate conversations",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "TEAMS-EXTACCESS-003": {
+      "controlId": "8.2.1",
+      "title": "Ensure external domains are restricted in the Teams admin center",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "TEAMS-EXTACCESS-004": {
+      "controlId": "8.2.4",
+      "title": "Ensure the organization cannot communicate with accounts in trial Teams tenants",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "TEAMS-MEETING-001": {
+      "controlId": "8.5.1",
+      "title": "Ensure anonymous users can't join a meeting",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "TEAMS-MEETING-002": {
+      "controlId": "8.5.2",
+      "title": "Ensure anonymous users and dial-in callers can't start a meeting",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "TEAMS-MEETING-003": {
+      "controlId": "8.5.3",
+      "title": "Ensure only people in my org can bypass the lobby",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "TEAMS-MEETING-004": {
+      "controlId": "8.5.4",
+      "title": "Ensure users dialing in can't bypass the lobby",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "TEAMS-MEETING-005": {
+      "controlId": "8.5.7",
+      "title": "Ensure external participants can't give or request control",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "TEAMS-MEETING-006": {
+      "controlId": "8.5.5",
+      "title": "Ensure meeting chat does not allow anonymous users",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "TEAMS-MEETING-007": {
+      "controlId": "8.5.6",
+      "title": "Ensure only organizers and co-organizers can present",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "TEAMS-MEETING-008": {
+      "controlId": "8.5.8",
+      "title": "Ensure external meeting chat is off",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "TEAMS-MEETING-009": {
+      "controlId": "8.5.9",
+      "title": "Ensure meeting recording is off by default",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "TEAMS-REPORTING-001": {
+      "controlId": "8.6.1",
+      "title": "Ensure users can report security concerns in Teams",
+      "profiles": [
+        "E5-L1"
+      ]
+    }
+  }
+}

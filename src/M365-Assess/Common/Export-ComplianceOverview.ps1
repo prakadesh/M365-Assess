@@ -179,7 +179,7 @@ function Export-ComplianceOverview {
         $null = $html.AppendLine("</div>")
     }
 
-    # CIS profile sub-filter (shown when cis-m365-v6 is active)
+    # CIS profile sub-filter (shown when a cis-m365-* framework is active)
     $null = $html.AppendLine("<div class='co-filter-row' id='cisSubFilter' style='display:none'>")
     $null = $html.AppendLine("<span class='co-filter-label'>CIS Profile:</span>")
     $null = $html.AppendLine("<div class='co-profile-group'>")
@@ -345,7 +345,7 @@ function Export-ComplianceOverview {
 
         $svAttr = if ($finding.RiskSeverity) { " data-sv='$($finding.RiskSeverity.ToLower())'" } else { '' }
         $cisProfilesAttr = ''
-        $cisFwId = 'cis-m365-v6'
+        $cisFwId = 'cis-m365-v7'
         if ($finding.Frameworks -and $finding.Frameworks.ContainsKey($cisFwId)) {
             $cisEntry = $finding.Frameworks[$cisFwId]
             if ($cisEntry.profiles -and $cisEntry.profiles.Count -gt 0) {

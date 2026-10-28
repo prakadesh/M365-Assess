@@ -67,7 +67,7 @@ function Build-ReportDataJson {
     .PARAMETER HeadlineFrameworks
         Framework id(s) that headline the Executive Briefing first screen. Emitted
         verbatim as REPORT_DATA.headlineFrameworks; validation happens upstream.
-        The React app owns the cis-m365-v6 default so data files generated without
+        The React app owns the cis-m365-v7 default (falling back to cis-m365-v6) so data files generated without
         this parameter render identically to pre-#963 reports.
     .PARAMETER AssessedAt
         Assessment run timestamp (from the assessment log's Started line), shown on

@@ -126,10 +126,10 @@
     HTML assessor panel, then pass the file on subsequent runs or regeneration.
 .PARAMETER HeadlineFramework
     Framework id(s) that headline the report's Executive Briefing first screen
-    (e.g. 'cis-m365-v6', 'cmmc'). Validated against the framework definitions
+    (e.g. 'cis-m365-v7', 'cis-m365-v6', 'cmmc'). Validated against the framework definitions
     discovered in controls/frameworks/*.json; unknown ids abort the run with
     the list of valid ids. When omitted, the report defaults to CIS Microsoft
-    365 (cis-m365-v6). Viewers can still switch frameworks inside the report.
+    365 v7.0.0 (cis-m365-v7). Viewers can still switch frameworks inside the report.
 .PARAMETER DryRun
     Show a dry-run preview of what the assessment would do (sections,
     services, Graph scopes, check counts) without connecting or collecting

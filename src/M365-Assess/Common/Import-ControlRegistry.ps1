@@ -13,12 +13,17 @@
     Also builds a reverse lookup from CIS control IDs to CheckIds (stored
     under the special key '__cisReverseLookup') for backward compatibility
     with CSVs that still use the CisControl column.
+
+    CIS Microsoft 365 Foundations Benchmark v7.0.0 mappings are not carried in
+    registry.json (it is rewritten wholesale by the CheckID sync). They live in
+    controls/cis-m365-v7-mapping.json and are merged into each entry's
+    frameworks hashtable here, under the overlay's frameworkId ('cis-m365-v7').
 .PARAMETER ControlsPath
     Path to the controls/ directory containing registry.json,
     risk-severity.json, and licensing-overlay.json.
 .PARAMETER CisFrameworkId
     Framework ID for the active CIS benchmark version, used for the reverse
-    lookup. Defaults to 'cis-m365-v6'.
+    lookup. Defaults to 'cis-m365-v7'. 'cis-m365-v6' remains available.
 .OUTPUTS
     [hashtable] - Keys are CheckIds, values are registry entry objects.
     Special key '__cisReverseLookup' maps CIS control IDs to CheckIds.
@@ -36,7 +41,7 @@ function Import-ControlRegistry {
         [string]$ControlsPath,
 
         [Parameter()]
-        [string]$CisFrameworkId = 'cis-m365-v6'
+        [string]$CisFrameworkId = 'cis-m365-v7'
     )
 
     $registryPath = Join-Path -Path $ControlsPath -ChildPath 'registry.json'
@@ -80,6 +85,26 @@ function Import-ControlRegistry {
         Write-Verbose "Loaded $($licensingOverlay.Count) licensing overrides from licensing-overlay.json"
     }
 
+    # Load CIS v7 mapping overlay (local to M365-Assess; survives CheckID registry sync)
+    $cisOverlayFrameworkId = $null
+    $cisOverlayChecks = @{}
+    $cisOverlayPath = Join-Path -Path $ControlsPath -ChildPath 'cis-m365-v7-mapping.json'
+    if (Test-Path -Path $cisOverlayPath) {
+        try {
+            $cisOverlayData = Get-Content -Path $cisOverlayPath -Raw | ConvertFrom-Json -ErrorAction Stop
+            if ($cisOverlayData.frameworkId -and $cisOverlayData.checks) {
+                $cisOverlayFrameworkId = [string]$cisOverlayData.frameworkId
+                foreach ($prop in $cisOverlayData.checks.PSObject.Properties) {
+                    $cisOverlayChecks[$prop.Name] = $prop.Value
+                }
+                Write-Verbose "Loaded $($cisOverlayChecks.Count) $cisOverlayFrameworkId mappings from cis-m365-v7-mapping.json"
+            }
+        }
+        catch {
+            Write-Warning "Import-ControlRegistry: could not read cis-m365-v7-mapping.json - CIS v7 mappings unavailable: $_"
+        }
+    }
+
     # Build hashtable keyed by CheckId
     $lookup = @{}
     $cisReverse = @{}
@@ -117,12 +142,17 @@ function Import-ControlRegistry {
             $entry.frameworks[$prop.Name] = $prop.Value
         }
 
+        # Overlay mappings win over (and are independent of) anything the registry carries
+        if ($cisOverlayFrameworkId -and $cisOverlayChecks.ContainsKey($check.checkId)) {
+            $entry.frameworks[$cisOverlayFrameworkId] = $cisOverlayChecks[$check.checkId]
+        }
+
         $entry.riskSeverity = 'Medium'  # default, overridden from risk-severity.json below
         $entry.severityRated = $false   # flipped to $true when risk-severity.json has an explicit rating
         $lookup[$check.checkId] = $entry
 
         # Build CIS reverse lookup (parameterized for version upgrades)
-        $cisMapping = $check.frameworks.$CisFrameworkId
+        $cisMapping = $entry.frameworks[$CisFrameworkId]
         if ($cisMapping -and $cisMapping.controlId) {
             $cisReverse[$cisMapping.controlId] = $check.checkId
         }

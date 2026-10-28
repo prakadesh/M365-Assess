@@ -123,7 +123,7 @@ const matchProfileToken = (profilesArr, token) => {
 // native controlId. Each framework's JSON file declares its `groupBy` strategy
 // + `groups` map (key → display name); the strategies are enumerated here.
 const GROUP_EXTRACTORS = {
-  // CIS M365 v6, CIS Controls v8, PCI DSS v4: leading numeric section (e.g. '5.2.2.5' → '5')
+  // CIS M365 v6/v7, CIS Controls v8, PCI DSS v4: leading numeric section (e.g. '5.2.2.5' → '5')
   'section-prefix': (cid) => {
     const m = String(cid).match(/^(\d+)/);
     return m ? m[1] : null;

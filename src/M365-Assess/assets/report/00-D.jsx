@@ -84,6 +84,7 @@ const ROADMAP_COUNTS = {
 };
 
 const FRAMEWORKS = (D.frameworks && D.frameworks.length) ? D.frameworks : [
+  { id: 'cis-m365-v7',     full: 'CIS Microsoft 365 v7.0.0' },
   { id: 'cis-m365-v6',     full: 'CIS Microsoft 365 v6.0.1' },
   { id: 'nist-800-53',     full: 'NIST SP 800-53 Rev 5' },
   { id: 'cmmc',            full: 'CMMC 2.0' },
@@ -107,10 +108,12 @@ const FRAMEWORKS = (D.frameworks && D.frameworks.length) ? D.frameworks : [
 const HEADLINE_FWS = (() => {
   const ids = [].concat(D.headlineFrameworks || []).filter(id => FRAMEWORKS.some(fw => fw.id === id));
   if (ids.length > 0) return ids;
-  return FRAMEWORKS.some(fw => fw.id === 'cis-m365-v6') ? ['cis-m365-v6'] : [FRAMEWORKS[0].id];
+  const cis = ['cis-m365-v7', 'cis-m365-v6'].find(id => FRAMEWORKS.some(fw => fw.id === id));
+  return cis ? [cis] : [FRAMEWORKS[0].id];
 })();
 
 const FW_BLURB = {
+  'cis-m365-v7':     { desc: 'Prescriptive configuration recommendations for Microsoft 365 services, organized into L1/L2 profiles and E3/E5 licensing tiers. Maintained by the Center for Internet Security.', url: 'https://www.cisecurity.org/benchmark/microsoft_365' },
   'cis-m365-v6':     { desc: 'Prescriptive configuration recommendations for Microsoft 365 services, organized into L1/L2 profiles and E3/E5 licensing tiers. Maintained by the Center for Internet Security.', url: 'https://www.cisecurity.org/benchmark/microsoft_365' },
   'cis-controls-v8': { desc: 'Prioritized set of 18 critical security controls defending against the most pervasive attacks, organized into three Implementation Groups (IG1–IG3) by organizational maturity.', url: 'https://www.cisecurity.org/controls' },
   'cisa-scuba':      { desc: 'Federal cloud security baselines from CISA covering M365 configurations. Required for US federal agencies and widely adopted by state/local government.', url: 'https://www.cisa.gov/resources-tools/services/secure-cloud-business-applications-scuba-project' },

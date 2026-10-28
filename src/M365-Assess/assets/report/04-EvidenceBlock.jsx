@@ -469,7 +469,7 @@ function Roadmap({ onViewFinding, editMode, hiddenFindings, roadmapOverrides, on
   };
   tasks.sort((a,b) => score(b) - score(a));
 
-  const FW_PREF_RM = ['cis-m365-v6','nist-800-53','cmmc','nist-csf','iso-27001'];
+  const FW_PREF_RM = ['cis-m365-v7','cis-m365-v6','nist-800-53','cmmc','nist-csf','iso-27001'];
   const buildRoadmapCsv = (n, s, l) => {
     const cols = ['Lane','Setting','CheckID','Severity','Effort','Domain','Section',
                   'CurrentValue','RecommendedValue','Remediation','LearnMore','ControlRef'];

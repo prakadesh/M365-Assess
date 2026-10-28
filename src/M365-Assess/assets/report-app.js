@@ -108,6 +108,9 @@ const ROADMAP_COUNTS = {
   later: _RM.filter(t => t.lane === 'later' || !t.lane).length
 };
 const FRAMEWORKS = D.frameworks && D.frameworks.length ? D.frameworks : [{
+  id: 'cis-m365-v7',
+  full: 'CIS Microsoft 365 v7.0.0'
+}, {
   id: 'cis-m365-v6',
   full: 'CIS Microsoft 365 v6.0.1'
 }, {
@@ -158,9 +161,14 @@ const FRAMEWORKS = D.frameworks && D.frameworks.length ? D.frameworks : [{
 const HEADLINE_FWS = (() => {
   const ids = [].concat(D.headlineFrameworks || []).filter(id => FRAMEWORKS.some(fw => fw.id === id));
   if (ids.length > 0) return ids;
-  return FRAMEWORKS.some(fw => fw.id === 'cis-m365-v6') ? ['cis-m365-v6'] : [FRAMEWORKS[0].id];
+  const cis = ['cis-m365-v7', 'cis-m365-v6'].find(id => FRAMEWORKS.some(fw => fw.id === id));
+  return cis ? [cis] : [FRAMEWORKS[0].id];
 })();
 const FW_BLURB = {
+  'cis-m365-v7': {
+    desc: 'Prescriptive configuration recommendations for Microsoft 365 services, organized into L1/L2 profiles and E3/E5 licensing tiers. Maintained by the Center for Internet Security.',
+    url: 'https://www.cisecurity.org/benchmark/microsoft_365'
+  },
   'cis-m365-v6': {
     desc: 'Prescriptive configuration recommendations for Microsoft 365 services, organized into L1/L2 profiles and E3/E5 licensing tiers. Maintained by the Center for Internet Security.',
     url: 'https://www.cisecurity.org/benchmark/microsoft_365'
@@ -2513,7 +2521,7 @@ const matchProfileToken = (profilesArr, token) => {
 // native controlId. Each framework's JSON file declares its `groupBy` strategy
 // + `groups` map (key → display name); the strategies are enumerated here.
 const GROUP_EXTRACTORS = {
-  // CIS M365 v6, CIS Controls v8, PCI DSS v4: leading numeric section (e.g. '5.2.2.5' → '5')
+  // CIS M365 v6/v7, CIS Controls v8, PCI DSS v4: leading numeric section (e.g. '5.2.2.5' → '5')
   'section-prefix': cid => {
     const m = String(cid).match(/^(\d+)/);
     return m ? m[1] : null;
@@ -4543,7 +4551,7 @@ function FindingsTable({
         {
           const activeFw = filters.framework.length === 1 ? filters.framework[0] : null;
           const meta = activeFw ? f.fwMeta?.[activeFw] : null;
-          const FW_PREF = ['cis-m365-v6', 'nist-800-53', 'cmmc', 'nist-csf', 'iso-27001'];
+          const FW_PREF = ['cis-m365-v7', 'cis-m365-v6', 'nist-800-53', 'cmmc', 'nist-csf', 'iso-27001'];
           const cid = meta?.controlId || (() => {
             if (!f.fwMeta) return null;
             for (const fw of FW_PREF) {
@@ -5325,7 +5333,7 @@ function Roadmap({
     return sev * eff;
   };
   tasks.sort((a, b) => score(b) - score(a));
-  const FW_PREF_RM = ['cis-m365-v6', 'nist-800-53', 'cmmc', 'nist-csf', 'iso-27001'];
+  const FW_PREF_RM = ['cis-m365-v7', 'cis-m365-v6', 'nist-800-53', 'cmmc', 'nist-csf', 'iso-27001'];
   const buildRoadmapCsv = (n, s, l) => {
     const cols = ['Lane', 'Setting', 'CheckID', 'Severity', 'Effort', 'Domain', 'Section', 'CurrentValue', 'RecommendedValue', 'Remediation', 'LearnMore', 'ControlRef'];
     const esc = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
