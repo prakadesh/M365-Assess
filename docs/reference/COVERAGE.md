@@ -12,7 +12,7 @@
 
 ## Per-framework mapping coverage
 
-"Checks mapped" counts registry checks carrying a mapping for the framework; "distinct controls" counts the unique framework control IDs those mappings reference. Coverage relative to a framework's full control catalog needs the framework's own denominator — the registry only knows what is mapped, so an unmapped control is invisible here (see the SCuBA pillar table below for a worked example).
+"Checks mapped" counts registry checks or version-overlay entries carrying a mapping for the framework; "distinct controls" counts the unique framework control IDs those mappings reference. Coverage relative to a framework's full control catalog needs the framework's own denominator — unmapped controls are not inferred from absence of a mapping (see the SCuBA pillar table below for a worked example).
 
 | Framework key | Report view | Checks mapped | Distinct controls mapped | Avg checks / control |
 |---|---|---|---|---|
