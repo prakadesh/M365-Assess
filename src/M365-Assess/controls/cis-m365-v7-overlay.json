@@ -4,10 +4,11 @@
   "benchmarkVersion": "7.0.0",
   "benchmarkReleaseDate": "2026-05-20",
   "sourceFramework": "cis-m365-v6",
-  "mappingPolicy": "Best-effort version crosswalk; retain mappings only where an existing M365-Assess check is available, with explicit corrections for known v7 numbering/profile changes.",
+  "mappingPolicy": "Best-effort version crosswalk; existing checks are mapped only where their audited setting matches the v7 recommendation. Explicit mappings cover v7 numbering/profile changes and the new Direct Send organization setting.",
   "notes": [
     "This file contains control identifiers and profile mappings only; it does not reproduce CIS Benchmark recommendation text.",
     "Recommendations without a directly corresponding assessment check remain unmapped and must not be interpreted as passing.",
+    "Mappings for controls whose settings changed in v7 must be backed by the v7 audit criterion, not just matching control numbers.",
     "Review crosswalk mappings against the licensed CIS Benchmark before using results for formal audit or attestation."
   ],
   "checks": {
@@ -1053,6 +1054,20 @@
       "profiles": [
         "E3-L1",
         "E5-L1"
+      ]
+    },
+    "ENTRA-PASSWORD-003": {
+      "controlId": "5.2.3.8",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-DIRECTSEND-001": {
+      "controlId": "6.5.5",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
       ]
     }
   }
