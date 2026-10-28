@@ -51,6 +51,18 @@ $learnMore = Get-Content -Path (Join-Path -Path $controlsPath -ChildPath 'learn-
 $localExt = Get-Content -Path (Join-Path -Path $controlsPath -ChildPath 'local-extensions.json') -Raw | ConvertFrom-Json
 
 $checks = @($registry.checks)
+
+# local-extensions.json is the source of truth for local-only check IDs. Most are
+# already included by the last CheckID sync, but newly added extensions must be
+# included in stats immediately and must not be double-counted when sync has run.
+$knownCheckIds = @{}
+foreach ($registeredCheck in $checks) { $knownCheckIds[$registeredCheck.checkId] = $true }
+foreach ($localCheck in $localExt) {
+    if ($localCheck.checkId -and -not $knownCheckIds.ContainsKey($localCheck.checkId)) {
+        $checks += $localCheck
+        $knownCheckIds[$localCheck.checkId] = $true
+    }
+}
 $severityIds = @($severity.checks.PSObject.Properties.Name)
 $learnMoreIds = @($learnMore.checks.PSObject.Properties.Name)
 
