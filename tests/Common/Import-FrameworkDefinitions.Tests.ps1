@@ -12,9 +12,9 @@ Describe 'Import-FrameworkDefinitions' {
         }
     }
 
-    It 'Loads all 15 framework JSON files without error' {
+    It 'Loads all 16 framework JSON files without error' {
         $result = Import-FrameworkDefinitions -FrameworksPath $frameworksPath
-        $result.Count | Should -Be 15
+        $result.Count | Should -Be 16
     }
 
     It 'Each framework has required frameworkId and label' {
@@ -129,9 +129,21 @@ Describe 'Import-FrameworkDefinitions' {
         $result.Count | Should -Be 0
     }
 
-    It 'CIS M365 is first in display order' {
+    It 'CIS M365 v7 is first in display order while v6 remains available' {
         $result = Import-FrameworkDefinitions -FrameworksPath $frameworksPath
-        $result[0].frameworkId | Should -Be 'cis-m365-v6'
+        $result[0].frameworkId | Should -Be 'cis-m365-v7'
+        @($result | Where-Object { $_.frameworkId -eq 'cis-m365-v6' }).Count | Should -Be 1
+    }
+
+    It 'loads CIS M365 v7 version and four E3/E5 profiles' {
+        $result = Import-FrameworkDefinitions -FrameworksPath $frameworksPath
+        $cisV7 = $result | Where-Object { $_.frameworkId -eq 'cis-m365-v7' }
+        $cisV7.label | Should -Match 'v7.0.0'
+        $cisV7.scoringMethod | Should -Be 'profile-compliance'
+        $cisV7.profiles.Keys | Should -Contain 'E3-L1'
+        $cisV7.profiles.Keys | Should -Contain 'E3-L2'
+        $cisV7.profiles.Keys | Should -Contain 'E5-L1'
+        $cisV7.profiles.Keys | Should -Contain 'E5-L2'
     }
 
     It 'Each framework includes scoringData from the scoring object' {
