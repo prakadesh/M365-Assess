@@ -128,6 +128,36 @@ function Import-ControlRegistry {
         }
     }
 
+    # Apply the separately versioned CIS Microsoft 365 v7 crosswalk. Do not edit
+    # registry.json for this: it is regenerated from upstream CheckID/SCF and must
+    # retain its v6 mappings for historical comparisons.
+    $cisV7OverlayPath = Join-Path -Path $ControlsPath -ChildPath 'cis-m365-v7-overlay.json'
+    if (Test-Path -Path $cisV7OverlayPath) {
+        try {
+            $cisV7Overlay = Get-Content -Path $cisV7OverlayPath -Raw | ConvertFrom-Json -ErrorAction Stop
+            foreach ($prop in $cisV7Overlay.checks.PSObject.Properties) {
+                if (-not $lookup.ContainsKey($prop.Name)) { continue }
+                if (-not $prop.Value.controlId) { continue }
+
+                $v7Mapping = @{ controlId = [string]$prop.Value.controlId }
+                $v7Profiles = @()
+                if ($prop.Value.profiles) {
+                    $v7Profiles = @($prop.Value.profiles | Where-Object { $_ -in @('E3-L1', 'E3-L2', 'E5-L1', 'E5-L2') })
+                }
+                if ($v7Profiles.Count -eq 0) {
+                    Write-Warning "CIS M365 v7 crosswalk entry '$($prop.Name)' has no supported profile; skipping it."
+                    continue
+                }
+                $v7Mapping['profiles'] = $v7Profiles
+                $lookup[$prop.Name].frameworks['cis-m365-v7'] = $v7Mapping
+            }
+            Write-Verbose "Applied $(@($cisV7Overlay.checks.PSObject.Properties).Count) CIS M365 v7 crosswalk definitions."
+        }
+        catch {
+            Write-Warning "Unable to load CIS M365 v7 crosswalk '$cisV7OverlayPath': $_"
+        }
+    }
+
     $lookup['__cisReverseLookup'] = $cisReverse
 
     # Load risk severity overlay (local to M365-Assess, not in CheckID)
