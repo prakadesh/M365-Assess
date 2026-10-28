@@ -35,7 +35,7 @@ The HTML report includes a **Compliance Overview** section that maps assessed se
 
 ### CIS Microsoft 365 Foundations Benchmark v7.0.0
 
-CIS v7.0.0 (released May 20, 2026) is available as a separate framework from v6.0.1. The v6 definition remains available for historical comparisons, and the legacy ordering/default behavior is intentionally preserved.
+CIS v7.0.0 (released May 20, 2026) is available as a separate framework from v6.0.1. The current crosswalk maps 154 assessment check IDs to 138 unique recommendation IDs out of 160. The v6 definition remains available for historical comparisons, and the legacy ordering/default behavior is intentionally preserved.
 
 The v7 integration uses a version-specific crosswalk over existing M365-Assess checks. It is **not yet a full implementation of every v7 recommendation**: controls without a defensible matching check remain unmapped and must not be treated as passing. Profile counts shown above are the benchmark's profile recommendation counts, not a claim that M365-Assess currently assesses every recommendation. Review the mapping notes in [the CIS v7 crosswalk document](../research/cis-m365-v7-crosswalk.md) and validate all findings against the official [CIS benchmark source](https://www.cisecurity.org/benchmark/microsoft_365) before audit or attestation.
 
