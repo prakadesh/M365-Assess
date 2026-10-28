@@ -19,6 +19,18 @@ Describe 'CIS Microsoft 365 v7 crosswalk' {
         $registry['ENTRA-APPREG-001'].frameworks.'cis-m365-v7'.controlId | Should -Be '5.1.2.2'
     }
 
+    It 'maps the Entra lockout threshold to v7 5.2.3.8' {
+        $registry['ENTRA-PASSWORD-003'].frameworks.'cis-m365-v7'.controlId | Should -Be '5.2.3.8'
+        $registry['ENTRA-PASSWORD-003'].frameworks.'cis-m365-v7'.profiles | Should -Contain 'E3-L1'
+        $registry['ENTRA-PASSWORD-003'].frameworks.'cis-m365-v7'.profiles | Should -Contain 'E5-L1'
+    }
+
+    It 'maps the dedicated Direct Send finding to v7 6.5.5 Level 2' {
+        $registry['EXO-DIRECTSEND-001'].frameworks.'cis-m365-v7'.controlId | Should -Be '6.5.5'
+        $registry['EXO-DIRECTSEND-001'].frameworks.'cis-m365-v7'.profiles | Should -Contain 'E3-L2'
+        $registry['EXO-DIRECTSEND-001'].frameworks.'cis-m365-v7'.profiles | Should -Contain 'E5-L2'
+    }
+
     It 'updates Intune recommendations moved to Level 1 in v7' {
         $registry['INTUNE-COMPLIANCE-001'].frameworks.'cis-m365-v7'.profiles | Should -Contain 'E3-L1'
         $registry['INTUNE-COMPLIANCE-001'].frameworks.'cis-m365-v7'.profiles | Should -Contain 'E5-L1'
