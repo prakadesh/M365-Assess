@@ -661,7 +661,7 @@ try {
         $directSendRemediation = 'Run Set-OrganizationConfig -RejectDirectSend $true. Validate mail-flow impact and confirm any required partner connector scenarios before change.'
     }
 
-    Add-Setting @{
+    $settingParams = @{
         Category         = 'Mail Flow'
         Setting          = 'Direct Send submissions rejected'
         CurrentValue     = $directSendCurrent
@@ -670,10 +670,11 @@ try {
         CheckId          = 'EXO-DIRECTSEND-001'
         Remediation      = $directSendRemediation
     }
+    Add-Setting @settingParams
 }
 catch {
     Write-Warning "Could not read the Exchange Online RejectDirectSend setting: $_"
-    Add-Setting @{
+    $settingParams = @{
         Category         = 'Mail Flow'
         Setting          = 'Direct Send submissions rejected'
         CurrentValue     = "Unable to verify RejectDirectSend: $($_.Exception.Message)"
@@ -682,6 +683,7 @@ catch {
         CheckId          = 'EXO-DIRECTSEND-001'
         Remediation      = 'Connect to Exchange Online PowerShell with permission to read organization configuration, then run Get-OrganizationConfig | Select-Object RejectDirectSend.'
     }
+    Add-Setting @settingParams
 }
 
 # ------------------------------------------------------------------
