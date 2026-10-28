@@ -21,7 +21,7 @@ For consultants running assessments and consuming the report.
 | [`user/UNDERSTANDING-RESULTS.md`](user/UNDERSTANDING-RESULTS.md) | What each status (Pass / Fail / Review / Warning / Skipped / etc.) means and what to do |
 | [`user/FIRST-REMEDIATION.md`](user/FIRST-REMEDIATION.md) | Worked example: take one Fail finding from initial state through remediation through re-verification |
 | [`user/SCORING.md`](user/SCORING.md) | How the headline score is computed; the 6 scoring views; per-audience rationale |
-| [`user/COMPLIANCE.md`](user/COMPLIANCE.md) | 15 frameworks, XLSX export, CheckId system, control registry |
+| [`user/COMPLIANCE.md`](user/COMPLIANCE.md) | 16 frameworks, XLSX export, CheckId system, control registry |
 | [`user/EVIDENCE-PACKAGE.md`](user/EVIDENCE-PACKAGE.md) | Sanitized evidence bundle for auditor handoff (`-EvidencePackage` switch) |
 | [`user/TROUBLESHOOTING.md`](user/TROUBLESHOOTING.md) | Common errors and resolutions |
 | [`user/GLOSSARY.md`](user/GLOSSARY.md) | Glossary — Lane / Sequence / Section / Collector / Check / Control / Framework / Profile / Level / Status |
