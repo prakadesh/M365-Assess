@@ -28,7 +28,7 @@
 M365 Assess runs a single read-only command against a Microsoft 365 tenant and produces CSV data, a self-contained branded HTML report, and an XLSX compliance matrix covering identity, email, security, devices, collaboration, and compliance baselines.
 
 <!-- registry-stats:summary:begin -->
-**293 automated security checks** mapped across **16 compliance frameworks** — counts generated from [`controls/registry.json`](src/M365-Assess/controls/registry.json) and [`controls/local-extensions.json`](src/M365-Assess/controls/local-extensions.json); per-framework coverage in [docs/reference/COVERAGE.md](docs/reference/COVERAGE.md).
+**291 automated security checks** mapped across **16 compliance frameworks** — counts generated from [`controls/registry.json`](src/M365-Assess/controls/registry.json) and [`controls/local-extensions.json`](src/M365-Assess/controls/local-extensions.json); per-framework coverage in [docs/reference/COVERAGE.md](docs/reference/COVERAGE.md).
 <!-- registry-stats:summary:end -->
 
 It is built for security administrators, compliance officers, IT consultants / vCISOs, auditors, and CI pipelines - anyone who needs a fast, evidence-backed posture snapshot mapped to CIS, NIST, SOC 2, HIPAA, ISO 27001, and more.
