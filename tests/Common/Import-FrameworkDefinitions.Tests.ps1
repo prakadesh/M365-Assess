@@ -12,9 +12,9 @@ Describe 'Import-FrameworkDefinitions' {
         }
     }
 
-    It 'Loads all 15 framework JSON files without error' {
+    It 'Loads all 16 framework JSON files without error' {
         $result = Import-FrameworkDefinitions -FrameworksPath $frameworksPath
-        $result.Count | Should -Be 15
+        $result.Count | Should -Be 16
     }
 
     It 'Each framework has required frameworkId and label' {
@@ -129,9 +129,11 @@ Describe 'Import-FrameworkDefinitions' {
         $result.Count | Should -Be 0
     }
 
-    It 'CIS M365 is first in display order' {
+    It 'CIS M365 (current benchmark, v7.0.0) is first in display order' {
         $result = Import-FrameworkDefinitions -FrameworksPath $frameworksPath
-        $result[0].frameworkId | Should -Be 'cis-m365-v6'
+        $result[0].frameworkId | Should -Be 'cis-m365-v7'
+        # v6 stays available, immediately after v7
+        $result[1].frameworkId | Should -Be 'cis-m365-v6'
     }
 
     It 'Each framework includes scoringData from the scoring object' {

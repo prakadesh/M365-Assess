@@ -263,6 +263,35 @@ try {
         }
         Add-Setting @settingParams
     }
+
+    # CIS v7.0.0 6.3.2 -- only the default OWA mailbox policy is assessed
+    $defaultOwaPolicy = @($owaPolicies | Where-Object { $_.IsDefault -eq $true }) | Select-Object -First 1
+    if ($defaultOwaPolicy) {
+        $personalAccounts  = [bool]$defaultOwaPolicy.PersonalAccountsEnabled
+        $personalCalendars = [bool]$defaultOwaPolicy.PersonalAccountCalendarsEnabled
+        $settingParams = @{
+            Category         = 'OWA Policy'
+            Setting          = "OWA Personal Accounts and Calendars ($($defaultOwaPolicy.Name))"
+            CurrentValue     = "PersonalAccountsEnabled: $personalAccounts; PersonalAccountCalendarsEnabled: $personalCalendars"
+            RecommendedValue = 'Both False'
+            Status           = if (-not $personalAccounts -and -not $personalCalendars) { 'Pass' } else { 'Fail' }
+            CheckId          = 'EXO-OWA-002'
+            Remediation      = 'Run: Set-OwaMailboxPolicy -Identity (Get-OwaMailboxPolicy | Where-Object IsDefault).Identity -PersonalAccountsEnabled $false -PersonalAccountCalendarsEnabled $false'
+        }
+        Add-Setting @settingParams
+    }
+    else {
+        $settingParams = @{
+            Category         = 'OWA Policy'
+            Setting          = 'OWA Personal Accounts and Calendars (default policy)'
+            CurrentValue     = 'Default OWA mailbox policy not found -- verify manually'
+            RecommendedValue = 'Both False'
+            Status           = 'Review'
+            CheckId          = 'EXO-OWA-002'
+            Remediation      = 'Run: Get-OwaMailboxPolicy | Where-Object IsDefault | Format-List PersonalAccountsEnabled, PersonalAccountCalendarsEnabled'
+        }
+        Add-Setting @settingParams
+    }
 }
 catch {
     Write-Warning "Could not check OWA policies: $_"

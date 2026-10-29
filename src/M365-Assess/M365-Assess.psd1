@@ -125,6 +125,7 @@
         'Entra\EntraAdminRoleChecks.ps1'
         'Entra\EntraConditionalAccessChecks.ps1'
         'Entra\EntraUserGroupChecks.ps1'
+        'Entra\EntraCisV7Checks.ps1'
         'Entra\Get-CASecurityConfig.ps1'
         'Entra\Get-EntAppSecurityConfig.ps1'
         'Entra\Get-LicenseReport.ps1'

@@ -25,7 +25,7 @@
     Exports the security configuration to CSV.
 .NOTES
     Author:  Daren9m
-    Settings checked are aligned with CIS Microsoft 365 Foundations Benchmark v6.0.1 recommendations.
+    Settings checked are aligned with CIS Microsoft 365 Foundations Benchmark v7.0.0 recommendations.
 #>
 [CmdletBinding()]
 param(
@@ -90,6 +90,7 @@ $pwSettings = $null
 . (Join-Path -Path $_scriptDir -ChildPath 'EntraAdminRoleChecks.ps1')
 . (Join-Path -Path $_scriptDir -ChildPath 'EntraConditionalAccessChecks.ps1')
 . (Join-Path -Path $_scriptDir -ChildPath 'EntraUserGroupChecks.ps1')
+. (Join-Path -Path $_scriptDir -ChildPath 'EntraCisV7Checks.ps1')
 
 # ------------------------------------------------------------------
 # Output results

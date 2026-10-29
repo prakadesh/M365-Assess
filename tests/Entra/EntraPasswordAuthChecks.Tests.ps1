@@ -80,6 +80,7 @@ Describe 'EntraPasswordAuthChecks' {
                                 # under featureSettings. Only the admin-controllable context toggles remain.
                                 featureSettings = @{
                                     displayAppInformationRequiredState = @{ state = 'enabled' }
+                                    displayLocationInformationRequiredState = @{ state = 'enabled' }
                                 }
                             }
                             @{ id = 'Sms'; state = 'disabled'; '@odata.type' = '#microsoft.graph.smsAuthenticationMethodConfiguration' }
@@ -104,6 +105,7 @@ Describe 'EntraPasswordAuthChecks' {
                                 @{ name = 'EnableBannedPasswordCheck'; value = 'True' }
                                 @{ name = 'BannedPasswordList'; value = 'password1,letmein,welcome1' }
                                 @{ name = 'LockoutThreshold'; value = '10' }
+                                @{ name = 'LockoutDurationInSeconds'; value = '60' }
                                 @{ name = 'EnableBannedPasswordCheckOnPremises'; value = 'True' }
                             )
                         }
@@ -202,7 +204,14 @@ Describe 'EntraPasswordAuthChecks' {
         $check.Status | Should -Be 'Pass'
     }
 
-    It 'Authenticator fatigue protection passes when both enabled' {
+    It 'Smart lockout duration of 60 seconds passes (CIS v7 5.2.3.9)' {
+        $check = $settings | Where-Object { $_.CheckId -like 'ENTRA-PASSWORD-006*' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
+        $check.CurrentValue | Should -Be '60 seconds'
+    }
+
+    It 'Authenticator fatigue protection passes when app name and location context are both enabled (CIS v7 5.2.3.1)' {
         $check = $settings | Where-Object { $_.Setting -eq 'Authenticator Fatigue Protection' }
         $check | Should -Not -BeNullOrEmpty
         $check.Status | Should -Be 'Pass'
@@ -288,6 +297,7 @@ Describe 'EntraPasswordAuthChecks - Modern schema with disabled states' {
                                 # explicitly turned OFF application context display.
                                 featureSettings = @{
                                     displayAppInformationRequiredState = @{ state = 'disabled' }
+                                    displayLocationInformationRequiredState = @{ state = 'enabled' }
                                 }
                             }
                         )
@@ -340,10 +350,17 @@ Describe 'EntraPasswordAuthChecks - Modern schema with disabled states' {
         . "$PSScriptRoot/../../src/M365-Assess/Entra/EntraPasswordAuthChecks.ps1"
     }
 
+    It 'Smart lockout duration defaults to Pass when no password settings are customized (CIS v7 5.2.3.9)' {
+        $check = $settings | Where-Object { $_.CheckId -like 'ENTRA-PASSWORD-006*' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
+        $check.CurrentValue | Should -Match 'default'
+    }
+
     It 'Authenticator fatigue protection fails when application context is explicitly disabled' {
         $check = $settings | Where-Object { $_.Setting -eq 'Authenticator Fatigue Protection' }
         $check | Should -Not -BeNullOrEmpty
-        $check.Status | Should -Be 'Fail' -Because 'application context display is off even though number matching is enforced'
+        $check.Status | Should -Be 'Fail' -Because 'application name display is off (CIS v7 5.2.3.1 requires app name and location context)'
     }
 
     It 'System-preferred MFA fails when explicitly disabled' {
@@ -572,6 +589,7 @@ Describe 'EntraPasswordAuthChecks - Modern schema with default states' {
                                 featureSettings = @{
                                     numberMatchingRequiredState        = @{ state = 'default' }
                                     displayAppInformationRequiredState = @{ state = 'enabled' }
+                                    displayLocationInformationRequiredState = @{ state = 'enabled' }
                                 }
                             }
                         )

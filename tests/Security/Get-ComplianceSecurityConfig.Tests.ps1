@@ -19,6 +19,7 @@ Describe 'Get-ComplianceSecurityConfig' {
                 @{ Name = 'PII Protection'; Enabled = $true; TeamsLocation = @('All') }
                 @{ Name = 'Financial Data'; Enabled = $true; TeamsLocation = $null; Workload = 'Exchange,SharePoint' }
                 @{ Name = 'Disabled Policy'; Enabled = $false; TeamsLocation = $null; Workload = $null }
+                @{ Name = 'Copilot Interactions'; Enabled = $true; Mode = 'Enable'; EnforcementPlanes = @('CopilotExperiences'); LocationInclusions = @('All') }
             )
         }
 
@@ -136,6 +137,13 @@ Describe 'Get-ComplianceSecurityConfig' {
         }
         $labelCheck | Should -Not -BeNullOrEmpty
         $labelCheck.Status | Should -Be 'Pass'
+    }
+
+    It 'DLP Published for Copilot passes when an enabled policy covers all Copilot accounts (CIS v7 3.2.3)' {
+        $check = $settings | Where-Object { $_.CheckId -like 'COMPLIANCE-DLP-004*' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
+        $check.CurrentValue | Should -Match 'Copilot Interactions'
     }
 
     It 'DLP Workload Coverage check passes when Exchange and SharePoint are covered' {

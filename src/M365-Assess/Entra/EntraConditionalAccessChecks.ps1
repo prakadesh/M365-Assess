@@ -81,16 +81,16 @@ try {
         }
         Add-Setting @settingParams
 
-        # CIS 5.1.4.2 -- Max devices per user
+        # CIS 5.1.4.2 -- Max devices per user (v7.0.0 lowered the limit from 20 to 10)
         $maxDevices = $devicePolicy['userDeviceQuota']
         $settingParams = @{
             Category         = 'Device Management'
             Setting          = 'Maximum Devices Per User'
             CurrentValue     = "$maxDevices"
-            RecommendedValue = '15 or fewer'
-            Status           = $(if ($maxDevices -le 15) { 'Pass' } else { 'Fail' })
+            RecommendedValue = '10 or fewer'
+            Status           = $(if ($maxDevices -le 10) { 'Pass' } else { 'Fail' })
             CheckId          = 'ENTRA-DEVICE-002'
-            Remediation      = 'Entra admin center > Devices > Device settings > Maximum number of devices per user. Set to 15 or lower.'
+            Remediation      = 'Entra admin center > Devices > Device settings > Maximum number of devices per user. Set to 10 or lower (CIS v7.0.0 5.1.4.2).'
         }
         Add-Setting @settingParams
 

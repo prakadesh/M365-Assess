@@ -300,6 +300,20 @@
     "SPO-SITE-003": "Info",
     "SPO-SWAY-001": "Medium",
     "SPO-VERSIONING-001": "Medium",
-    "TEAMS-GUEST-001": "High"
+    "TEAMS-GUEST-001": "High",
+    "ENTRA-GROUP-007": "Low",
+    "ENTRA-APPMGMT-001": "Medium",
+    "ENTRA-APPMGMT-002": "Medium",
+    "ENTRA-APPMGMT-003": "Medium",
+    "ENTRA-APPMGMT-004": "Medium",
+    "CA-REAUTH-001": "Medium",
+    "CA-NAMEDLOC-003": "Low",
+    "CA-GEOBLOCK-001": "Medium",
+    "CA-TOKENPROT-001": "Medium",
+    "CA-AUTHTRANSFER-001": "Medium",
+    "ENTRA-PASSWORD-006": "Low",
+    "ENTRA-AUTHMETHOD-009": "Medium",
+    "EXO-OWA-002": "Medium",
+    "COMPLIANCE-DLP-004": "Medium"
   }
 }

@@ -313,6 +313,44 @@ try {
             Remediation      = 'Run: Update-MgBetaDirectorySetting for Password Rule Settings with LockoutThreshold. Entra admin center > Protection > Password protection.'
         }
         Add-Setting @settingParams
+
+        # CIS v7.0.0 5.2.3.9 -- lockout duration of at least 60 seconds
+        $lockoutDurEntry = if ($pwSettings['values']) { $pwSettings['values'] | Where-Object { $_['name'] -eq 'LockoutDurationInSeconds' } } else { $null }
+        $lockoutDurRaw = if ($lockoutDurEntry) { $lockoutDurEntry['value'] } else { $null }
+        $lockoutDurSeconds = 0
+        $durFix = 'Entra admin center > Entra ID > Authentication methods > Password protection > Lockout duration in seconds = 60 or more (Password Rule Settings directory setting, LockoutDurationInSeconds).'
+        if ($null -eq $lockoutDurRaw) {
+            $durCurrent = '60 seconds (Entra default; not customized)'; $durStatus = 'Pass'
+        }
+        elseif ([int]::TryParse([string]$lockoutDurRaw, [ref]$lockoutDurSeconds)) {
+            $durCurrent = "$lockoutDurSeconds seconds"; $durStatus = $(if ($lockoutDurSeconds -ge 60) { 'Pass' } else { 'Fail' })
+        }
+        else {
+            $durCurrent = "Unreadable value: $lockoutDurRaw"; $durStatus = 'Review'
+        }
+        $settingParams = @{
+            Category         = 'Password Management'
+            Setting          = 'Smart Lockout Duration'
+            CurrentValue     = $durCurrent
+            RecommendedValue = '60 seconds or more'
+            Status           = $durStatus
+            CheckId          = 'ENTRA-PASSWORD-006'
+            Remediation      = $durFix
+        }
+        Add-Setting @settingParams
+    }
+    else {
+        # No Password Rule Settings directory setting exists: Entra defaults apply (60s lockout duration).
+        $settingParams = @{
+            Category         = 'Password Management'
+            Setting          = 'Smart Lockout Duration'
+            CurrentValue     = '60 seconds (Entra default; no custom password protection settings)'
+            RecommendedValue = '60 seconds or more'
+            Status           = 'Pass'
+            CheckId          = 'ENTRA-PASSWORD-006'
+            Remediation      = 'Entra admin center > Entra ID > Authentication methods > Password protection > Lockout duration in seconds = 60 or more.'
+        }
+        Add-Setting @settingParams
     }
 }
 catch {
@@ -328,6 +366,17 @@ catch {
             Status           = 'Info'
             CheckId          = 'ENTRA-PASSWORD-002'
             Remediation      = 'Entra admin center > Protection > Authentication methods > Password protection. Configure a custom banned password list and smart lockout threshold.'
+        }
+        Add-Setting @settingParams
+
+        $settingParams = @{
+            Category         = 'Password Management'
+            Setting          = 'Smart Lockout Duration'
+            CurrentValue     = '60 seconds (Entra default; directory settings not configured)'
+            RecommendedValue = '60 seconds or more'
+            Status           = 'Pass'
+            CheckId          = 'ENTRA-PASSWORD-006'
+            Remediation      = 'Entra admin center > Entra ID > Authentication methods > Password protection > Lockout duration in seconds = 60 or more.'
         }
         Add-Setting @settingParams
     }
@@ -375,27 +424,26 @@ try {
         if ($authenticator) {
             $featureSettings = $authenticator['featureSettings']
             if ($null -ne $featureSettings) {
-                $numberMatchState = $featureSettings['numberMatchingRequiredState']
                 $appInfoState = $featureSettings['displayAppInformationRequiredState']
-                # Number matching has been enforced tenant-wide since May 2023. Once enforced,
-                # Graph stops returning numberMatchingRequiredState, so an absent property means
-                # "enforced" (on), not "not configured". Treat absence as the enforced state
-                # rather than failing the check (community issue #998).
+                $locInfoState = $featureSettings['displayLocationInformationRequiredState']
+                # CIS v7.0.0 5.2.3.1 requires application name AND geographic location context in
+                # push/passwordless notifications. Number matching is no longer part of the control:
+                # Microsoft has enforced it tenant-wide since 2023 (Graph stops returning
+                # numberMatchingRequiredState once enforced), so it is reported for context only.
+                $numberMatchState = $featureSettings['numberMatchingRequiredState']
                 $numberMatch = if ($numberMatchState) { $numberMatchState['state'] } else { 'enforced (mandatory)' }
                 $appInfo = if ($appInfoState) { $appInfoState['state'] } else { 'not configured' }
+                $locInfo = if ($locInfoState) { $locInfoState['state'] } else { 'not configured' }
 
-                # 'default' is the Microsoft-managed advancedConfigState; for number matching
-                # (enforced tenant-wide) it means on, matching the System-Preferred MFA path.
-                $numberMatchOn = $numberMatch -in @('enabled', 'enforced (mandatory)', 'default')
-                $fatiguePassed = $numberMatchOn -and ($appInfo -eq 'enabled')
+                $fatiguePassed = ($appInfo -eq 'enabled') -and ($locInfo -eq 'enabled')
                 $settingParams = @{
                     Category         = 'Authentication Methods'
                     Setting          = 'Authenticator Fatigue Protection'
-                    CurrentValue     = "Number matching: $numberMatch; App context: $appInfo"
-                    RecommendedValue = 'Both enabled'
+                    CurrentValue     = "App name: $appInfo; Geographic location: $locInfo (number matching: $numberMatch)"
+                    RecommendedValue = 'App name and geographic location both enabled'
                     Status           = $(if ($fatiguePassed) { 'Pass' } else { 'Fail' })
                     CheckId          = 'ENTRA-AUTHMETHOD-003'
-                    Remediation      = 'Entra admin center > Protection > Authentication methods > Microsoft Authenticator > Configure > Require number matching = Enabled, Show application name = Enabled.'
+                    Remediation      = 'Entra admin center > Entra ID > Authentication methods > Policies > Microsoft Authenticator > Configure > Show application name in push and passwordless notifications = Enabled; Show geographic location in push and passwordless notifications = Enabled (target All users).'
                 }
                 Add-Setting @settingParams
             }

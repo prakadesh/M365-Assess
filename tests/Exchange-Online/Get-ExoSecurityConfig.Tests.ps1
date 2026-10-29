@@ -47,7 +47,10 @@ Describe 'Get-ExoSecurityConfig' {
         Mock Get-OwaMailboxPolicy {
             return @([PSCustomObject]@{
                 Name                             = 'OwaMailboxPolicy-Default'
+                IsDefault                        = $true
                 AdditionalStorageProvidersAvailable = $false
+                PersonalAccountsEnabled          = $false
+                PersonalAccountCalendarsEnabled  = $false
             })
         }
 
@@ -183,6 +186,12 @@ Describe 'Get-ExoSecurityConfig' {
             $s.CheckId | Should -Match '^EXO-' `
                 -Because "CheckId '$($s.CheckId)' should start with EXO-"
         }
+    }
+
+    It 'Default OWA policy blocks personal accounts and calendars (CIS v7 6.3.2)' {
+        $check = $settings | Where-Object { $_.CheckId -like 'EXO-OWA-002*' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
     }
 
     It 'Modern authentication check passes' {

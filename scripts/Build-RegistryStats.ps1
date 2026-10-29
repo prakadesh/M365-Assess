@@ -100,6 +100,26 @@ foreach ($regCheck in $checks) {
     }
 }
 
+# Local overlay mappings (controls/cis-m365-v7-mapping.json) are merged into registry entries
+# at load time by Import-ControlRegistry, so they count toward framework coverage too.
+$overlayPath = Join-Path -Path $controlsPath -ChildPath 'cis-m365-v7-mapping.json'
+if (Test-Path -Path $overlayPath) {
+    $overlay = Get-Content -Path $overlayPath -Raw | ConvertFrom-Json
+    $overlayKey = [string]$overlay.frameworkId
+    $registryIds = @($checks | ForEach-Object { $_.checkId })
+    foreach ($prop in $overlay.checks.PSObject.Properties) {
+        if ($registryIds -notcontains $prop.Name) { continue }
+        if (-not $frameworkStats.ContainsKey($overlayKey)) {
+            $frameworkStats[$overlayKey] = @{
+                Checks   = 0
+                Controls = [System.Collections.Generic.HashSet[string]]::new()
+            }
+        }
+        $frameworkStats[$overlayKey].Checks++
+        if ($prop.Value.controlId) { [void]$frameworkStats[$overlayKey].Controls.Add(([string]$prop.Value.controlId).Trim()) }
+    }
+}
+
 # CISA SCuBA product pillars from controlId prefixes (MS.<PRODUCT>.x.y).
 # Labels come from scoring.products, falling back to the groups map (which the
 # Framework-Taxonomy test guarantees covers every registry-mapped MS.* key).

@@ -115,5 +115,229 @@
       "rationale": "Informational: surfaces the total count of disabled member accounts alongside total directory size. High ratios may indicate accounts pending removal or an offboarding gap.",
       "scfWeighting": 3
     }
+  },
+  {
+    "checkId": "ENTRA-GROUP-007",
+    "name": "Ensure that 'Users can create Microsoft 365 groups in Azure portals, API or PowerShell' is set to 'No'",
+    "category": "GROUP",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Low",
+      "rationale": "Unrestricted Microsoft 365 group creation leads to group sprawl, unmanaged Teams and SharePoint sites, and ungoverned external sharing locations.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "ENTRA-APPMGMT-001",
+    "name": "Ensure password addition is blocked for applications",
+    "category": "APPMGMT",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Client secrets are long-lived, easily leaked credentials. Blocking new password credentials tenant-wide forces certificate or federated credentials for applications and service principals.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "ENTRA-APPMGMT-002",
+    "name": "Ensure password lifetime for applications does not exceed 180 days",
+    "category": "APPMGMT",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Long-lived application secrets extend the window in which a leaked credential can be abused. A tenant-wide maximum lifetime bounds that exposure.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "ENTRA-APPMGMT-003",
+    "name": "Ensure new application passwords are system-generated",
+    "category": "APPMGMT",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Custom, user-chosen application secrets are often weak or reused. Requiring system-generated secrets guarantees sufficient entropy.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "ENTRA-APPMGMT-004",
+    "name": "Ensure maximum certificate lifetime for applications does not exceed 180 days",
+    "category": "APPMGMT",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Long-lived application certificates extend the exposure window of a stolen private key. A tenant-wide maximum lifetime bounds that exposure.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "CA-REAUTH-001",
+    "name": "Ensure that periodic reauthentication is required for all users",
+    "category": "REAUTH",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Without a sign-in frequency ceiling, stolen or long-lived sessions and refresh tokens remain usable indefinitely. Periodic reauthentication limits session replay.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "CA-NAMEDLOC-003",
+    "name": "Ensure trusted named locations are defined",
+    "category": "NAMEDLOC",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Low",
+      "rationale": "Location-aware Conditional Access policies depend on trusted named locations being defined and maintained.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "CA-GEOBLOCK-001",
+    "name": "Ensure exclusionary geographic access controls are utilized",
+    "category": "GEOBLOCK",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Blocking sign-ins from locations the organization never operates in removes a large share of opportunistic credential-attack traffic.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "CA-TOKENPROT-001",
+    "name": "Ensure Token Protection is enforced for session tokens",
+    "category": "TOKENPROT",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Token protection cryptographically binds sign-in tokens to the device, defeating token theft and replay for Exchange Online, SharePoint Online and Teams on Windows.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "CA-AUTHTRANSFER-001",
+    "name": "Ensure authentication transfer is blocked",
+    "category": "AUTHTRANSFER",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Authentication transfer lets a session on one device be handed to another, bypassing device-bound controls. Blocking it closes that path.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "ENTRA-PASSWORD-006",
+    "name": "Ensure that Account 'Lockout duration in seconds' is at least 60 seconds",
+    "category": "PASSWORD",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Low",
+      "rationale": "A very short smart-lockout duration lets password-guessing resume almost immediately, weakening protection against brute force and password spray.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "ENTRA-AUTHMETHOD-009",
+    "name": "Ensure Microsoft Authenticator on companion applications is disabled",
+    "category": "AUTHMETHOD",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Allowing Authenticator approvals inside companion applications places an MFA factor in the same context as the resource being protected, weakening phishing and fatigue resistance.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "EXO-OWA-002",
+    "name": "Ensure the ability to add personal email accounts and calendars is disabled",
+    "category": "OWA",
+    "collector": "ExchangeOnline",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Connecting personal accounts in Outlook on the web creates an unmonitored path for corporate data to leave via consumer mailboxes.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "COMPLIANCE-DLP-004",
+    "name": "Ensure DLP policies are published for Copilot users",
+    "category": "DLP",
+    "collector": "Compliance",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E5"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Without DLP coverage of Microsoft 365 Copilot interactions, sensitive data can be surfaced or shared through prompts and responses outside normal controls.",
+      "scfWeighting": 5
+    }
   }
 ]

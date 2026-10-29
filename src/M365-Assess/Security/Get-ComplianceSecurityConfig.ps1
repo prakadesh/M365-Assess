@@ -137,6 +137,37 @@ try {
             Add-Setting @settingParams
         }
 
+        # CIS v7.0.0 3.2.3 -- DLP policy covering Microsoft 365 Copilot experiences
+        $copilotPolicies = @($dlpPolicies | Where-Object { @($_.EnforcementPlanes) -match 'CopilotExperiences' })
+        $copilotActive = @($copilotPolicies | Where-Object { "$($_.Mode)" -eq 'Enable' })
+        $copilotAllScope = @($copilotActive | Where-Object { ((@($_.LocationInclusions) | ForEach-Object { "$_" }) -join ' ') -match '\bAll\b' })
+        if ($copilotAllScope.Count -gt 0) {
+            $copilotStatus = 'Pass'
+            $copilotCurrent = "$($copilotAllScope.Count) enabled policy(ies) cover Copilot for all accounts: $((@($copilotAllScope | ForEach-Object { $_.Name }) | Select-Object -First 3) -join ', ')"
+        }
+        elseif ($copilotActive.Count -gt 0) {
+            $copilotStatus = 'Warning'
+            $copilotCurrent = "$($copilotActive.Count) enabled Copilot policy(ies), but scope is not All accounts -- review locations and exclusions"
+        }
+        elseif ($copilotPolicies.Count -gt 0) {
+            $copilotStatus = 'Fail'
+            $copilotCurrent = "$($copilotPolicies.Count) Copilot DLP policy(ies) exist but none are enabled (Mode: $((@($copilotPolicies | ForEach-Object { "$($_.Mode)" }) | Select-Object -Unique) -join ', '))"
+        }
+        else {
+            $copilotStatus = 'Fail'
+            $copilotCurrent = 'No DLP policy covers Microsoft 365 Copilot'
+        }
+        $settingParams = @{
+            Category         = 'Data Loss Prevention'
+            Setting          = 'DLP Published for Copilot'
+            CurrentValue     = $copilotCurrent
+            RecommendedValue = 'At least one enabled policy covering Microsoft 365 Copilot for all accounts'
+            Status           = $copilotStatus
+            CheckId          = 'COMPLIANCE-DLP-004'
+            Remediation      = 'Microsoft Purview > Data loss prevention > Policies > Create policy (or enable the default policy "Protect sensitive M365 Copilot interactions") > Locations: Microsoft 365 Copilot and Copilot Chat - All accounts, Mode On, with rules restricting sensitive data in Copilot interactions.'
+        }
+        Add-Setting @settingParams
+
         # DLP workload coverage -- Exchange and SharePoint/OneDrive
         $exoPolicies  = @($enabledPolicies | Where-Object { $_.ExchangeLocation -or ($_.Workload -and $_.Workload -match 'Exchange') })
         $spodPolicies = @($enabledPolicies | Where-Object { $_.SharePointLocation -or $_.OneDriveLocation -or ($_.Workload -and $_.Workload -match 'SharePoint') })

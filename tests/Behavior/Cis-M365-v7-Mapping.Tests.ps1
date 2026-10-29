@@ -60,6 +60,13 @@ Describe 'CIS M365 v7.0.0 overlay' {
     It 'follows the v6 -> v7 renumbering: "users cannot create security groups" is 5.1.3.1' {
         $script:overlay.checks.'ENTRA-GROUP-001'.controlId | Should -Be '5.1.3.1'
     }
+
+    It 'covers every Automated v7 recommendation with at least one check' {
+        $covered = @($script:overlay.checks.PSObject.Properties | ForEach-Object { $_.Value.controlId }) | Sort-Object -Unique
+        $uncovered = @($script:catalogIds | Where-Object {
+            $script:overlay.catalog.$_.assessment -eq 'Automated' -and $_ -notin $covered })
+        $uncovered | Should -BeNullOrEmpty -Because "automated controls with no check: $($uncovered -join ', ')"
+    }
 }
 
 Describe 'cis-m365-v7 framework definition' {

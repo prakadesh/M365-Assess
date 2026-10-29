@@ -67,6 +67,13 @@ Describe 'Metadata Consistency' {
                 if ($_.frameworks) { $_.frameworks.PSObject.Properties.Name }
             } | Sort-Object -Unique)
 
+            # Frameworks mapped through a local overlay (e.g. cis-m365-v7-mapping.json) are merged into
+            # registry entries by Import-ControlRegistry rather than stored in registry.json.
+            $overlayPath = "$moduleRoot/controls/cis-m365-v7-mapping.json"
+            if (Test-Path -Path $overlayPath) {
+                $regFwKeys += (Get-Content -Path $overlayPath -Raw | ConvertFrom-Json).frameworkId
+            }
+
             foreach ($fw in $fws) {
                 $regFwKeys | Should -Contain $fw.frameworkId -Because "framework '$($fw.frameworkId)' should be referenced in at least one registry entry"
             }
