@@ -1,6 +1,6 @@
 # Multi-Framework Compliance
 
-The HTML report includes a **Compliance Overview** section that maps all assessed security controls across 15 compliance frameworks simultaneously. No parameters needed; all framework data is always included.
+The HTML report includes a **Compliance Overview** section that maps all assessed security controls across 16 compliance frameworks simultaneously. No parameters needed; all framework data is always included.
 
 **Assessment scope:** M365-Assess provides best-effort checks and framework mappings to support security insights, audit preparation, and alignment. Some requirements allow multiple implementations or require organizational and procedural evidence beyond the settings assessed here. A passing check does not establish that a framework requirement is fully satisfied, and a deviation from this baseline does not by itself establish noncompliance. Determine applicability within your system's scope and validate supporting evidence with the responsible assessor. Recorded attestations document reviewer judgments; they do not constitute certification.
 
@@ -8,10 +8,14 @@ The HTML report includes a **Compliance Overview** section that maps all assesse
 
 | Framework | Controls | Type |
 |-----------|----------|------|
-| CIS M365 E3 Level 1 | 86 | CIS Benchmark v6.0.1 compliance score |
-| CIS M365 E3 Level 2 | 34 | CIS Benchmark v6.0.1 compliance score |
-| CIS M365 E5 Level 1 | 97 | CIS Benchmark v6.0.1 compliance score |
-| CIS M365 E5 Level 2 | 43 | CIS Benchmark v6.0.1 compliance score |
+| CIS M365 v7 E3 Level 1 | 100 | CIS Benchmark v7.0.0 compliance score (default) |
+| CIS M365 v7 E3 Level 2 | 37 | CIS Benchmark v7.0.0 compliance score |
+| CIS M365 v7 E5 Level 1 | 114 | CIS Benchmark v7.0.0 compliance score |
+| CIS M365 v7 E5 Level 2 | 46 | CIS Benchmark v7.0.0 compliance score |
+| CIS M365 v6 E3 Level 1 | 86 | CIS Benchmark v6.0.1 compliance score |
+| CIS M365 v6 E3 Level 2 | 34 | CIS Benchmark v6.0.1 compliance score |
+| CIS M365 v6 E5 Level 1 | 97 | CIS Benchmark v6.0.1 compliance score |
+| CIS M365 v6 E5 Level 2 | 43 | CIS Benchmark v6.0.1 compliance score |
 | NIST 800-53 Rev 5 | 1,189 | Coverage mapping |
 | NIST CSF 2.0 | 106 | Coverage mapping |
 | ISO 27001:2022 | 93 | Coverage mapping |
@@ -72,13 +76,13 @@ ENTRA-ADMIN-001.2    Second setting assessed under ENTRA-ADMIN-001
 ```
 
 <!-- registry-stats:checks:begin -->
-The assessment suite includes **292 security checks** across **16 collector families** (Backup, CAEvaluator, Compliance, CriticalExposure, Defender, DNS, EntApp, Entra, ExchangeOnline, Forms, Intune, PowerBI, PurviewRetention, SharePoint, StrykerReadiness, Teams), each mapped to one or more compliance frameworks.
+The assessment suite includes **306 security checks** across **16 collector families** (Backup, CAEvaluator, Compliance, CriticalExposure, Defender, DNS, EntApp, Entra, ExchangeOnline, Forms, Intune, PowerBI, PurviewRetention, SharePoint, StrykerReadiness, Teams), each mapped to one or more compliance frameworks.
 <!-- registry-stats:checks:end -->
 
 ## Control Registry
 
 <!-- registry-stats:registry:begin -->
-Framework mappings are defined in `controls/registry.json`, which contains **292 control entries** — the M365-scoped subset of the upstream CheckID registry plus **5 local extension checks**.
+Framework mappings are defined in `controls/registry.json`, which contains **306 control entries** — the M365-scoped subset of the upstream CheckID registry plus **19 local extension checks**.
 <!-- registry-stats:registry:end -->
 
 CheckID upstream also carries Windows-endpoint `WIN-*` and Azure-subscription `AZ-*` checks; the sync workflow filters those out via `controls/sync-scope.json` because no collector in this module can emit them. Each entry specifies the check ID, description, and mappings to all applicable frameworks.
@@ -94,10 +98,11 @@ Framework mappings are stored in two locations:
 
 ```
 controls/
-  registry.json              # Master registry (292 entries) -- contains all framework mappings inline
+  registry.json              # Master registry (306 entries) -- contains all framework mappings inline
   sync-scope.json            # M365 collector allowlist applied by the CheckID sync
   frameworks/
     cis-m365-v6.json         # CIS M365 v6.0.1 benchmark profiles
+    cis-m365-v7.json         # CIS M365 v7.0.0 benchmark profiles (mappings in cis-m365-v7-mapping.json)
     soc2-tsc.json            # SOC 2 Trust Services Criteria
 ```
 

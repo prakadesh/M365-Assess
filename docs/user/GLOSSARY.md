@@ -34,7 +34,7 @@ The user-visible outcome of a check — title, status, current value, recommende
 
 ### Framework
 
-A compliance standard or benchmark M365-Assess maps findings to. There are 15: CIS Controls v8, CIS M365 v6, NIST 800-53 r5, NIST CSF, CMMC, ISO 27001, ISO 27002, SOC 2, PCI-DSS v4, HIPAA, FedRAMP, MITRE ATT&CK, STIG, CISA SCUBA, Essential Eight.
+A compliance standard or benchmark M365-Assess maps findings to. There are 16: CIS Controls v8, CIS M365 v7, CIS M365 v6, NIST 800-53 r5, NIST CSF, CMMC, ISO 27001, ISO 27002, SOC 2, PCI-DSS v4, HIPAA, FedRAMP, MITRE ATT&CK, STIG, CISA SCUBA, Essential Eight.
 
 ### Lane
 

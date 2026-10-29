@@ -6,9 +6,26 @@ All notable changes to M365 Assess are documented here. This project uses [Conve
 
 ### Added
 
+- **CIS Microsoft 365 Foundations Benchmark v7.0.0** support (`cis-m365-v7`), now the default CIS
+  framework in reports; v6.0.1 remains available. Adds the 160-recommendation catalog with E3/E5
+  Level 1/2 profiles and maps all 143 Automated recommendations. Mappings live in
+  `controls/cis-m365-v7-mapping.json` (a local overlay merged by `Import-ControlRegistry`) so the
+  CheckID registry sync cannot overwrite them. See `docs/reference/CIS-M365-V7.md`.
+- 14 new checks for v7 recommendations: `COMPLIANCE-DLP-004` (Copilot DLP), `ENTRA-GROUP-007`,
+  `ENTRA-APPMGMT-001` to `-004` (default app management policy), `CA-REAUTH-001`,
+  `CA-NAMEDLOC-003`, `CA-GEOBLOCK-001`, `CA-TOKENPROT-001`, `CA-AUTHTRANSFER-001`,
+  `ENTRA-PASSWORD-006` (lockout duration), `ENTRA-AUTHMETHOD-009` (Authenticator companion apps),
+  and `EXO-OWA-002` (personal accounts and calendars).
 - Repeatable offline release validation using sample CSVs, two AutoBaseline runs,
   generated HTML/React and XLSX checks, folder/log checks, and artifact hashes.
   CI retains validation artifacts; human live-tenant release checks remain separate.
+
+### Changed
+
+- `ENTRA-DEVICE-002` now requires 10 or fewer devices per user (CIS v7.0.0 5.1.4.2; was 15).
+- `ENTRA-AUTHMETHOD-003` now requires application name and geographic location in Authenticator
+  notifications (CIS v7.0.0 5.2.3.1). Number matching is reported for context only.
+- `Import-ControlRegistry -CisFrameworkId` now defaults to `cis-m365-v7`.
 
 ### Fixed
 

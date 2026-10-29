@@ -58,7 +58,7 @@ If you need any of the below, M365-Assess is the wrong tool:
 
 ## A note on framework coverage
 
-M365-Assess maps each finding to **15 compliance frameworks** (CIS Controls v8, CIS M365 v6, NIST 800-53, NIST CSF, CMMC, ISO 27001, ISO 27002, SOC 2, PCI-DSS, HIPAA, FedRAMP, MITRE ATT&CK, STIG, CISA SCUBA, Essential Eight). This **mapping is informational** — useful for evidence packages and audit prep, not a substitute for an auditor's judgement.
+M365-Assess maps each finding to **16 compliance frameworks** (CIS Controls v8, CIS M365 v7, CIS M365 v6, NIST 800-53, NIST CSF, CMMC, ISO 27001, ISO 27002, SOC 2, PCI-DSS, HIPAA, FedRAMP, MITRE ATT&CK, STIG, CISA SCUBA, Essential Eight). This **mapping is informational** — useful for evidence packages and audit prep, not a substitute for an auditor's judgement.
 
 A tenant scoring 95% on CIS M365 has not been "CIS-certified"; it has 95% of the controls M365-Assess maps to CIS verified as Pass. Real certification still requires an accredited assessor.
 
