@@ -4,11 +4,11 @@
 
 ## Registry summary
 
-- **Checks:** 293 (291 automated)
+- **Checks:** 307 (305 automated)
 - **Collector families:** 16 (see `controls/sync-scope.json`)
-- **Local extension checks:** 6 (pending upstream CheckID adoption)
-- **Severity-rated:** 293 of 293 (0 unrated checks display the default Medium severity)
-- **Learn-more links:** 31 of 293
+- **Local extension checks:** 20 (pending upstream CheckID adoption)
+- **Severity-rated:** 293 of 307 (14 unrated checks display the default Medium severity)
+- **Learn-more links:** 31 of 307
 
 ## Per-framework mapping coverage
 
@@ -30,7 +30,7 @@
 | `nist-csf` | yes | 257 | 71 | 3.6 |
 | `hipaa` | yes | 167 | 188 | 0.9 |
 | `cis-m365-v6` | yes | 166 | 139 | 1.2 |
-| `cis-m365-v7` | yes | 154 | 138 | 1.1 |
+| `cis-m365-v7` | yes | 153 | 152 | 1 |
 | `essential-eight` | yes | 140 | 24 | 5.8 |
 | `nis2` | — | 80 | 21 | 3.8 |
 | `cisa-scuba` | yes | 52 | 47 | 1.1 |
@@ -57,14 +57,14 @@ Distinct SCuBA policy IDs mapped, by product prefix (`MS.<PRODUCT>.*`). Products
 | Collector | Checks | Severity-rated | Learn-more links |
 |---|---|---|---|
 | Backup | 1 | 1 | 0 |
-| CAEvaluator | 23 | 23 | 7 |
-| Compliance | 10 | 10 | 0 |
+| CAEvaluator | 28 | 23 | 7 |
+| Compliance | 11 | 10 | 0 |
 | CriticalExposure | 0 | 0 | 0 |
 | Defender | 19 | 19 | 0 |
 | DNS | 4 | 4 | 0 |
-| EntApp | 24 | 24 | 6 |
-| Entra | 79 | 79 | 10 |
-| ExchangeOnline | 24 | 24 | 2 |
+| EntApp | 28 | 24 | 6 |
+| Entra | 82 | 79 | 10 |
+| ExchangeOnline | 25 | 24 | 2 |
 | Forms | 6 | 6 | 0 |
 | Intune | 17 | 17 | 0 |
 | PowerBI | 26 | 26 | 3 |

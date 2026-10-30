@@ -129,9 +129,10 @@ Describe 'Import-FrameworkDefinitions' {
         $result.Count | Should -Be 0
     }
 
-    It 'CIS M365 v6 remains first in display order for backward compatibility' {
+    It 'CIS M365 v7 is first in display order (v6 retained second)' {
         $result = Import-FrameworkDefinitions -FrameworksPath $frameworksPath
-        $result[0].frameworkId | Should -Be 'cis-m365-v6'
+        $result[0].frameworkId | Should -Be 'cis-m365-v7'
+        $result[1].frameworkId | Should -Be 'cis-m365-v6'
         @($result | Where-Object { $_.frameworkId -eq 'cis-m365-v7' }).Count | Should -Be 1
     }
 

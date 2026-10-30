@@ -104,6 +104,7 @@ Describe 'EntraPasswordAuthChecks' {
                                 @{ name = 'EnableBannedPasswordCheck'; value = 'True' }
                                 @{ name = 'BannedPasswordList'; value = 'password1,letmein,welcome1' }
                                 @{ name = 'LockoutThreshold'; value = '10' }
+                                @{ name = 'LockoutDurationInSeconds'; value = '90' }
                                 @{ name = 'EnableBannedPasswordCheckOnPremises'; value = 'True' }
                             )
                         }
@@ -168,7 +169,7 @@ Describe 'EntraPasswordAuthChecks' {
     }
 
     It 'All Status values are valid' {
-        $validStatuses = @('Pass', 'Fail', 'Warning', 'Review', 'Info', 'N/A')
+        $validStatuses = @('Pass', 'Fail', 'Warning', 'Review', 'Info', 'Unknown', 'N/A')
         foreach ($s in $settings) {
             $s.Status | Should -BeIn $validStatuses `
                 -Because "Setting '$($s.Setting)' has status '$($s.Status)'"
@@ -224,6 +225,20 @@ Describe 'EntraPasswordAuthChecks' {
         $check = $settings | Where-Object { $_.Setting -eq 'Custom Banned Password List Enforced' }
         $check | Should -Not -BeNullOrEmpty
         $check.Status | Should -Be 'Pass'
+    }
+
+    It 'v7 smart lockout duration passes when 90 seconds' {
+        $check = $settings | Where-Object { $_.Setting -eq 'Smart Lockout Duration' }
+        $check | Should -Not -BeNullOrEmpty -Because 'CIS 5.2.3.9 check must always be emitted with password protection settings'
+        $check.Status | Should -Be 'Pass'
+        $check.CurrentValue | Should -Be '90 seconds'
+    }
+
+    It 'v7 Authenticator companion applications fails when not explicitly disabled' {
+        $check = $settings | Where-Object { $_.Setting -eq 'Authenticator Companion Applications' }
+        $check | Should -Not -BeNullOrEmpty -Because 'CIS 5.2.3.10 check must always be emitted when Authenticator is configured'
+        $check.Status | Should -Be 'Fail'
+        $check.CurrentValue | Should -Be 'not configured (Microsoft default)'
     }
 
     It 'Security defaults enabled check requires review when SD is off but CA policies are active' {

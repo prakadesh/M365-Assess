@@ -16,7 +16,7 @@ Describe 'Get-ComplianceSecurityConfig' {
 
         function Get-DlpCompliancePolicy {
             return @(
-                @{ Name = 'PII Protection'; Enabled = $true; TeamsLocation = @('All') }
+                @{ Name = 'PII Protection'; Enabled = $true; TeamsLocation = @('All'); EnforcementPlanes = @('Exchange', 'SharePoint', 'CopilotExperiences') }
                 @{ Name = 'Financial Data'; Enabled = $true; TeamsLocation = $null; Workload = 'Exchange,SharePoint' }
                 @{ Name = 'Disabled Policy'; Enabled = $false; TeamsLocation = $null; Workload = $null }
             )
@@ -142,6 +142,15 @@ Describe 'Get-ComplianceSecurityConfig' {
         $dlpCoverage = $settings | Where-Object { $_.CheckId -like 'COMPLIANCE-DLP-003*' }
         $dlpCoverage | Should -Not -BeNullOrEmpty
         $dlpCoverage.Status | Should -Be 'Pass'
+    }
+
+    It 'v7 DLP Covers Copilot check passes when a policy is published to Copilot experiences' {
+        $dlpCopilot = $settings | Where-Object {
+            $_.CheckId -like 'COMPLIANCE-DLP-004*' -and $_.Setting -eq 'DLP Covers Copilot'
+        }
+        $dlpCopilot | Should -Not -BeNullOrEmpty -Because 'CIS 3.2.3 check must always be emitted when DLP is queryable'
+        $dlpCopilot.Status | Should -Be 'Pass'
+        $dlpCopilot.CurrentValue | Should -Match 'PII Protection'
     }
 
     It 'Alert Policies check passes when enabled policies exist' {

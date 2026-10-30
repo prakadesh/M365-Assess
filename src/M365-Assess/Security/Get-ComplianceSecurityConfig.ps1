@@ -153,6 +153,41 @@ try {
             Remediation      = 'Microsoft Purview > Data loss prevention > Policies > Edit existing policies to include Exchange email and SharePoint/OneDrive locations for comprehensive data protection.'
         }
         Add-Setting @settingParams
+
+        # CIS 3.2.3 -- DLP policies published for Copilot users
+        # EnforcementPlanes on a DlpCompliancePolicy reflects the workloads the policy
+        # is published to; 'CopilotExperiences' indicates Copilot coverage.
+        $copilotPolicies = @($dlpPolicies | Where-Object {
+            $planes = @($_.EnforcementPlanes)
+            ($planes | Where-Object { "$_" -match 'Copilot' }).Count -gt 0
+        })
+        $copilotEnabled = @($copilotPolicies | Where-Object { $_.Enabled -eq $true })
+
+        if ($copilotEnabled.Count -gt 0) {
+            $copilotNames = ($copilotEnabled | ForEach-Object { $_.Name }) -join '; '
+            $settingParams = @{
+                Category         = 'Data Loss Prevention'
+                Setting          = 'DLP Covers Copilot'
+                CurrentValue     = "$($copilotEnabled.Count) enabled policy(ies): $copilotNames"
+                RecommendedValue = 'At least 1 enabled policy covers Microsoft 365 Copilot'
+                Status           = 'Pass'
+                CheckId          = 'COMPLIANCE-DLP-004'
+                Remediation      = 'No action needed.'
+            }
+            Add-Setting @settingParams
+        }
+        else {
+            $settingParams = @{
+                Category         = 'Data Loss Prevention'
+                Setting          = 'DLP Covers Copilot'
+                CurrentValue     = 'No DLP policies cover Microsoft 365 Copilot experiences'
+                RecommendedValue = 'At least 1 enabled policy covers Microsoft 365 Copilot'
+                Status           = 'Fail'
+                CheckId          = 'COMPLIANCE-DLP-004'
+                Remediation      = 'Microsoft Purview > Data loss prevention > Policies > Create or edit a policy > Include Microsoft 365 Copilot and Copilot Chat locations > Mode On.'
+            }
+            Add-Setting @settingParams
+        }
     }
     else {
         $settingParams = @{
@@ -172,6 +207,7 @@ catch {
     if (-not @($settings | Where-Object { $_.CheckId -like 'COMPLIANCE-DLP-001.*' }).Count) { Add-Setting -Category 'Collection' -Setting 'DLP Policies' -CurrentValue 'Collection failed' -RecommendedValue 'Verify configuration' -Status 'Unknown' -CheckId 'COMPLIANCE-DLP-001' -Limitations 'The authoritative query failed; no configuration conclusion is available.' }
     if (-not @($settings | Where-Object { $_.CheckId -like 'COMPLIANCE-DLP-002.*' }).Count) { Add-Setting -Category 'Collection' -Setting 'DLP Covers Teams' -CurrentValue 'Collection failed' -RecommendedValue 'Verify configuration' -Status 'Unknown' -CheckId 'COMPLIANCE-DLP-002' -Limitations 'The authoritative query failed; no configuration conclusion is available.' }
     if (-not @($settings | Where-Object { $_.CheckId -like 'COMPLIANCE-DLP-003.*' }).Count) { Add-Setting -Category 'Collection' -Setting 'DLP Workload Coverage' -CurrentValue 'Collection failed' -RecommendedValue 'Verify configuration' -Status 'Unknown' -CheckId 'COMPLIANCE-DLP-003' -Limitations 'The authoritative query failed; no configuration conclusion is available.' }
+    if (-not @($settings | Where-Object { $_.CheckId -like 'COMPLIANCE-DLP-004.*' }).Count) { Add-Setting -Category 'Collection' -Setting 'DLP Covers Copilot' -CurrentValue 'Collection failed' -RecommendedValue 'Verify configuration' -Status 'Unknown' -CheckId 'COMPLIANCE-DLP-004' -Limitations 'The authoritative query failed; no configuration conclusion is available.' }
 }
 
 # ------------------------------------------------------------------

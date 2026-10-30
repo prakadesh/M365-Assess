@@ -9,7 +9,7 @@
   "totalControls": 160,
   "registryKey": "cis-m365-v7",
   "csvColumn": "CisV7",
-  "displayOrder": 2,
+  "displayOrder": 1,
   "scoring": {
     "method": "profile-compliance",
     "profiles": {

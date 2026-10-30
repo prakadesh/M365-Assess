@@ -199,9 +199,16 @@ Describe 'EntraUserGroupChecks' {
     }
 
     It 'Non-admin tenant creation restricted passes when disabled' {
-        $check = $settings | Where-Object { $_.Setting -eq 'Non-Admin Tenant Creation Restricted' }
+        $check = $settings | Where-Object { $_.Setting -eq 'Non-admin Tenant Creation Restricted' }
         $check | Should -Not -BeNullOrEmpty
         $check.Status | Should -Be 'Pass'
+    }
+
+    It 'v7 user Microsoft 365 group creation fails when the Group.Unified setting is absent' {
+        $check = $settings | Where-Object { $_.Setting -eq 'User Microsoft 365 Group Creation' }
+        $check | Should -Not -BeNullOrEmpty -Because 'CIS 5.1.3.4 check must always be emitted'
+        $check.Status | Should -Be 'Fail'
+        $check.CurrentValue | Should -Match 'Not configured'
     }
 
     It 'All checks use ENTRA- prefix' {
@@ -505,6 +512,96 @@ Describe 'EntraUserGroupChecks - Skipped fallback on API error' {
         $check = $settings | Where-Object { $_.Setting -eq 'Per-user MFA (Legacy)' }
         $check | Should -Not -BeNullOrEmpty
         $check.Status | Should -Be 'Review'
+    }
+
+    AfterAll {
+        Remove-Item Function:\Update-CheckProgress -ErrorAction SilentlyContinue
+        Remove-Item Function:\Get-MgContext -ErrorAction SilentlyContinue
+        Remove-Item Function:\Add-Setting -ErrorAction SilentlyContinue
+    }
+}
+
+Describe 'EntraUserGroupChecks - CIS 5.1.3.4 group creation disabled' {
+    BeforeAll {
+        function global:Update-CheckProgress {
+            param($CheckId, $Setting, $Status)
+        }
+
+        function global:Get-MgContext {
+            return @{ TenantId = 'test-tenant-id' }
+        }
+
+        Mock Import-Module { }
+
+        Mock Invoke-MgGraphRequest {
+            param($Method, $Uri, $Headers, $ErrorAction)
+            switch -Wildcard ($Uri) {
+                '*/policies/authorizationPolicy' {
+                    return @{
+                        defaultUserRolePermissions = @{
+                            permissionGrantPoliciesAssigned = @('ManagePermissionGrantsForSelf.microsoft-user-default-low')
+                            allowedToCreateApps             = $false
+                            allowedToCreateSecurityGroups   = $false
+                            allowedToCreateTenants          = $false
+                        }
+                        allowInvitesFrom     = 'adminsAndGuestInviters'
+                        guestUserRoleId      = '2af84b1e-32c8-42b7-82bc-daa82404023b'
+                        restrictNonAdminUsers = $true
+                    }
+                }
+                '*/groupSettings' {
+                    return @{
+                        value = @(
+                            @{
+                                templateId = '62375ab9-6b52-47ed-826b-58e47e0e304b'
+                                values     = @( @{ name = 'EnableGroupCreation'; value = 'False' } )
+                            }
+                        )
+                    }
+                }
+                default { return @{ value = @() } }
+            }
+        }
+
+        . "$PSScriptRoot/../../src/M365-Assess/Orchestrator/AssessmentHelpers.ps1"
+        . "$PSScriptRoot/../../src/M365-Assess/Common/SecurityConfigHelper.ps1"
+
+        $ctx            = Initialize-SecurityConfig
+        $settings       = $ctx.Settings
+        $checkIdCounter = $ctx.CheckIdCounter
+
+        function Add-Setting {
+            param([string]$Category, [string]$Setting, [string]$CurrentValue,
+                  [string]$RecommendedValue, [string]$Status,
+                  [string]$CheckId = '', [string]$Remediation = '')
+            Add-SecuritySetting -Settings $settings -CheckIdCounter $checkIdCounter `
+                -Category $Category -Setting $Setting -CurrentValue $CurrentValue `
+                -RecommendedValue $RecommendedValue -Status $Status `
+                -CheckId $CheckId -Remediation $Remediation
+        }
+
+        $authPolicy = @{
+            defaultUserRolePermissions = @{
+                permissionGrantPoliciesAssigned = @('ManagePermissionGrantsForSelf.microsoft-user-default-low')
+                allowedToCreateApps             = $false
+                allowedToCreateSecurityGroups   = $false
+                allowedToCreateTenants          = $false
+            }
+            allowInvitesFrom     = 'adminsAndGuestInviters'
+            guestUserRoleId      = '2af84b1e-32c8-42b7-82bc-daa82404023b'
+            restrictNonAdminUsers = $true
+        }
+
+        $context = @{ TenantId = 'test-tenant-id' }
+
+        . "$PSScriptRoot/../../src/M365-Assess/Entra/EntraUserGroupChecks.ps1"
+    }
+
+    It 'passes when EnableGroupCreation is False' {
+        $check = $settings | Where-Object { $_.Setting -eq 'User Microsoft 365 Group Creation' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
+        $check.CurrentValue | Should -Be 'False'
     }
 
     AfterAll {

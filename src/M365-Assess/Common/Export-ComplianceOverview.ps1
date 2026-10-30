@@ -345,7 +345,7 @@ function Export-ComplianceOverview {
 
         $svAttr = if ($finding.RiskSeverity) { " data-sv='$($finding.RiskSeverity.ToLower())'" } else { '' }
         $cisProfilesAttr = ''
-        $cisFwId = 'cis-m365-v6'
+        $cisFwId = 'cis-m365-v7'
         if ($finding.Frameworks -and $finding.Frameworks.ContainsKey($cisFwId)) {
             $cisEntry = $finding.Frameworks[$cisFwId]
             if ($cisEntry.profiles -and $cisEntry.profiles.Count -gt 0) {

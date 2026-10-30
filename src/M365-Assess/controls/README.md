@@ -47,7 +47,7 @@ M365-Assess repo
 | `frameworks/stig.json` | DISA STIG M365 rules |
 
 <!-- registry-stats:files:begin -->
-The runtime control set contains **293 checks** across **16 collector families**, including **6 local extension checks**. Mappings span **21 framework keys**, 16 of which have report-view definitions in `frameworks/`.
+The runtime control set contains **307 checks** across **16 collector families**, including **20 local extension checks**. Mappings span **21 framework keys**, 16 of which have report-view definitions in `frameworks/`.
 <!-- registry-stats:files:end -->
 
 ## Updating Registry Data

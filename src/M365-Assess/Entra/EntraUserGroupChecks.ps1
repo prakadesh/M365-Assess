@@ -760,3 +760,47 @@ catch {
     }
     Add-Setting @settingParams
 }
+
+# ------------------------------------------------------------------
+# 34. ENTRA-GROUPSET-001: Users can create Microsoft 365 groups (CIS 5.1.3.4)
+# ------------------------------------------------------------------
+try {
+    Write-Verbose "Checking Microsoft 365 group creation setting..."
+    # Group.Unified directory setting template controls user group creation.
+    # Absence of the template means the tenant uses the default state (creation allowed = non-compliant).
+    $groupSettingsResp = Invoke-SafeGraphRequest -ExpectCollection -Method GET -Uri '/v1.0/groupSettings' -ErrorAction Stop
+    $groupSettingsList = if ($groupSettingsResp -and $groupSettingsResp['value']) { @($groupSettingsResp['value']) } else { @() }
+    $unifiedGroupSetting = $groupSettingsList | Where-Object { $_['templateId'] -eq '62375ab9-6b52-47ed-826b-58e47e0e304b' }
+    $enableGroupCreationEntry = if ($unifiedGroupSetting -and $unifiedGroupSetting['values']) {
+        $unifiedGroupSetting['values'] | Where-Object { $_['name'] -eq 'EnableGroupCreation' }
+    } else { $null }
+    $enableGroupCreation = if ($enableGroupCreationEntry) { $enableGroupCreationEntry['value'] } else { $null }
+
+    if ($null -eq $unifiedGroupSetting) {
+        $settingParams = @{
+            Category         = 'Groups'
+            Setting          = 'User Microsoft 365 Group Creation'
+            CurrentValue     = 'Not configured (default: users can create groups)'
+            RecommendedValue = 'False'
+            Status           = 'Fail'
+            CheckId          = 'ENTRA-GROUPSET-001'
+            Remediation      = 'Entra admin center > Groups > General > Users can create Microsoft 365 groups in Azure portals, API or PowerShell > No. Creating the Group.Unified setting disables user self-service group creation.'
+        }
+        Add-Setting @settingParams
+    }
+    else {
+        $settingParams = @{
+            Category         = 'Groups'
+            Setting          = 'User Microsoft 365 Group Creation'
+            CurrentValue     = "$enableGroupCreation"
+            RecommendedValue = 'False'
+            Status           = $(if ($enableGroupCreation -eq 'False') { 'Pass' } else { 'Fail' })
+            CheckId          = 'ENTRA-GROUPSET-001'
+            Remediation      = 'Entra admin center > Groups > General > Users can create Microsoft 365 groups in Azure portals, API or PowerShell > No.'
+        }
+        Add-Setting @settingParams
+    }
+}
+catch {
+    Write-Warning "Could not check Microsoft 365 group creation setting: $_"
+}

@@ -279,6 +279,8 @@ try {
         $enforceCustom = if ($enforceCustomEntry) { $enforceCustomEntry['value'] } else { $null }
         $lockoutEntry = if ($pwSettings['values']) { $pwSettings['values'] | Where-Object { $_['name'] -eq 'LockoutThreshold' } } else { $null }
         $lockoutThreshold = if ($lockoutEntry) { $lockoutEntry['value'] } else { $null }
+        $lockoutDurationEntry = if ($pwSettings['values']) { $pwSettings['values'] | Where-Object { $_['name'] -eq 'LockoutDurationInSeconds' } } else { $null }
+        $lockoutDuration = if ($lockoutDurationEntry) { $lockoutDurationEntry['value'] } else { $null }
 
         $settingParams = @{
             Category         = 'Password Management'
@@ -311,6 +313,23 @@ try {
             Status           = $(if ([int]$lockoutThreshold -le 10) { 'Pass' } else { 'Review' })
             CheckId          = 'ENTRA-PASSWORD-003'
             Remediation      = 'Run: Update-MgBetaDirectorySetting for Password Rule Settings with LockoutThreshold. Entra admin center > Protection > Password protection.'
+        }
+        Add-Setting @settingParams
+
+        # CIS 5.2.3.9 -- Lockout duration >= 60 seconds
+        $lockoutDurationInt = if ($null -ne $lockoutDuration -and "$lockoutDuration" -match '^\d+$') { [int]$lockoutDuration } else { $null }
+        $lockoutDurationStatus = if ($null -eq $lockoutDurationInt) { 'Unknown' }
+                                 elseif ($lockoutDurationInt -ge 60) { 'Pass' }
+                                 else { 'Fail' }
+        $lockoutDurationCurrent = if ($null -eq $lockoutDurationInt) { 'Not configured (Entra default applies)' } else { "$lockoutDurationInt seconds" }
+        $settingParams = @{
+            Category         = 'Password Management'
+            Setting          = 'Smart Lockout Duration'
+            CurrentValue     = $lockoutDurationCurrent
+            RecommendedValue = '60 seconds or higher'
+            Status           = $lockoutDurationStatus
+            CheckId          = 'ENTRA-PASSWORD-006'
+            Remediation      = 'Entra admin center > Protection > Authentication methods > Password protection > Smart Lockout > Lockout duration in seconds. Set to 60 or higher.'
         }
         Add-Setting @settingParams
     }
@@ -428,6 +447,50 @@ try {
 }
 catch {
     Write-Warning "Could not check authenticator fatigue protection: $_"
+}
+
+# ------------------------------------------------------------------
+# 20b. Authenticator Companion Applications (CIS 5.2.3.10)
+# ------------------------------------------------------------------
+try {
+    if ($sspr) {
+        $authMethods2 = $sspr['authenticationMethodConfigurations']
+        $authenticatorCompanion = if ($authMethods2) { $authMethods2 | Where-Object { $_['id'] -eq 'MicrosoftAuthenticator' } } else { $null }
+
+        if ($authenticatorCompanion) {
+            $featureSettings = $authenticatorCompanion['featureSettings']
+            $companionAppAllowed = if ($featureSettings) { $featureSettings['companionAppAllowedState'] } else { $null }
+            $companionState = if ($companionAppAllowed) { $companionAppAllowed['state'] } else { $null }
+            $companionCurrent = if ($null -eq $companionState) { 'not configured (Microsoft default)' } else { "$companionState" }
+            # Compliant when explicitly disabled; 'default' is not compliant per CIS audit criteria
+            $companionStatus = if ($companionState -eq 'disabled') { 'Pass' } else { 'Fail' }
+            $settingParams = @{
+                Category         = 'Authentication Methods'
+                Setting          = 'Authenticator Companion Applications'
+                CurrentValue     = $companionCurrent
+                RecommendedValue = 'disabled'
+                Status           = $companionStatus
+                CheckId          = 'ENTRA-AUTHMETHOD-009'
+                Remediation      = 'Entra admin center > Protection > Authentication methods > Microsoft Authenticator > Configure > Microsoft Authenticator on companion applications > Status = Disabled.'
+            }
+            Add-Setting @settingParams
+        }
+        else {
+            $settingParams = @{
+                Category         = 'Authentication Methods'
+                Setting          = 'Authenticator Companion Applications'
+                CurrentValue     = 'Microsoft Authenticator not configured'
+                RecommendedValue = 'disabled'
+                Status           = 'Review'
+                CheckId          = 'ENTRA-AUTHMETHOD-009'
+                Remediation      = 'Enable Microsoft Authenticator and disable companion applications under Configure settings.'
+            }
+            Add-Setting @settingParams
+        }
+    }
+}
+catch {
+    Write-Warning "Could not check Authenticator companion applications: $_"
 }
 
 # ------------------------------------------------------------------

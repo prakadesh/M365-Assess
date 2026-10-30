@@ -40,7 +40,7 @@
     Framework id(s) that headline the report's Executive Briefing first screen.
     Unknown ids are dropped with a warning (Invoke-M365Assessment validates with
     a hard throw before calling this script). When empty, the React app defaults
-    to CIS Microsoft 365 (cis-m365-v6).
+    to CIS Microsoft 365 v7 (cis-m365-v7).
 .EXAMPLE
     PS> .\Common\Export-AssessmentReport.ps1 -AssessmentFolder '.\M365-Assessment\Assessment_20260306_195618'
 .NOTES

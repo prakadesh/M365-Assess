@@ -1202,6 +1202,249 @@ catch {
 }
 
 # ------------------------------------------------------------------
+# 21. Periodic Reauthentication for All Users (CIS 5.2.2.13)
+# ------------------------------------------------------------------
+try {
+    Write-Verbose "Checking CA: Periodic reauthentication for all users..."
+    # Any sign-in frequency of 7 days (or shorter, including everyTime / hours) on an
+    # all-users / all-apps policy satisfies the periodic-reauthentication requirement.
+    $reauthPolicies = @($enabledPolicies | Where-Object {
+        $sif = $_['sessionControls']['signInFrequency']
+        if (-not $sif -or $sif['isEnabled'] -ne $true) { return $false }
+        # Risk-scoped policies do not satisfy the all-users requirement
+        $riskCond = $_['conditions']
+        if (($riskCond -and $riskCond['signInRiskLevels']) -or ($riskCond -and $riskCond['userRiskLevels'])) { return $false }
+        $users = $_['conditions']['users']
+        $apps = $_['conditions']['applications']
+        if (-not $users -or $users['includeUsers'] -notcontains 'All') { return $false }
+        if (-not $apps -or $apps['includeApplications'] -notcontains 'All') { return $false }
+        if ($sif['type'] -eq 'everyTime') { return $true }
+        if ($sif['frequencyInterval'] -eq 'timeBased' -or $null -eq $sif['frequencyInterval']) {
+            $value = $sif['value']
+            $sifType = $sif['type']
+            if ($null -eq $value) { return $false }
+            switch ($sifType) {
+                'days' { return [int]$value -le 7 }
+                'hours' { return [int]$value -le 168 }
+                'minutes' { return [int]$value -le 10080 }
+                default { return $false }
+            }
+        }
+        return $false
+    })
+
+    if ($reauthPolicies.Count -gt 0) {
+        $names = ($reauthPolicies | ForEach-Object { $_['displayName'] }) -join '; '
+        $settingParams = @{
+            Category         = 'Conditional Access'
+            Setting          = 'Periodic Reauthentication (All Users)'
+            CurrentValue     = "Yes ($($reauthPolicies.Count) policy: $names)"
+            RecommendedValue = 'At least 1 policy with sign-in frequency <= 7 days'
+            Status           = 'Pass'
+            CheckId          = 'CA-REAUTH-001'
+            Remediation      = 'No action needed.'
+        }
+        Add-Setting @settingParams
+    }
+    else {
+        $settingParams = @{
+            Category         = 'Conditional Access'
+            Setting          = 'Periodic Reauthentication (All Users)'
+            CurrentValue     = 'No matching CA policy found'
+            RecommendedValue = 'At least 1 policy with sign-in frequency <= 7 days'
+            Status           = 'Fail'
+            CheckId          = 'CA-REAUTH-001'
+            Remediation      = 'Create a CA policy: Target All users + All resources > Session > Sign-in frequency = Periodic reauthentication, 7 days or less. Entra admin center > Protection > Conditional Access.'
+        }
+        Add-Setting @settingParams
+    }
+}
+catch {
+    Write-Warning "Could not check CA periodic reauthentication: $_"
+}
+
+# ------------------------------------------------------------------
+# 22. Trusted Named Locations Defined (CIS 5.2.2.14)
+# ------------------------------------------------------------------
+try {
+    Write-Verbose "Checking CA: Trusted named locations defined..."
+    # $namedLocations populated by check 14 above; refetch if unavailable
+    if ($null -eq $namedLocations) {
+        $namedLocResponse2 = Invoke-SafeGraphRequest -ExpectCollection -Method GET -Uri '/v1.0/identity/conditionalAccess/namedLocations' -ErrorAction Stop
+        $namedLocations = if ($namedLocResponse2 -and $namedLocResponse2['value']) { @($namedLocResponse2['value']) } else { @() }
+    }
+    $trustedIpLocations = @($namedLocations | Where-Object {
+        $_['@odata.type'] -eq '#microsoft.graph.ipNamedLocation' -and
+        $_['isTrusted'] -eq $true -and
+        $_['ipRanges'] -and @($_['ipRanges']).Count -gt 0
+    })
+
+    if ($trustedIpLocations.Count -gt 0) {
+        $names = ($trustedIpLocations | ForEach-Object { $_['displayName'] }) -join '; '
+        $settingParams = @{
+            Category         = 'Conditional Access'
+            Setting          = 'Trusted Named Locations Defined'
+            CurrentValue     = "Yes ($($trustedIpLocations.Count) trusted location(s): $names)"
+            RecommendedValue = 'At least 1 trusted named location with IP ranges'
+            Status           = 'Pass'
+            CheckId          = 'CA-TRUSTEDLOC-001'
+            Remediation      = 'No action needed.'
+        }
+        Add-Setting @settingParams
+    }
+    else {
+        $settingParams = @{
+            Category         = 'Conditional Access'
+            Setting          = 'Trusted Named Locations Defined'
+            CurrentValue     = 'None configured'
+            RecommendedValue = 'At least 1 trusted named location with IP ranges'
+            Status           = 'Fail'
+            CheckId          = 'CA-TRUSTEDLOC-001'
+            Remediation      = 'Entra admin center > Protection > Conditional Access > Named locations > Add IP range location > mark Trusted. Define corporate network IP ranges.'
+        }
+        Add-Setting @settingParams
+    }
+}
+catch {
+    Write-Warning "Could not check trusted named locations: $_"
+}
+
+# ------------------------------------------------------------------
+# 23. Exclusionary Geographic Access Controls (CIS 5.2.2.15)
+# ------------------------------------------------------------------
+try {
+    Write-Verbose "Checking CA: Exclusionary geographic access controls..."
+    $geoBlockPolicies = @($enabledPolicies | Where-Object {
+        $loc = $_['conditions']['locations']
+        if (-not $loc) { return $false }
+        $includeLoc = @($loc['includeLocations'])
+        $excludeLoc = @($loc['excludeLocations'])
+        # Must include at least one non-AllTrusted specific location GUID (untrusted/network)
+        $hasInclude = ($includeLoc | Where-Object { $_ -ne 'All' -and $_ -ne 'AllTrusted' }).Count -gt 0
+        # Must exclude AllTrusted or at least one specific trusted location GUID
+        $hasExclude = ($excludeLoc | Where-Object { $_ -eq 'AllTrusted' -or ($_ -ne 'All' -and $_ -ne 'AllTrusted') }).Count -gt 0
+        $users = $_['conditions']['users']
+        $apps = $_['conditions']['applications']
+        $isAllUsers = $users -and $users['includeUsers'] -contains 'All'
+        $isAllApps = $apps -and $apps['includeApplications'] -contains 'All'
+        $isBlock = $_['grantControls'] -and @($_['grantControls']['builtInControls']) -contains 'block'
+        $hasInclude -and $hasExclude -and $isAllUsers -and $isAllApps -and $isBlock
+    })
+
+    if ($geoBlockPolicies.Count -gt 0) {
+        $names = ($geoBlockPolicies | ForEach-Object { $_['displayName'] }) -join '; '
+        $settingParams = @{
+            Category         = 'Conditional Access'
+            Setting          = 'Exclusionary Geographic Access Controls'
+            CurrentValue     = "Yes ($($geoBlockPolicies.Count) policy: $names)"
+            RecommendedValue = 'At least 1 block policy excluding trusted locations'
+            Status           = 'Pass'
+            CheckId          = 'CA-GEOBLOCK-001'
+            Remediation      = 'No action needed.'
+        }
+        Add-Setting @settingParams
+    }
+    else {
+        $settingParams = @{
+            Category         = 'Conditional Access'
+            Setting          = 'Exclusionary Geographic Access Controls'
+            CurrentValue     = 'No matching CA policy found'
+            RecommendedValue = 'At least 1 block policy excluding trusted locations'
+            Status           = 'Fail'
+            CheckId          = 'CA-GEOBLOCK-001'
+            Remediation      = 'Create a CA policy: Target All users + All resources > Locations > Include selected/untrusted networks > Exclude All trusted locations > Grant > Block access. Entra admin center > Protection > Conditional Access.'
+        }
+        Add-Setting @settingParams
+    }
+}
+catch {
+    Write-Warning "Could not check exclusionary geographic access controls: $_"
+}
+
+# ------------------------------------------------------------------
+# 24. Token Protection for Sign-in Sessions (CIS 5.2.2.16)
+# ------------------------------------------------------------------
+try {
+    Write-Verbose "Checking CA: Token protection (secure sign-in session)..."
+    $tokenProtPolicies = @($enabledPolicies | Where-Object {
+        $session = $_['sessionControls']['secureSignInSession']
+        $session -and $session['isEnabled'] -eq $true
+    })
+
+    if ($tokenProtPolicies.Count -gt 0) {
+        $names = ($tokenProtPolicies | ForEach-Object { $_['displayName'] }) -join '; '
+        $settingParams = @{
+            Category         = 'Conditional Access'
+            Setting          = 'Token Protection (Secure Sign-in Session)'
+            CurrentValue     = "Yes ($($tokenProtPolicies.Count) policy: $names)"
+            RecommendedValue = 'At least 1 policy with token protection enabled'
+            Status           = 'Pass'
+            CheckId          = 'CA-TOKENPROT-001'
+            Remediation      = 'No action needed.'
+        }
+        Add-Setting @settingParams
+    }
+    else {
+        $settingParams = @{
+            Category         = 'Conditional Access'
+            Setting          = 'Token Protection (Secure Sign-in Session)'
+            CurrentValue     = 'No matching CA policy found'
+            RecommendedValue = 'At least 1 policy with token protection enabled'
+            Status           = 'Fail'
+            CheckId          = 'CA-TOKENPROT-001'
+            Remediation      = 'Create a CA policy targeting Exchange Online, SharePoint Online and Teams for Windows desktop clients > Session > Require token protection for sign-in sessions. Requires Microsoft Entra ID P2. Entra admin center > Protection > Conditional Access.'
+        }
+        Add-Setting @settingParams
+    }
+}
+catch {
+    Write-Warning "Could not check CA token protection: $_"
+}
+
+# ------------------------------------------------------------------
+# 25. Authentication Transfer Blocked (CIS 5.2.2.17)
+# ------------------------------------------------------------------
+try {
+    Write-Verbose "Checking CA: Authentication transfer blocked..."
+    $authXferPolicies = @($enabledPolicies | Where-Object {
+        $authFlows = $_['conditions']['authenticationFlows']
+        $transferMethods = if ($authFlows) { $authFlows['transferMethods'] } else { $null }
+        $transferMethods -and
+        ($transferMethods -contains 'authenticationTransfer') -and
+        ($null -ne $_['grantControls'] -and @($_['grantControls']['builtInControls']) -contains 'block')
+    })
+
+    if ($authXferPolicies.Count -gt 0) {
+        $names = ($authXferPolicies | ForEach-Object { $_['displayName'] }) -join '; '
+        $settingParams = @{
+            Category         = 'Conditional Access'
+            Setting          = 'Authentication Transfer Blocked'
+            CurrentValue     = "Yes ($($authXferPolicies.Count) policy: $names)"
+            RecommendedValue = 'At least 1 policy'
+            Status           = 'Pass'
+            CheckId          = 'CA-AUTHXFER-001'
+            Remediation      = 'No action needed.'
+        }
+        Add-Setting @settingParams
+    }
+    else {
+        $settingParams = @{
+            Category         = 'Conditional Access'
+            Setting          = 'Authentication Transfer Blocked'
+            CurrentValue     = 'No matching CA policy found'
+            RecommendedValue = 'At least 1 policy'
+            Status           = 'Fail'
+            CheckId          = 'CA-AUTHXFER-001'
+            Remediation      = 'Create a CA policy: Target All users + All resources > Conditions > Authentication flows > Authentication transfer > Grant > Block access. Entra admin center > Protection > Conditional Access.'
+        }
+        Add-Setting @settingParams
+    }
+}
+catch {
+    Write-Warning "Could not check CA authentication transfer block: $_"
+}
+
+# ------------------------------------------------------------------
 # Output
 # ------------------------------------------------------------------
 Export-SecurityConfigReport -Settings $settings -OutputPath $OutputPath -ServiceLabel 'Conditional Access'

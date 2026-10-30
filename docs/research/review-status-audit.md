@@ -118,3 +118,22 @@ emission counter only counts literal property assignments, not -Status arguments
 Five optional Purview command absence sites also change Review to Unknown: DLP,
 labels, alert policies, auto-labeling, and communication compliance. Missing
 commands are collection limitations, not manual compliance judgments.
+
+### CIS v7 gap-filling checks (October 2026, ceiling 8 -> 9)
+
+- **EXO-OWA-PERSONAL-001** (CIS 6.3.2, `Get-ExoSecurityConfig.ps1`) emits `Unknown`
+  when the installed ExchangeOnlineManagement module does not expose the
+  `PersonalAccountsEnabled` / `PersonalAccountCalendarsEnabled` properties on
+  `Get-OwaMailboxPolicy`. The properties are the only authoritative source for
+  this control; when absent (older module versions) the collector cannot
+  distinguish "not exposed" from "enabled". Genuine limitation: surfaced with
+  CurrentValue naming the missing module capability and remediation instructing
+  a module update. When the properties ARE present, the check resolves to
+  Pass/Fail normally.
+- **ENTRA-AUTHMETHOD-009** (CIS 5.2.3.10, `EntraPasswordAuthChecks.ps1`) emits
+  `Review` when the Microsoft Authenticator method configuration is not present
+  in the tenant (Authenticator not enabled). Without the configuration there is
+  no `companionAppAllowedState` to read, and absence cannot distinguish
+  "method disabled tenant-wide" from "query returned partial data". Genuine
+  limitation: the operator must confirm Authenticator enrollment scope before
+  the companion-app restriction is meaningful.

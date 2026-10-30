@@ -260,6 +260,30 @@ Describe 'Get-CASecurityConfig' {
         $check.Status | Should -Be 'Pass'
     }
 
+    It 'emits all five CIS v7 gap checks (5.2.2.13-17)' {
+        $expectedSettings = @(
+            'Periodic Reauthentication (All Users)',
+            'Trusted Named Locations Defined',
+            'Exclusionary Geographic Access Controls',
+            'Token Protection (Secure Sign-in Session)',
+            'Authentication Transfer Blocked'
+        )
+        foreach ($name in $expectedSettings) {
+            ($settings | Where-Object { $_.Setting -eq $name }) |
+                Should -Not -BeNullOrEmpty -Because "'$name' must always be emitted"
+        }
+    }
+
+    It 'CA-REAUTH-001 fails when no all-users sign-in frequency policy exists' {
+        $check = $settings | Where-Object { $_.Setting -eq 'Periodic Reauthentication (All Users)' }
+        $check.Status | Should -Be 'Fail'
+    }
+
+    It 'CA-GEOBLOCK-001 fails when no exclusionary block policy exists' {
+        $check = $settings | Where-Object { $_.Setting -eq 'Exclusionary Geographic Access Controls' }
+        $check.Status | Should -Be 'Fail'
+    }
+
     AfterAll {
         Remove-Item Function:\Update-CheckProgress -ErrorAction SilentlyContinue
     }
@@ -934,6 +958,103 @@ Describe 'Get-CASecurityConfig - All-Users MFA with group exclusion (#1000 revie
         $check = $settings | Where-Object { $_.Setting -eq 'MFA Required for Admin Roles' }
         $check | Should -Not -BeNullOrEmpty
         $check.Status | Should -Be 'Review' -Because 'the excluded group might contain administrators'
+    }
+
+    AfterAll {
+        Remove-Item Function:\Update-CheckProgress -ErrorAction SilentlyContinue
+    }
+}
+
+Describe 'Get-CASecurityConfig - CIS v7 gap checks pass path (5.2.2.13-17)' {
+    BeforeAll {
+        function global:Update-CheckProgress {
+            param($CheckId, $Setting, $Status)
+        }
+
+        function Get-MgContext { return @{ TenantId = 'test-tenant-id' } }
+
+        Mock Invoke-MgGraphRequest {
+            param($Method, $Uri)
+            if ($Uri -like '*identitySecurityDefaultsEnforcementPolicy*') {
+                return @{ isEnabled = $false }
+            }
+            if ($Uri -like '*namedLocations*') {
+                return @{
+                    value = @(
+                        @{
+                            '@odata.type' = '#microsoft.graph.ipNamedLocation'
+                            id            = 'loc-trusted-1'
+                            displayName   = 'Corporate Network'
+                            isTrusted     = $true
+                            ipRanges      = @( @{ cidrAddress = '203.0.113.0/24' } )
+                        }
+                    )
+                }
+            }
+            if ($Uri -like '*conditionalAccess/policies*') {
+                # One all-users/all-apps block policy that also satisfies every
+                # session-control based v7 gap check at once.
+                return @{
+                    value = @(
+                        @{
+                            id          = 'ca-v7-all'
+                            displayName = 'V7 Baseline Block with Session Controls'
+                            state       = 'enabled'
+                            conditions  = @{
+                                users             = @{ includeUsers = @('All') }
+                                applications      = @{ includeApplications = @('All') }
+                                locations         = @{
+                                    includeLocations = @( '00000000-0000-0000-0000-000000000001' )
+                                    excludeLocations = @( 'AllTrusted' )
+                                }
+                                authenticationFlows = @{ transferMethods = @( 'authenticationTransfer' ) }
+                            }
+                            grantControls    = @{ builtInControls = @( 'block' ) }
+                            sessionControls  = @{
+                                signInFrequency      = @{ isEnabled = $true; value = 7; type = 'days' }
+                                secureSignInSession  = @{ isEnabled = $true }
+                            }
+                        }
+                    )
+                }
+            }
+            return @{ value = @() }
+        }
+
+        . "$PSScriptRoot/../../src/M365-Assess/Orchestrator/AssessmentHelpers.ps1"
+        . "$PSScriptRoot/../../src/M365-Assess/Entra/Get-CASecurityConfig.ps1"
+    }
+
+    It 'CA-REAUTH-001 passes when an all-users policy reauthenticates within 7 days' {
+        $check = $settings | Where-Object { $_.Setting -eq 'Periodic Reauthentication (All Users)' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
+        $check.CheckId | Should -BeLike 'CA-REAUTH-001*'
+    }
+
+    It 'CA-TRUSTEDLOC-001 passes when a trusted IP named location exists' {
+        $check = $settings | Where-Object { $_.Setting -eq 'Trusted Named Locations Defined' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
+        $check.CurrentValue | Should -Match 'Corporate Network'
+    }
+
+    It 'CA-GEOBLOCK-001 passes when a block policy excludes trusted locations' {
+        $check = $settings | Where-Object { $_.Setting -eq 'Exclusionary Geographic Access Controls' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
+    }
+
+    It 'CA-TOKENPROT-001 passes when token protection is enabled' {
+        $check = $settings | Where-Object { $_.Setting -eq 'Token Protection (Secure Sign-in Session)' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
+    }
+
+    It 'CA-AUTHXFER-001 passes when authentication transfer is blocked' {
+        $check = $settings | Where-Object { $_.Setting -eq 'Authentication Transfer Blocked' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
     }
 
     AfterAll {

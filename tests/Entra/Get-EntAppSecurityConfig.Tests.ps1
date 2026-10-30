@@ -139,6 +139,33 @@ Describe 'Get-EntAppSecurityConfig' {
         $check | Should -Not -BeNullOrEmpty
     }
 
+    It 'emits all four CIS v7 app restriction checks' {
+        $expected = @(
+            'App Password Addition Blocked',
+            'App Password Lifetime Limited',
+            'App Custom Passwords Blocked',
+            'App Certificate Lifetime Limited'
+        )
+        foreach ($name in $expected) {
+            ($settings | Where-Object { $_.Setting -eq $name }) |
+                Should -Not -BeNullOrEmpty -Because "'$name' must always be emitted"
+        }
+    }
+
+    It 'v7 app restriction checks fail when the default app management policy is disabled' {
+        $expected = @(
+            'App Password Addition Blocked',
+            'App Password Lifetime Limited',
+            'App Custom Passwords Blocked',
+            'App Certificate Lifetime Limited'
+        )
+        foreach ($name in $expected) {
+            $check = $settings | Where-Object { $_.Setting -eq $name }
+            $check.Status | Should -Be 'Fail' -Because "$name with a disabled policy should fail"
+            $check.CurrentValue | Should -Match 'disabled or unavailable'
+        }
+    }
+
     It 'Produces settings across Enterprise Applications and Managed Identities categories' {
         $categories = $settings | Select-Object -ExpandProperty Category -Unique
         $categories | Should -Contain 'Enterprise Applications'
@@ -303,6 +330,73 @@ Describe 'Get-EntAppSecurityConfig - ENTRA-ENTAPP-003 first-party classification
     It 'still reports the first-party app separately in Evidence' {
         $check = $settings | Where-Object { $_.Setting -eq 'Foreign Apps with Tier 0 Permissions (GA Escalation)' }
         ($check.Evidence.MicrosoftFirstParty -join '; ') | Should -Match 'Modern Workplace Management'
+    }
+
+    AfterAll {
+        Remove-Item Function:\Update-CheckProgress -ErrorAction SilentlyContinue
+    }
+}
+
+Describe 'Get-EntAppSecurityConfig - CIS 5.1.5 app restrictions enabled' {
+    BeforeAll {
+        function global:Update-CheckProgress { param($CheckId, $Setting, $Status) }
+        function Get-MgContext { return @{ TenantId = 'test-tenant-id' } }
+        Mock Import-Module { }
+
+        # Compliant default app management policy: every restriction enabled with
+        # 180-day maxima on both application and service principal scopes.
+        $compliantAppRestrictions = @{
+            passwordCredentials = @(
+                @{ restrictionType = 'passwordAddition';        state = 'enabled' }
+                @{ restrictionType = 'passwordLifetime';        state = 'enabled'; maxLifetime = 'P180D' }
+                @{ restrictionType = 'customPasswordAddition';  state = 'enabled' }
+            )
+            keyCredentials = @(
+                @{ restrictionType = 'asymmetricKeyLifetime';   state = 'enabled'; maxLifetime = 'P180D' }
+            )
+        }
+
+        Mock Invoke-MgGraphRequest {
+            param($Method, $Uri)
+            switch -Wildcard ($Uri) {
+                '*/policies/defaultAppManagementPolicy' {
+                    return @{
+                        isEnabled                   = $true
+                        applicationRestrictions     = $compliantAppRestrictions
+                        servicePrincipalRestrictions = $compliantAppRestrictions
+                    }
+                }
+                default { return @{ value = @() } }
+            }
+        }
+
+        . "$PSScriptRoot/../../src/M365-Assess/Orchestrator/AssessmentHelpers.ps1"
+        . "$PSScriptRoot/../../src/M365-Assess/Entra/Get-EntAppSecurityConfig.ps1"
+    }
+
+    It 'ENTRA-APPPWD-001 passes when password addition is blocked in both scopes' {
+        $check = $settings | Where-Object { $_.Setting -eq 'App Password Addition Blocked' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
+    }
+
+    It 'ENTRA-APPPWD-002 passes when password lifetime is capped at 180 days' {
+        $check = $settings | Where-Object { $_.Setting -eq 'App Password Lifetime Limited' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
+        $check.CurrentValue | Should -Match 'P180D'
+    }
+
+    It 'ENTRA-APPPWD-003 passes when custom passwords are blocked' {
+        $check = $settings | Where-Object { $_.Setting -eq 'App Custom Passwords Blocked' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
+    }
+
+    It 'ENTRA-APPCERT-001 passes when certificate lifetime is capped at 180 days' {
+        $check = $settings | Where-Object { $_.Setting -eq 'App Certificate Lifetime Limited' }
+        $check | Should -Not -BeNullOrEmpty
+        $check.Status | Should -Be 'Pass'
     }
 
     AfterAll {

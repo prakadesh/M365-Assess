@@ -1,3 +1,6 @@
+# Node spawns pwsh with a pipe and no console, so stdout defaults to the OEM
+# codepage (ibm437) which corrupts non-ASCII payloads. Force UTF-8.
+[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
 $ErrorActionPreference = 'Stop'
 . "$PSScriptRoot/../../src/M365-Assess/Common/Build-ReportData.ps1"
 $findings = @(

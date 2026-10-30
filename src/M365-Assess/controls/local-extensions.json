@@ -177,5 +177,229 @@
       "rationale": "This heuristic flags enabled inbound connectors where TLS is not required and sender-domain/IP restrictions are absent. Review the connector's intended use and sender scope. A pass means no connector matched this heuristic; it does not independently prove that tenant-wide Direct Send is blocked.",
       "scfWeighting": 5
     }
+  },
+  {
+    "checkId": "CA-REAUTH-001",
+    "name": "Periodic Reauthentication Required for All Users",
+    "category": "Conditional Access",
+    "collector": "CAEvaluator",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "High",
+      "rationale": "Without periodic reauthentication, session tokens remain valid indefinitely until explicitly revoked. Stolen or leaked tokens provide durable access that survives credential rotation.",
+      "scfWeighting": 7
+    }
+  },
+  {
+    "checkId": "CA-TRUSTEDLOC-001",
+    "name": "Trusted Named Locations Defined",
+    "category": "Conditional Access",
+    "collector": "CAEvaluator",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Trusted named locations are required building blocks for exclusionary geographic access controls and location-scoped Conditional Access policies.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "CA-GEOBLOCK-001",
+    "name": "Exclusionary Geographic Access Controls Configured",
+    "category": "Conditional Access",
+    "collector": "CAEvaluator",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "High",
+      "rationale": "Without a block policy that excludes trusted locations, authentication from unexpected geographies proceeds unchallenged, enabling credential-stuffing and session-hijack follow-through.",
+      "scfWeighting": 7
+    }
+  },
+  {
+    "checkId": "CA-TOKENPROT-001",
+    "name": "Token Protection Enabled for Sign-in Sessions",
+    "category": "Conditional Access",
+    "collector": "CAEvaluator",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E5"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "High",
+      "rationale": "Token protection binds session tokens to the device that requested them, preventing theft and replay of primary refresh tokens on attacker infrastructure.",
+      "scfWeighting": 7
+    }
+  },
+  {
+    "checkId": "CA-AUTHXFER-001",
+    "name": "Authentication Transfer Blocked",
+    "category": "Conditional Access",
+    "collector": "CAEvaluator",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Authentication transfer allows moving credentials between devices during sign-in. Blocking it prevents cookie-banner and QR-based credential relay attacks.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "ENTRA-GROUPSET-001",
+    "name": "Users Cannot Create Microsoft 365 Groups",
+    "category": "Groups",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Allowing self-service Microsoft 365 group creation leads to ungoverned collaboration workspaces with default sharing settings, expanding the data-exposure surface.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "ENTRA-APPPWD-001",
+    "name": "Application Password Addition Blocked",
+    "category": "Enterprise Applications",
+    "collector": "EntApp",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "High",
+      "rationale": "Unrestricted application password addition allows long-lived shared secrets to proliferate across app and service principal credentials, complicating rotation and increasing breach blast radius.",
+      "scfWeighting": 7
+    }
+  },
+  {
+    "checkId": "ENTRA-APPPWD-002",
+    "name": "Application Password Lifetime Limited to 180 Days",
+    "category": "Enterprise Applications",
+    "collector": "EntApp",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "High",
+      "rationale": "Application passwords with unlimited lifetime act as permanent credentials. Capping lifetime forces regular rotation and limits the window of exposure for leaked secrets.",
+      "scfWeighting": 7
+    }
+  },
+  {
+    "checkId": "ENTRA-APPPWD-003",
+    "name": "Application Custom Passwords Blocked",
+    "category": "Enterprise Applications",
+    "collector": "EntApp",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Custom (user-defined) application passwords bypass system entropy requirements and are more susceptible to guessing and reuse across systems.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "ENTRA-APPCERT-001",
+    "name": "Application Certificate Lifetime Limited to 180 Days",
+    "category": "Enterprise Applications",
+    "collector": "EntApp",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "High",
+      "rationale": "Long-lived application certificates delay detection of compromised credentials and complicate incident response when key material is exposed.",
+      "scfWeighting": 7
+    }
+  },
+  {
+    "checkId": "ENTRA-PASSWORD-006",
+    "name": "Smart Lockout Duration at Least 60 Seconds",
+    "category": "Password Management",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "A zero or near-zero lockout duration allows immediate retry after lockout, enabling rapid password-guessing campaigns against the same account.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "ENTRA-AUTHMETHOD-009",
+    "name": "Microsoft Authenticator Companion Applications Disabled",
+    "category": "Authentication Methods",
+    "collector": "Entra",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Companion applications can receive Authenticator push approvals outside the primary Authenticator app, expanding the prompt-fatigue and approval-relay attack surface.",
+      "scfWeighting": 5
+    }
+  },
+  {
+    "checkId": "COMPLIANCE-DLP-004",
+    "name": "DLP Policies Cover Microsoft 365 Copilot",
+    "category": "DLP",
+    "collector": "Compliance",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E5"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "High",
+      "rationale": "Without DLP policies published to Copilot experiences, sensitive data can be surfaced and shared through AI-assisted interactions without the controls applied to traditional workloads.",
+      "scfWeighting": 7
+    }
+  },
+  {
+    "checkId": "EXO-OWA-PERSONAL-001",
+    "name": "OWA Personal Email Accounts and Calendars Blocked",
+    "category": "OWA Policy",
+    "collector": "ExchangeOnline",
+    "hasAutomatedCheck": true,
+    "licensing": {
+      "minimum": "E3"
+    },
+    "frameworks": {},
+    "impactRating": {
+      "severity": "Medium",
+      "rationale": "Allowing personal email accounts and calendars in Outlook on the web enables unmonitored data flow between corporate and consumer identities, bypassing DLP and audit controls.",
+      "scfWeighting": 5
+    }
   }
 ]

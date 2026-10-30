@@ -262,6 +262,39 @@ try {
             Remediation      = 'Run: Set-OwaMailboxPolicy -Identity OwaMailboxPolicy-Default -AdditionalStorageProvidersAvailable $false'
         }
         Add-Setting @settingParams
+
+        # CIS 6.3.2 -- Personal email accounts and calendars blocked (default policy only)
+        if ($policy.IsDefault) {
+            $personalAccounts = $policy.PersonalAccountsEnabled
+            $personalCalendars = $policy.PersonalAccountCalendarsEnabled
+            # Older EXO module versions may not expose these properties; treat missing as Unknown
+            $hasPersonalProps = $null -ne $policy.PSObject.Properties['PersonalAccountsEnabled']
+            if (-not $hasPersonalProps) {
+                $settingParams = @{
+                    Category         = 'OWA Policy'
+                    Setting          = 'OWA Personal Accounts and Calendars'
+                    CurrentValue     = 'Properties not exposed by current ExchangeOnlineManagement module'
+                    RecommendedValue = 'PersonalAccountsEnabled=False; PersonalAccountCalendarsEnabled=False'
+                    Status           = 'Unknown'
+                    CheckId          = 'EXO-OWA-PERSONAL-001'
+                    Remediation      = 'Run: Get-OwaMailboxPolicy | Where-Object { $_.IsDefault } | Format-List PersonalAccountsEnabled, PersonalAccountCalendarsEnabled. Update ExchangeOnlineManagement module if properties are missing, then set both to False via Set-OwaMailboxPolicy.'
+                }
+                Add-Setting @settingParams
+            }
+            else {
+                $personalBlocked = (-not $personalAccounts) -and (-not $personalCalendars)
+                $settingParams = @{
+                    Category         = 'OWA Policy'
+                    Setting          = 'OWA Personal Accounts and Calendars'
+                    CurrentValue     = "PersonalAccountsEnabled=$personalAccounts; PersonalAccountCalendarsEnabled=$personalCalendars"
+                    RecommendedValue = 'PersonalAccountsEnabled=False; PersonalAccountCalendarsEnabled=False'
+                    Status           = if ($personalBlocked) { 'Pass' } else { 'Fail' }
+                    CheckId          = 'EXO-OWA-PERSONAL-001'
+                    Remediation      = 'Run: Set-OwaMailboxPolicy -Identity (default policy) -PersonalAccountsEnabled $false -PersonalAccountCalendarsEnabled $false. Exchange admin center > Permissions > Organization management > OWA mailbox policies.'
+                }
+                Add-Setting @settingParams
+            }
+        }
     }
 }
 catch {

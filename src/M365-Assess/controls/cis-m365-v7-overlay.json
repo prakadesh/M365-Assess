@@ -1,17 +1,503 @@
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "benchmark": "CIS Microsoft 365 Foundations Benchmark",
   "benchmarkVersion": "7.0.0",
   "benchmarkReleaseDate": "2026-05-20",
   "sourceFramework": "cis-m365-v6",
-  "mappingPolicy": "Best-effort version crosswalk; existing checks are mapped only where their audited setting matches the v7 recommendation. Explicit mappings cover v7 numbering/profile changes and the new Direct Send organization setting.",
+  "mappingPolicy": "Version crosswalk from cis-m365-v6 registry checks plus dedicated CIS v7 gap-filling checks emitted by M365-Assess collectors. Each mapping is backed by the v7 audit criterion for the target control. Unmapped recommendations (manual-only) remain unassessed.",
   "notes": [
     "This file contains control identifiers and profile mappings only; it does not reproduce CIS Benchmark recommendation text.",
     "Recommendations without a directly corresponding assessment check remain unmapped and must not be interpreted as passing.",
-    "Mappings for controls whose settings changed in v7 must be backed by the v7 audit criterion, not just matching control numbers.",
+    "Mappings for controls whose settings changed in v7 are backed by the v7 audit criterion, not just matching control numbers.",
+    "Duplicate upstream POWERBI-*/PBI-* pairs are collapsed to the POWERBI-* checkIds emitted by the PowerBI collector.",
     "Review crosswalk mappings against the licensed CIS Benchmark before using results for formal audit or attestation."
   ],
   "checks": {
+    "ENTRA-CLOUDADMIN-001": {
+      "controlId": "1.1.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-SYNCADMIN-001": {
+      "controlId": "1.1.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-ADMIN-003": {
+      "controlId": "1.1.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-ADMIN-001": {
+      "controlId": "1.1.3",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-CLOUDADMIN-002": {
+      "controlId": "1.1.4",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-GROUP-003": {
+      "controlId": "1.2.1",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "EXO-SHAREDMBX-001": {
+      "controlId": "1.2.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PASSWORD-001": {
+      "controlId": "1.3.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "SPO-SESSION-001": {
+      "controlId": "1.3.2",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "EXO-SHARING-001": {
+      "controlId": "1.3.3",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-ORGSETTING-001": {
+      "controlId": "1.3.4",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "FORMS-CONFIG-004": {
+      "controlId": "1.3.5",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-LOCKBOX-001": {
+      "controlId": "1.3.6",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "ENTRA-ORGSETTING-003": {
+      "controlId": "1.3.7",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "SPO-SWAY-001": {
+      "controlId": "1.3.8",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-ORGSETTING-004": {
+      "controlId": "1.3.9",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-SAFELINKS-001": {
+      "controlId": "2.1.1",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "DEFENDER-ANTIMALWARE-001": {
+      "controlId": "2.1.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-ANTIMALWARE-002": {
+      "controlId": "2.1.3",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-SAFEATTACH-001": {
+      "controlId": "2.1.4",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "DEFENDER-SAFEATTACH-002": {
+      "controlId": "2.1.5",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "DEFENDER-ANTISPAM-001": {
+      "controlId": "2.1.6",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-ANTIPHISH-001": {
+      "controlId": "2.1.7",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "DNS-SPF-001": {
+      "controlId": "2.1.8",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DNS-DKIM-001": {
+      "controlId": "2.1.9",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DNS-DMARC-001": {
+      "controlId": "2.1.10",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-MALWARE-002": {
+      "controlId": "2.1.11",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "EXO-CONNFILTER-001": {
+      "controlId": "2.1.12",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-CONNFILTER-002": {
+      "controlId": "2.1.13",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-ANTISPAM-002": {
+      "controlId": "2.1.14",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-OUTBOUND-001": {
+      "controlId": "2.1.15",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-BREAKGLASS-002": {
+      "controlId": "2.2.1",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-PRIORITY-001": {
+      "controlId": "2.4.1",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-PRIORITY-002": {
+      "controlId": "2.4.2",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "DEFENDER-CLOUDAPPS-001": {
+      "controlId": "2.4.3",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "DEFENDER-ZAP-001": {
+      "controlId": "2.4.4",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "COMPLIANCE-AUDIT-001": {
+      "controlId": "3.1.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "COMPLIANCE-DLP-001": {
+      "controlId": "3.2.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "COMPLIANCE-DLP-002": {
+      "controlId": "3.2.2",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "COMPLIANCE-DLP-004": {
+      "controlId": "3.2.3",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "COMPLIANCE-LABELS-001": {
+      "controlId": "3.3.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "INTUNE-COMPLIANCE-001": {
+      "controlId": "4.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "INTUNE-ENROLL-001": {
+      "controlId": "4.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PERUSER-001": {
+      "controlId": "5.1.2.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-APPREG-001": {
+      "controlId": "5.1.2.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-TENANT-001": {
+      "controlId": "5.1.2.3",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-ADMIN-002": {
+      "controlId": "5.1.2.4",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-SESSION-001": {
+      "controlId": "5.1.2.5",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-LINKEDIN-001": {
+      "controlId": "5.1.2.6",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-GROUP-001": {
+      "controlId": "5.1.3.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-GROUPSET-001": {
+      "controlId": "5.1.3.4",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-DEVICE-001": {
+      "controlId": "5.1.4.1",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-DEVICE-002": {
+      "controlId": "5.1.4.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-DEVICE-003": {
+      "controlId": "5.1.4.3",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-DEVICE-004": {
+      "controlId": "5.1.4.4",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-DEVICE-005": {
+      "controlId": "5.1.4.5",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-DEVICE-006": {
+      "controlId": "5.1.4.6",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-CONSENT-001": {
+      "controlId": "5.1.5.1",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-CONSENT-002": {
+      "controlId": "5.1.5.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-APPPWD-001": {
+      "controlId": "5.1.5.3",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-APPPWD-002": {
+      "controlId": "5.1.5.4",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-APPPWD-003": {
+      "controlId": "5.1.5.5",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-APPCERT-001": {
+      "controlId": "5.1.5.6",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-GUEST-004": {
+      "controlId": "5.1.6.1",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-GUEST-001": {
+      "controlId": "5.1.6.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-GUEST-002": {
+      "controlId": "5.1.6.3",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-HYBRID-001": {
+      "controlId": "5.1.8.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-MFA-ADMIN-001": {
+      "controlId": "5.2.2.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-MFA-ALL-001": {
+      "controlId": "5.2.2.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-LEGACYAUTH-001": {
+      "controlId": "5.2.2.3",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-SIGNIN-FREQ-001": {
+      "controlId": "5.2.2.4",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
     "CA-PHISHRES-001": {
       "controlId": "5.2.2.5",
       "profiles": [
@@ -19,8 +505,280 @@
         "E5-L2"
       ]
     },
+    "CA-USERRISK-001": {
+      "controlId": "5.2.2.6",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "CA-SIGNINRISK-001": {
+      "controlId": "5.2.2.7",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "CA-SIGNINRISK-002": {
+      "controlId": "5.2.2.8",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "CA-DEVICE-001": {
+      "controlId": "5.2.2.9",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-DEVICE-002": {
+      "controlId": "5.2.2.10",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-INTUNE-001": {
+      "controlId": "5.2.2.11",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-DEVICECODE-001": {
+      "controlId": "5.2.2.12",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-REAUTH-001": {
+      "controlId": "5.2.2.13",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "CA-TRUSTEDLOC-001": {
+      "controlId": "5.2.2.14",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "CA-GEOBLOCK-001": {
+      "controlId": "5.2.2.15",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "CA-TOKENPROT-001": {
+      "controlId": "5.2.2.16",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "CA-AUTHXFER-001": {
+      "controlId": "5.2.2.17",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
     "ENTRA-AUTHMETHOD-003": {
       "controlId": "5.2.3.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PASSWORD-002": {
+      "controlId": "5.2.3.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PASSWORD-005": {
+      "controlId": "5.2.3.3",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-MFA-001": {
+      "controlId": "5.2.3.4",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-AUTHMETHOD-001": {
+      "controlId": "5.2.3.5",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-AUTHMETHOD-004": {
+      "controlId": "5.2.3.6",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-AUTHMETHOD-002": {
+      "controlId": "5.2.3.7",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "ENTRA-PASSWORD-003": {
+      "controlId": "5.2.3.8",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PASSWORD-006": {
+      "controlId": "5.2.3.9",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-AUTHMETHOD-009": {
+      "controlId": "5.2.3.10",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PIM-001": {
+      "controlId": "5.3.1",
+      "profiles": [
+        "E5-L2"
+      ]
+    },
+    "ENTRA-PIM-002": {
+      "controlId": "5.3.2",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PIM-003": {
+      "controlId": "5.3.3",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PIM-004": {
+      "controlId": "5.3.4",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "ENTRA-PIM-005": {
+      "controlId": "5.3.5",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "EXO-AUDIT-001": {
+      "controlId": "6.1.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-AUDIT-003": {
+      "controlId": "6.1.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-AUDIT-002": {
+      "controlId": "6.1.3",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-FORWARD-001": {
+      "controlId": "6.2.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-TRANSPORT-001": {
+      "controlId": "6.2.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-EXTTAG-001": {
+      "controlId": "6.2.3",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-ADDINS-001": {
+      "controlId": "6.3.1",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "EXO-OWA-PERSONAL-001": {
+      "controlId": "6.3.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-AUTH-001": {
+      "controlId": "6.5.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-MAILTIPS-001": {
+      "controlId": "6.5.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-OWA-001": {
+      "controlId": "6.5.3",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "EXO-AUTH-002": {
+      "controlId": "6.5.4",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "EXO-DIRECTSEND-001": {
+      "controlId": "6.5.5",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "SPO-AUTH-001": {
+      "controlId": "7.2.1",
       "profiles": [
         "E3-L1",
         "E5-L1"
@@ -47,287 +805,6 @@
         "E5-L2"
       ]
     },
-    "CA-MFA-ADMIN-001": {
-      "controlId": "5.2.2.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "CA-MFA-ALL-001": {
-      "controlId": "5.2.2.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "CA-INTUNE-001": {
-      "controlId": "5.2.2.11",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-MFA-001": {
-      "controlId": "5.2.3.4",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-AUTHMETHOD-004": {
-      "controlId": "5.2.3.6",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-PASSWORD-001": {
-      "controlId": "1.3.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-PASSWORD-002": {
-      "controlId": "5.2.3.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-PASSWORD-005": {
-      "controlId": "5.2.3.3",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-HYBRID-001": {
-      "controlId": "5.1.8.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "SPO-SHARING-006": {
-      "controlId": "7.2.10",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-SHAREDMBX-001": {
-      "controlId": "1.2.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "DNS-SPF-001": {
-      "controlId": "2.1.8",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-PIM-001": {
-      "controlId": "5.3.1",
-      "profiles": [
-        "E5-L2"
-      ]
-    },
-    "ENTRA-PIM-002": {
-      "controlId": "5.3.2",
-      "profiles": [
-        "E5-L1"
-      ]
-    },
-    "ENTRA-PIM-003": {
-      "controlId": "5.3.3",
-      "profiles": [
-        "E5-L1"
-      ]
-    },
-    "ENTRA-ADMIN-003": {
-      "controlId": "1.1.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-BREAKGLASS-001": {
-      "controlId": "1.1.4",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-GUEST-004": {
-      "controlId": "5.1.6.1",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "TEAMS-EXTACCESS-003": {
-      "controlId": "8.2.1",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "TEAMS-MEETING-003": {
-      "controlId": "8.5.3",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-LOCKBOX-001": {
-      "controlId": "1.3.6",
-      "profiles": [
-        "E5-L2"
-      ]
-    },
-    "ENTRA-ORGSETTING-004": {
-      "controlId": "1.3.9",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "CA-EXCLUSION-001": {
-      "controlId": "5.1.2.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-DEVICE-006": {
-      "controlId": "5.1.4.6",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "ENTRA-GUEST-001": {
-      "controlId": "5.1.6.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "SPO-SHARING-004": {
-      "controlId": "7.2.7",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "SPO-SHARING-007": {
-      "controlId": "7.2.11",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-PIM-004": {
-      "controlId": "5.3.4",
-      "profiles": [
-        "E5-L1"
-      ]
-    },
-    "ENTRA-PIM-005": {
-      "controlId": "5.3.5",
-      "profiles": [
-        "E5-L1"
-      ]
-    },
-    "ENTRA-CLOUDADMIN-001": {
-      "controlId": "1.1.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-SYNCADMIN-001": {
-      "controlId": "1.1.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-ADMIN-001": {
-      "controlId": "1.1.3",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-CLOUDADMIN-002": {
-      "controlId": "1.1.4",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-ADMIN-002": {
-      "controlId": "5.1.2.4",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-DEVICE-003": {
-      "controlId": "5.1.4.3",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-DEVICE-004": {
-      "controlId": "5.1.4.4",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "PBI-API-001": {
-      "controlId": "9.1.10",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "POWERBI-AUTH-002": {
-      "controlId": "9.1.10",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "POWERBI-AUTH-003": {
-      "controlId": "9.1.11",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "PBI-PROFILE-001": {
-      "controlId": "9.1.11",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-GUEST-002": {
-      "controlId": "5.1.6.3",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
     "SPO-SHARING-002": {
       "controlId": "7.2.5",
       "profiles": [
@@ -342,78 +819,18 @@
         "E5-L2"
       ]
     },
+    "SPO-SHARING-004": {
+      "controlId": "7.2.7",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
     "SPO-SHARING-008": {
       "controlId": "7.2.8",
       "profiles": [
         "E3-L2",
         "E5-L2"
-      ]
-    },
-    "SPO-SESSION-001": {
-      "controlId": "1.3.2",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "ENTRA-SESSION-001": {
-      "controlId": "5.1.2.5",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "CA-SIGNIN-FREQ-001": {
-      "controlId": "5.2.2.4",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "CA-USERRISK-001": {
-      "controlId": "5.2.2.6",
-      "profiles": [
-        "E5-L1"
-      ]
-    },
-    "CA-SIGNINRISK-001": {
-      "controlId": "5.2.2.7",
-      "profiles": [
-        "E5-L1"
-      ]
-    },
-    "CA-SIGNINRISK-002": {
-      "controlId": "5.2.2.8",
-      "profiles": [
-        "E5-L2"
-      ]
-    },
-    "EXO-MAILTIPS-001": {
-      "controlId": "6.5.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "INTUNE-COMPLIANCE-001": {
-      "controlId": "4.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "CA-DEVICE-001": {
-      "controlId": "5.2.2.9",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "CA-DEVICE-002": {
-      "controlId": "5.2.2.10",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
       ]
     },
     "SPO-SHARING-005": {
@@ -423,141 +840,42 @@
         "E5-L1"
       ]
     },
-    "TEAMS-MEETING-007": {
-      "controlId": "8.5.6",
+    "SPO-SHARING-006": {
+      "controlId": "7.2.10",
       "profiles": [
-        "E3-L2",
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "SPO-SHARING-007": {
+      "controlId": "7.2.11",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "SPO-MALWARE-002": {
+      "controlId": "7.3.1",
+      "profiles": [
         "E5-L2"
-      ]
-    },
-    "DEFENDER-OUTBOUND-001": {
-      "controlId": "2.1.15",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-PERUSER-001": {
-      "controlId": "5.1.2.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-DEVICE-005": {
-      "controlId": "5.1.4.5",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-ORGSETTING-001": {
-      "controlId": "1.3.4",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-ORGSETTING-003": {
-      "controlId": "1.3.7",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "INTUNE-ENROLL-001": {
-      "controlId": "4.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-LINKEDIN-001": {
-      "controlId": "5.1.2.6",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "ENTRA-DEVICE-001": {
-      "controlId": "5.1.4.1",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "ENTRA-CA-001": {
-      "controlId": "5.2.2.3",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "CA-LEGACYAUTH-001": {
-      "controlId": "5.2.2.3",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "CA-DEVICECODE-001": {
-      "controlId": "5.2.2.12",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-AUTHMETHOD-001": {
-      "controlId": "5.2.3.5",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-AUTHMETHOD-002": {
-      "controlId": "5.2.3.7",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "EXO-ADDINS-001": {
-      "controlId": "6.3.1",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "EXO-AUTH-001": {
-      "controlId": "6.5.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-OWA-001": {
-      "controlId": "6.5.3",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "EXO-AUTH-002": {
-      "controlId": "6.5.4",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "SPO-AUTH-001": {
-      "controlId": "7.2.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
       ]
     },
     "TEAMS-CLIENT-001": {
       "controlId": "8.1.1",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "TEAMS-CLIENT-002": {
+      "controlId": "8.1.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "TEAMS-EXTACCESS-003": {
+      "controlId": "8.2.1",
       "profiles": [
         "E3-L2",
         "E5-L2"
@@ -584,424 +902,8 @@
         "E5-L1"
       ]
     },
-    "TEAMS-MEETING-008": {
-      "controlId": "8.5.8",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "TEAMS-MEETING-009": {
-      "controlId": "8.5.9",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "POWERBI-GUEST-001": {
-      "controlId": "9.1.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "PBI-GUEST-001": {
-      "controlId": "9.1.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "POWERBI-GUEST-002": {
-      "controlId": "9.1.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "PBI-INVITE-001": {
-      "controlId": "9.1.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "PBI-CONTENT-001": {
-      "controlId": "9.1.3",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "POWERBI-GUEST-003": {
-      "controlId": "9.1.3",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "POWERBI-SHARING-001": {
-      "controlId": "9.1.4",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "PBI-PUBLISH-001": {
-      "controlId": "9.1.4",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "PBI-SCRIPT-001": {
-      "controlId": "9.1.5",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "POWERBI-SHARING-002": {
-      "controlId": "9.1.5",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "POWERBI-SHARING-004": {
-      "controlId": "9.1.8",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "PBI-SHARING-001": {
-      "controlId": "9.1.8",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "PBI-AUTH-001": {
-      "controlId": "9.1.9",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "POWERBI-AUTH-001": {
-      "controlId": "9.1.9",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "POWERBI-SERVICEPRINCIPAL-001": {
-      "controlId": "9.1.12",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
     "TEAMS-APPS-002": {
       "controlId": "8.4.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-CONSENT-002": {
-      "controlId": "5.1.5.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "DEFENDER-ANTIMALWARE-002": {
-      "controlId": "2.1.3",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "DNS-DMARC-001": {
-      "controlId": "2.1.10",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "DEFENDER-CLOUDAPPS-001": {
-      "controlId": "2.4.3",
-      "profiles": [
-        "E5-L2"
-      ]
-    },
-    "TEAMS-REPORTING-001": {
-      "controlId": "8.6.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-BREAKGLASS-002": {
-      "controlId": "2.2.1",
-      "profiles": [
-        "E5-L1"
-      ]
-    },
-    "COMPLIANCE-AUDIT-001": {
-      "controlId": "3.1.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-AUDIT-001": {
-      "controlId": "6.1.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-AUDIT-003": {
-      "controlId": "6.1.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-AUDIT-002": {
-      "controlId": "6.1.3",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-SHARING-001": {
-      "controlId": "1.3.3",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "SPO-SWAY-001": {
-      "controlId": "1.3.8",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "COMPLIANCE-DLP-001": {
-      "controlId": "3.2.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "COMPLIANCE-DLP-002": {
-      "controlId": "3.2.2",
-      "profiles": [
-        "E5-L1"
-      ]
-    },
-    "COMPLIANCE-LABELS-001": {
-      "controlId": "3.3.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "TEAMS-CLIENT-002": {
-      "controlId": "8.1.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "POWERBI-INFOPROT-001": {
-      "controlId": "9.1.6",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "PBI-LABELS-001": {
-      "controlId": "9.1.6",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "POWERBI-SHARING-003": {
-      "controlId": "9.1.7",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "PBI-LINK-001": {
-      "controlId": "9.1.7",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-CONNFILTER-001": {
-      "controlId": "2.1.12",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-CONNFILTER-002": {
-      "controlId": "2.1.13",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-FORWARD-001": {
-      "controlId": "6.2.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "TEAMS-MEETING-005": {
-      "controlId": "8.5.7",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-GROUP-003": {
-      "controlId": "1.2.1",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "ENTRA-TENANT-001": {
-      "controlId": "5.1.2.3",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-GROUP-001": {
-      "controlId": "5.1.3.1",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-CONSENT-001": {
-      "controlId": "5.1.5.1",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "DEFENDER-SAFELINKS-001": {
-      "controlId": "2.1.1",
-      "profiles": [
-        "E5-L2"
-      ]
-    },
-    "DEFENDER-ANTIMALWARE-001": {
-      "controlId": "2.1.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "DEFENDER-SAFEATTACH-001": {
-      "controlId": "2.1.4",
-      "profiles": [
-        "E5-L2"
-      ]
-    },
-    "DEFENDER-SAFEATTACH-002": {
-      "controlId": "2.1.5",
-      "profiles": [
-        "E5-L2"
-      ]
-    },
-    "DEFENDER-ANTISPAM-001": {
-      "controlId": "2.1.6",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "DEFENDER-MALWARE-002": {
-      "controlId": "2.1.11",
-      "profiles": [
-        "E3-L2",
-        "E5-L2"
-      ]
-    },
-    "DEFENDER-PRIORITY-001": {
-      "controlId": "2.4.1",
-      "profiles": [
-        "E5-L1"
-      ]
-    },
-    "DEFENDER-PRIORITY-002": {
-      "controlId": "2.4.2",
-      "profiles": [
-        "E5-L1"
-      ]
-    },
-    "DEFENDER-ZAP-001": {
-      "controlId": "2.4.4",
-      "profiles": [
-        "E5-L1"
-      ]
-    },
-    "FORMS-CONFIG-004": {
-      "controlId": "1.3.5",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "SPO-MALWARE-002": {
-      "controlId": "7.3.1",
-      "profiles": [
-        "E5-L2"
-      ]
-    },
-    "ENTRA-ORGSETTING-002": {
-      "controlId": "1.3.5",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "DEFENDER-ANTIPHISH-001": {
-      "controlId": "2.1.7",
-      "profiles": [
-        "E5-L2"
-      ]
-    },
-    "DEFENDER-ANTISPAM-002": {
-      "controlId": "2.1.14",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-TRANSPORT-001": {
-      "controlId": "6.2.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-EXTTAG-001": {
-      "controlId": "6.2.3",
       "profiles": [
         "E3-L1",
         "E5-L1"
@@ -1021,6 +923,13 @@
         "E5-L1"
       ]
     },
+    "TEAMS-MEETING-003": {
+      "controlId": "8.5.3",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
     "TEAMS-MEETING-004": {
       "controlId": "8.5.4",
       "profiles": [
@@ -1035,39 +944,122 @@
         "E5-L2"
       ]
     },
-    "ENTRA-DEVICE-002": {
-      "controlId": "5.1.4.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "DNS-DKIM-001": {
-      "controlId": "2.1.9",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-APPREG-001": {
-      "controlId": "5.1.2.2",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "ENTRA-PASSWORD-003": {
-      "controlId": "5.2.3.8",
-      "profiles": [
-        "E3-L1",
-        "E5-L1"
-      ]
-    },
-    "EXO-DIRECTSEND-001": {
-      "controlId": "6.5.5",
+    "TEAMS-MEETING-007": {
+      "controlId": "8.5.6",
       "profiles": [
         "E3-L2",
         "E5-L2"
+      ]
+    },
+    "TEAMS-MEETING-005": {
+      "controlId": "8.5.7",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "TEAMS-MEETING-008": {
+      "controlId": "8.5.8",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "TEAMS-MEETING-009": {
+      "controlId": "8.5.9",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "TEAMS-REPORTING-001": {
+      "controlId": "8.6.1",
+      "profiles": [
+        "E5-L1"
+      ]
+    },
+    "POWERBI-GUEST-001": {
+      "controlId": "9.1.1",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-GUEST-002": {
+      "controlId": "9.1.2",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-GUEST-003": {
+      "controlId": "9.1.3",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-SHARING-001": {
+      "controlId": "9.1.4",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-SHARING-002": {
+      "controlId": "9.1.5",
+      "profiles": [
+        "E3-L2",
+        "E5-L2"
+      ]
+    },
+    "POWERBI-INFOPROT-001": {
+      "controlId": "9.1.6",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-SHARING-003": {
+      "controlId": "9.1.7",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-SHARING-004": {
+      "controlId": "9.1.8",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-AUTH-001": {
+      "controlId": "9.1.9",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-AUTH-002": {
+      "controlId": "9.1.10",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-AUTH-003": {
+      "controlId": "9.1.11",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
+      ]
+    },
+    "POWERBI-SERVICEPRINCIPAL-001": {
+      "controlId": "9.1.12",
+      "profiles": [
+        "E3-L1",
+        "E5-L1"
       ]
     }
   }

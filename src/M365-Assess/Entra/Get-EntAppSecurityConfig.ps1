@@ -584,6 +584,111 @@ try {
         Remediation      = 'Entra admin center > Applications > App management policies > configure a default policy to lock sensitive properties on multi-tenant apps.'
     }
     Add-Setting @settingParams
+
+    # ------------------------------------------------------------------
+    # 7b-7e. Application password & certificate lifetime restrictions
+    # (CIS 5.1.5.3 passwordAddition, 5.1.5.4 passwordLifetime,
+    #  5.1.5.5 customPasswordAddition, 5.1.5.6 asymmetricKeyLifetime)
+    # Both applicationRestrictions and servicePrincipalRestrictions must be
+    # evaluated; the UI only surfaces the combined state.
+    # ------------------------------------------------------------------
+    function Test-AppMgmtRestriction {
+        param(
+            [hashtable]$Policy,
+            [string]$RestrictionGroup,   # 'passwordCredentials' or 'keyCredentials'
+            [string]$RestrictionType,
+            [int]$MaxLifetimeDays        # 0 = no lifetime requirement
+        )
+        if (-not $Policy -or $Policy['isEnabled'] -ne $true) {
+            return @{ Enabled = $false; Detail = 'Default app management policy disabled or unavailable' }
+        }
+        $results = @()
+        $allPass = $true
+        foreach ($scope in @('applicationRestrictions', 'servicePrincipalRestrictions')) {
+            $group = $Policy[$scope][$RestrictionGroup]
+            $entry = if ($group) { @($group) | Where-Object { $_['restrictionType'] -eq $RestrictionType } } else { $null }
+            if (-not $entry) {
+                $allPass = $false
+                $results += "${scope}: restriction not configured"
+                continue
+            }
+            $stateOk = $entry['state'] -eq 'enabled'
+            # restrictForAppsCreatedAfterDateTime: any configured date satisfies the CIS audit
+            # criteria (must be on or before the assessment date); absent date = not configured.
+            $lifetimeOk = $true
+            if ($MaxLifetimeDays -gt 0) {
+                $maxLifetime = [string]$entry['maxLifetime']
+                if ($maxLifetime -match '^P(\d+)D$') {
+                    $lifetimeOk = [int]$Matches[1] -le $MaxLifetimeDays
+                }
+                elseif ($maxLifetime) {
+                    $lifetimeOk = $false
+                }
+                # absent maxLifetime = not configured = non-compliant when requirement exists
+                else {
+                    $lifetimeOk = $false
+                }
+            }
+            $scopePass = $stateOk -and $lifetimeOk
+            if (-not $scopePass) { $allPass = $false }
+            $stateLabel = $entry['state']
+            $ltLabel = if ($MaxLifetimeDays -gt 0) { "; maxLifetime=$([string]$entry['maxLifetime'])" } else { '' }
+            $results += "${scope}: state=$stateLabel$ltLabel"
+        }
+        return @{ Enabled = $allPass; Detail = ($results -join ' | ') }
+    }
+
+    # CIS 5.1.5.3 -- Block password addition
+    $pwdAddResult = Test-AppMgmtRestriction -Policy $defaultPolicy -RestrictionGroup 'passwordCredentials' -RestrictionType 'passwordAddition' -MaxLifetimeDays 0
+    $settingParams = @{
+        Category         = 'Enterprise Applications'
+        Setting          = 'App Password Addition Blocked'
+        CurrentValue     = $pwdAddResult.Detail
+        RecommendedValue = 'Enabled for applications and service principals'
+        Status           = $(if ($pwdAddResult.Enabled) { 'Pass' } else { 'Fail' })
+        CheckId          = 'ENTRA-APPPWD-001'
+        Remediation      = 'Entra admin center > Applications > App management policies > Block password addition > Status On, applies to All applications. Requires configuring both application and service principal restrictions via Graph if not set through UI.'
+    }
+    Add-Setting @settingParams
+
+    # CIS 5.1.5.4 -- Password lifetime <= 180 days
+    $pwdLifeResult = Test-AppMgmtRestriction -Policy $defaultPolicy -RestrictionGroup 'passwordCredentials' -RestrictionType 'passwordLifetime' -MaxLifetimeDays 180
+    $settingParams = @{
+        Category         = 'Enterprise Applications'
+        Setting          = 'App Password Lifetime Limited'
+        CurrentValue     = $pwdLifeResult.Detail
+        RecommendedValue = 'Max lifetime 180 days or less'
+        Status           = $(if ($pwdLifeResult.Enabled) { 'Pass' } else { 'Fail' })
+        CheckId          = 'ENTRA-APPPWD-002'
+        Remediation      = 'Entra admin center > Applications > App management policies > Restrict max password lifetime > Status On, maximum 180 days or less.'
+    }
+    Add-Setting @settingParams
+
+    # CIS 5.1.5.5 -- Block custom (user-defined) passwords
+    $customPwdResult = Test-AppMgmtRestriction -Policy $defaultPolicy -RestrictionGroup 'passwordCredentials' -RestrictionType 'customPasswordAddition' -MaxLifetimeDays 0
+    $settingParams = @{
+        Category         = 'Enterprise Applications'
+        Setting          = 'App Custom Passwords Blocked'
+        CurrentValue     = $customPwdResult.Detail
+        RecommendedValue = 'Enabled for applications and service principals'
+        Status           = $(if ($customPwdResult.Enabled) { 'Pass' } else { 'Fail' })
+        CheckId          = 'ENTRA-APPPWD-003'
+        Remediation      = 'Entra admin center > Applications > App management policies > Block custom passwords > Status On, applies to All applications.'
+    }
+    Add-Setting @settingParams
+
+    # CIS 5.1.5.6 -- Certificate lifetime <= 180 days
+    $certLifeResult = Test-AppMgmtRestriction -Policy $defaultPolicy -RestrictionGroup 'keyCredentials' -RestrictionType 'asymmetricKeyLifetime' -MaxLifetimeDays 180
+    $settingParams = @{
+        Category         = 'Enterprise Applications'
+        Setting          = 'App Certificate Lifetime Limited'
+        CurrentValue     = $certLifeResult.Detail
+        RecommendedValue = 'Max lifetime 180 days or less'
+        Status           = $(if ($certLifeResult.Enabled) { 'Pass' } else { 'Fail' })
+        CheckId          = 'ENTRA-APPCERT-001'
+        Remediation      = 'Entra admin center > Applications > App management policies > Restrict max certificate lifetime > Status On, maximum 180 days or less.'
+    }
+    Add-Setting @settingParams
 }
 catch {
     Write-Warning "Could not check app instance property lock: $_"

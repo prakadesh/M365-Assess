@@ -48,7 +48,10 @@ Describe 'Get-ExoSecurityConfig' {
         Mock Get-OwaMailboxPolicy {
             return @([PSCustomObject]@{
                 Name                             = 'OwaMailboxPolicy-Default'
+                IsDefault                        = $true
                 AdditionalStorageProvidersAvailable = $false
+                PersonalAccountsEnabled          = $false
+                PersonalAccountCalendarsEnabled  = $false
             })
         }
 
@@ -162,7 +165,7 @@ Describe 'Get-ExoSecurityConfig' {
     }
 
     It 'All Status values are valid' {
-        $validStatuses = @('Pass', 'Fail', 'Warning', 'Review', 'Info', 'N/A')
+        $validStatuses = @('Pass', 'Fail', 'Warning', 'Review', 'Info', 'Unknown', 'N/A')
         foreach ($s in $settings) {
             $s.Status | Should -BeIn $validStatuses `
                 -Because "Setting '$($s.Setting)' has status '$($s.Status)'"
@@ -187,8 +190,9 @@ Describe 'Get-ExoSecurityConfig' {
     }
 
     It 'v7 Direct Send check reads RejectDirectSend and passes when enabled' {
-        $check = @($settings | Where-Object { $_.CheckId -eq 'EXO-DIRECTSEND-001' })
+        $check = @($settings | Where-Object { $_.Setting -eq 'Direct Send submissions rejected' })
         $check.Count | Should -Be 1
+        $check[0].CheckId | Should -BeLike 'EXO-DIRECTSEND-001*'
         $check[0].Status | Should -Be 'Pass'
         $check[0].CurrentValue | Should -Be 'RejectDirectSend = True'
     }
@@ -211,9 +215,62 @@ Describe 'Get-ExoSecurityConfig' {
         $check.Status | Should -Be 'Pass'
     }
 
+    It 'v7 personal accounts and calendars check passes when blocked on the default policy' {
+        $check = @($settings | Where-Object { $_.Setting -eq 'OWA Personal Accounts and Calendars' })
+        $check.Count | Should -Be 1 -Because 'CIS 6.3.2 check must be emitted once for the default OWA policy'
+        $check[0].Status | Should -Be 'Pass'
+        $check[0].CurrentValue | Should -Match 'PersonalAccountsEnabled=False'
+        $check[0].CurrentValue | Should -Match 'PersonalAccountCalendarsEnabled=False'
+    }
+
     It 'Produces settings across multiple categories' {
         $categories = $settings | Select-Object -ExpandProperty Category -Unique
         $categories.Count | Should -BeGreaterOrEqual 3
+    }
+
+    AfterAll {
+        Remove-Item Function:\Update-CheckProgress -ErrorAction SilentlyContinue
+    }
+}
+
+Describe 'Get-ExoSecurityConfig - CIS 6.3.2 personal accounts enabled' {
+    BeforeAll {
+        function global:Update-CheckProgress {
+            param($CheckId, $Setting, $Status)
+        }
+
+        function Get-OrganizationConfig { }
+        function Get-ExternalInOutlook { }
+        function Get-RemoteDomain { }
+        function Get-OwaMailboxPolicy { }
+        function Get-SharingPolicy { }
+        function Get-MailboxAuditBypassAssociation { }
+        function Get-TransportConfig { }
+        function Get-RoleAssignmentPolicy { }
+        function Get-HostedConnectionFilterPolicy { }
+        function Get-TransportRule { }
+        function Get-Mailbox { }
+        function Get-InboundConnector { }
+
+        Mock Get-OwaMailboxPolicy {
+            return @([PSCustomObject]@{
+                Name                             = 'OwaMailboxPolicy-Default'
+                IsDefault                        = $true
+                AdditionalStorageProvidersAvailable = $false
+                PersonalAccountsEnabled          = $true
+                PersonalAccountCalendarsEnabled  = $true
+            })
+        }
+
+        . "$PSScriptRoot/../../src/M365-Assess/Orchestrator/AssessmentHelpers.ps1"
+        . "$PSScriptRoot/../../src/M365-Assess/Exchange-Online/Get-ExoSecurityConfig.ps1"
+    }
+
+    It 'fails when personal accounts and calendars remain enabled' {
+        $check = @($settings | Where-Object { $_.Setting -eq 'OWA Personal Accounts and Calendars' })
+        $check.Count | Should -Be 1
+        $check[0].Status | Should -Be 'Fail'
+        $check[0].CurrentValue | Should -Match 'PersonalAccountsEnabled=True'
     }
 
     AfterAll {
